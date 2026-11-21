@@ -28,7 +28,11 @@ public enum ComputeDeviceReport {
 
     private static func describe(_ kind: VisionRequestKind) -> String {
         let stages = VisionAvailability.stageDeviceKinds(of: kind)
-        guard !stages.isEmpty else { return "\(kind.diagnosticName): no selectable device reported" }
+        guard !stages.isEmpty else {
+            return kind.reportsDevices
+                ? "\(kind.diagnosticName): reports no devices: skipped"
+                : "\(kind.diagnosticName): never reports devices: performed"
+        }
         let parts = stages
             .map { stage, devices in
                 "\(stageName(stage)): \(devices.isEmpty ? "none" : devices.map(\.diagnosticName).joined(separator: ", "))"
