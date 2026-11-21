@@ -12,6 +12,7 @@
 - `site-shots.sh [shoot folder] [--evidence <file name>]` makes the landing page's screenshots; see "Screenshots for the site" below.
 - `make-dmg.sh [--build] [--app <Culla.app>] [--out <dmg>]` makes a disk image from a Release build, after checking it holds no automation code and exactly the three entitlements. It signs nothing; with `--build` the app is ad hoc signed, for a rehearsal without an account.
 - `release.sh [--tag <tag>] [--out <folder>] [--skip-notarize] [--preflight]` makes the release image: archives, exports with Developer ID, checks the app, makes the image with `make-dmg.sh`, signs it, notarizes it, staples the ticket and asks Gatekeeper. `.github/workflows/release.yml` runs it when a tag `v<version>` is pushed and attaches the image to a draft GitHub Release. `release.md` explains every step and the one-time setup.
+- `crash-reports.py [--minutes N] [--max-reports N] [--max-lines N]` prints the newest macOS crash reports: the exception, the termination reason and the crashed thread's backtrace. The GitHub workflows run it when the package's tests fail, because a test process that dies inside a system framework leaves nothing in the test output. `.github/workflows/tests.yml` runs the tests and the translation check on GitHub's runner without a release tag (on pushes to `main` that touch the code, or started by hand).
 
 ## Running a script
 

@@ -68,7 +68,16 @@ jobs:
           xcodebuild -version
 
       - name: Test the package
+        id: test
         run: cd CullaKit && swift test
+
+      # A test process killed by a trap inside a system framework prints nothing to the log; its
+      # reason and backtrace are only in the crash report. Never fails the job by itself.
+      - name: Show the crash reports of the tests
+        if: failure() && steps.test.outcome == 'failure'
+        continue-on-error: true
+        timeout-minutes: 2
+        run: python3 Scripts/crash-reports.py --minutes 30 --max-reports 4 --max-lines 150
 
       - name: Check the translations
         run: python3 Scripts/l10n.py check --require ru,tk

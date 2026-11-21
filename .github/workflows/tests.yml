@@ -1,0 +1,55 @@
+# Runs the package's tests and the translation check on the same runner as the release, without
+# a release tag. Uses no secrets.
+name: Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "CullaKit/**"
+      - "Culla/**"
+      - "Scripts/l10n.py"
+      - "Scripts/crash-reports.py"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    # The GitHub-hosted image with Xcode 27 (macOS 27, arm64); see actions/runner-images.
+    runs-on: xcode-27
+    timeout-minutes: 45
+    env:
+      XCODE_APP: /Applications/Xcode_27.1.app
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select --switch "$XCODE_APP/Contents/Developer"
+          xcodebuild -version
+
+      - name: Test the package
+        id: test
+        run: cd CullaKit && swift test
+
+      # A test process killed by a trap inside a system framework prints nothing to the log; its
+      # reason and backtrace are only in the crash report. Never fails the job by itself.
+      - name: Show the crash reports of the tests
+        if: failure() && steps.test.outcome == 'failure'
+        continue-on-error: true
+        timeout-minutes: 2
+        run: python3 Scripts/crash-reports.py --minutes 30 --max-reports 4 --max-lines 150
+
+      - name: Check the translations
+        if: success() || steps.test.outcome == 'failure'
+        run: python3 Scripts/l10n.py check --require ru,tk
