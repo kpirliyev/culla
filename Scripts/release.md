@@ -33,7 +33,7 @@ gh secret set NOTARY_ISSUER_ID --repo kpirliyev/culla
 
 The `.p12` comes from Keychain Access: select the "Developer ID Application" certificate together with its private key, File ▸ Export Items, and give it a password. The `.p8`, its key ID and the issuer ID are an App Store Connect API key (Users and Access ▸ Integrations ▸ Team Keys, role Developer).
 
-The workflow runs on GitHub's `xcode-27` image and selects Xcode 27.1. As of 2026-11-21 it had not yet run: the repository was not on GitHub. The first tag pushed is its first test; if it fails, release from this Mac and attach the image by hand (section 6).
+The workflow runs on GitHub's `xcode-27` image and selects Xcode 27.1. It first ran to the end on 2026-11-21 for `v1.0` and left the draft with a notarized image. If a run fails, its log names the step; a failed test step also prints the crash reports. As a fallback, release from this Mac and attach the image by hand (section 6).
 
 ## What a release build must be
 

@@ -321,7 +321,7 @@ Goal: a signed 1.0 that a stranger can download and use without help.
 - [x] Remaining empty, error and first-run states.
 - [x] App icon and About window.
 - [x] README, licence and contribution notes in the repository.
-- [x] Signing, notarization and a disk image for download. The steps are written down in `Scripts/release.md`. They were first run on 2026-11-21, from the working tree before it was committed: the image was signed with Developer ID (team `Z32TPH2T97`), notarized, stapled, and accepted by Gatekeeper as "Notarized Developer ID". It is not published; the image to publish is rebuilt from the tagged commit. `Scripts/release.sh` now runs all of the steps (first full run, notarized and accepted, on 2026-11-21), and `.github/workflows/release.yml` runs it when a tag `v<version>` is pushed and attaches the image to a draft GitHub Release; the workflow has not run yet, because the repository is not on GitHub.
+- [x] Signing, notarization and a disk image for download. The steps are written down in `Scripts/release.md`. They were first run on 2026-11-21, from the working tree before it was committed: the image was signed with Developer ID (team `Z32TPH2T97`), notarized, stapled, and accepted by Gatekeeper as "Notarized Developer ID". It is not published; the image to publish is rebuilt from the tagged commit. `Scripts/release.sh` now runs all of the steps (first full run, notarized and accepted, on 2026-11-21), and `.github/workflows/release.yml` runs it when a tag `v<version>` is pushed and attaches the image to a draft GitHub Release; the workflow first ran to the end on 2026-11-21 and left the `v1.0` draft release with a notarized image.
 - [ ] Full pass of all eight flows on a fresh macOS user account.
 
 Built and checked on 2026-11-10, up to signing. 504 unit tests and all 63 interface scripts pass; the Release build has no warnings, no network framework linked, and exactly the three sandbox entitlements when built with `CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO`.
@@ -376,6 +376,7 @@ Top bar, 2026-11-12 (after localization):
 Release pipeline, 2026-11-21:
 
 - The first run of the release workflow on GitHub's runner (a virtual Mac without a Neural Engine) lost two test processes to a trap inside Vision's lens-smudge request. The analyzer now skips a Vision request this Mac has no device for (`VisionAvailability`); the tests pass on the runner with lens smudge skipped there.
+- The second run stopped in `release.sh`: in the C locale of GitHub's runner, bash read the first byte of an ellipsis as part of the variable name before it. Such variables are braced now.
 - Not done: on a Mac without a Neural Engine, Settings still shows the Lens smudge switch, its threshold and a count that is always 0, which reads as "no smudged photos" although the check never ran. Saying so needs new text in three languages.
 - Not checked: an Intel Mac. The app is built for both architectures, but nothing has been run on one.
 
