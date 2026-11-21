@@ -113,7 +113,7 @@ ARCHIVE="$OUT/Culla.xcarchive"
 EXPORT="$OUT/export"
 rm -rf "$ARCHIVE" "$EXPORT"
 
-say "Archiving into $ARCHIVE…"
+say "Archiving into ${ARCHIVE}…"
 xcodebuild -project "$REPO/Culla.xcodeproj" -scheme Culla -configuration Release \
     -destination 'generic/platform=macOS' -derivedDataPath "$OUT/DerivedData" \
     -archivePath "$ARCHIVE" archive \
@@ -143,7 +143,7 @@ APP="$EXPORT/Culla.app"
 # --- What a release build must be (Scripts/release.md) -------------------------------------------
 # make-dmg.sh checks the automation harness and the three entitlements again; these are the rest.
 check() { say "  ok  $1"; }
-say "Checking $APP…"
+say "Checking ${APP}…"
 plutil -lint "$APP/Contents/Info.plist" >/dev/null || fail 1 "Info.plist does not lint"
 APP_VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$APP/Contents/Info.plist")"
 APP_ID="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP/Contents/Info.plist")"

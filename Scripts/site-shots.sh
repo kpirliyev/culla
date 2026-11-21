@@ -83,7 +83,7 @@ mkdir -p "$SHOTS"
 for LANG_CODE in en ru tk; do
     SCRIPT="$WORK/site-shots-$LANG_CODE.json"
     python3 "$REPO/Scripts/site-shots.py" script "$PROBE/probe.json" "$LANG_CODE" "$SCRIPT" "$STACK_GAP" "$WORK/names.json" ${EVIDENCE[@]+"${EVIDENCE[@]}"}
-    echo "Capturing in $LANG_CODE…" >&2
+    echo "Capturing in ${LANG_CODE}…" >&2
     OUT="$(run "$SCRIPT" --no-build --keep-shoot)"
     python3 "$REPO/Scripts/site-shots.py" finish "$OUT" "$LANG_CODE" "$SHOTS" >/dev/null
 done

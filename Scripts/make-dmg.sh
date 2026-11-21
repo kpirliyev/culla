@@ -31,7 +31,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ "$BUILD" -eq 1 ]; then
-    echo "Building the Release configuration into $DERIVED…" >&2
+    echo "Building the Release configuration into ${DERIVED}…" >&2
     xcodebuild -project "$REPO/Culla.xcodeproj" -scheme Culla -configuration Release \
         -destination 'platform=macOS' -derivedDataPath "$DERIVED" CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO build >"$DERIVED.build.log" 2>&1 \
         || { grep -E "error:" "$DERIVED.build.log" | head -20 >&2; echo "Build failed; log: $DERIVED.build.log" >&2; exit 2; }
