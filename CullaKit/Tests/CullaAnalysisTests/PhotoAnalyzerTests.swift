@@ -30,6 +30,23 @@ struct PhotoAnalyzerTests {
         #expect(scores.timings.pixels > 0 && scores.timings.vision > 0)
     }
 
+    /// A request this machine has no device for is not performed, so its score stays empty.
+    /// Lens smudge runs only on the Neural Engine, which a virtual machine (GitHub's macOS
+    /// runners) lacks; there the score must be nil rather than the process stopping in Vision.
+    /// On a Mac with a Neural Engine, the request runs and the synthetic image gets a confidence.
+    @Test func leavesTheScoreOfASkippedRequestEmpty() async throws {
+        let image = try #require(try makeImages(count: 1).first)
+        let available = await VisionAvailability.current()
+        let scores = await PhotoAnalyzer().analyze(image)
+        if available.isUsable(.lensSmudge) {
+            #expect(scores.smudgeConfidence != nil)
+        } else {
+            #expect(scores.smudgeConfidence == nil)
+        }
+        if !available.isUsable(.horizon) { #expect(scores.horizonDegrees == nil) }
+        if !available.isUsable(.aesthetics) { #expect(scores.aesthetics == nil) }
+    }
+
     /// Many more photos in flight than the machine has cores. Before Core Image's detector was
     /// moved off the cooperative pool this stopped for good once every pool thread was waiting
     /// inside it.

@@ -2,47 +2,49 @@ import CoreML
 import Foundation
 import Vision
 
-/// Lists which processors Vision says each request can run on.
+/// Lists which processors Vision says each request can run on, which processors this Mac has,
+/// and so which requests the analyzer performs here (see `VisionAvailability`).
 ///
 /// This is what the public API reports. Vision picks among the listed devices itself;
 /// it does not report which one a given run used, or how busy that device was.
+/// Synchronous and possibly slow: call it off the cooperative pool when that matters.
 public enum ComputeDeviceReport {
     public static func lines() -> [String] {
-        [
-            describe("Face landmarks", DetectFaceLandmarksRequest()),
-            describe("Face capture quality", DetectFaceCaptureQualityRequest()),
-            describe("Feature print", GenerateImageFeaturePrintRequest()),
-            describe("Aesthetics", CalculateImageAestheticsScoresRequest()),
-            describe("Attention saliency", GenerateAttentionBasedSaliencyImageRequest()),
-            describe("Horizon", DetectHorizonRequest()),
-            describe("Lens smudge", DetectLensSmudgeRequest()),
-        ]
+        let machine = VisionAvailability.machineDeviceKinds()
+        var lines = VisionRequestKind.allCases.map(describe)
+        lines.append("This Mac: \(names(machine))")
+        let availability = VisionAvailability.measure()
+        let skipped = VisionRequestKind.allCases.filter { !availability.isUsable($0) }
+        lines.append(
+            "Performed here: "
+                + VisionRequestKind.allCases.filter(availability.isUsable).map(\.diagnosticName).joined(separator: ", ")
+        )
+        lines.append(
+            "Skipped here: "
+                + (skipped.isEmpty ? "none" : skipped.map(\.diagnosticName).joined(separator: ", "))
+        )
+        return lines
     }
 
-    private static func describe<Request: VisionRequest>(_ name: String, _ request: Request) -> String {
-        let stages = request.supportedComputeStageDevices
-        guard !stages.isEmpty else { return "\(name): no selectable device reported" }
+    private static func describe(_ kind: VisionRequestKind) -> String {
+        let stages = VisionAvailability.stageDeviceKinds(of: kind)
+        guard !stages.isEmpty else { return "\(kind.diagnosticName): no selectable device reported" }
         let parts = stages
             .map { stage, devices in
-                "\(stageName(stage)): \(devices.map(deviceName).joined(separator: ", "))"
+                "\(stageName(stage)): \(devices.isEmpty ? "none" : devices.map(\.diagnosticName).joined(separator: ", "))"
             }
             .sorted()
-        return "\(name): \(parts.joined(separator: "; "))"
+        return "\(kind.diagnosticName): \(parts.joined(separator: "; "))"
+    }
+
+    private static func names(_ kinds: Set<ComputeDeviceKind>) -> String {
+        kinds.isEmpty ? "none" : kinds.map(\.diagnosticName).sorted().joined(separator: ", ")
     }
 
     private static func stageName(_ stage: ComputeStage) -> String {
         switch stage {
         case .main: "main"
         case .postProcessing: "post-processing"
-        @unknown default: "other"
-        }
-    }
-
-    private static func deviceName(_ device: MLComputeDevice) -> String {
-        switch device {
-        case .cpu: "CPU"
-        case .gpu: "GPU"
-        case .neuralEngine: "Neural Engine"
         @unknown default: "other"
         }
     }

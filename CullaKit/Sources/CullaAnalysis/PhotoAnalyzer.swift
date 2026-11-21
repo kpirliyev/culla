@@ -44,14 +44,21 @@ public struct PhotoAnalyzer: Sendable {
 
         // Vision requests run side by side on one handler, which decodes the image once.
         // Core Image's detector runs alongside them; it suspends this task rather than blocking.
+        // A request this Mac has no device for is skipped and leaves its score empty, as a failed
+        // one does: Vision traps on such a request instead of throwing (see `VisionAvailability`).
         let visionStart = clock.now
+        let available = await VisionAvailability.current()
         let handler = ImageRequestHandler(image)
-        async let saliencyResult = Self.attempt(GenerateAttentionBasedSaliencyImageRequest(), on: handler)
-        async let featureResult = Self.attempt(GenerateImageFeaturePrintRequest(), on: handler)
-        async let aestheticsResult = Self.attempt(CalculateImageAestheticsScoresRequest(), on: handler)
-        async let horizonResult = Self.attempt(DetectHorizonRequest(), on: handler)
-        async let smudgeResult = Self.attempt(DetectLensSmudgeRequest(), on: handler)
-        async let faceResult = Self.detectFaces(on: handler)
+        async let saliencyResult = Self.attempt(
+            GenerateAttentionBasedSaliencyImageRequest(), .saliency, if: available, on: handler
+        )
+        async let featureResult = Self.attempt(GenerateImageFeaturePrintRequest(), .featurePrint, if: available, on: handler)
+        async let aestheticsResult = Self.attempt(
+            CalculateImageAestheticsScoresRequest(), .aesthetics, if: available, on: handler
+        )
+        async let horizonResult = Self.attempt(DetectHorizonRequest(), .horizon, if: available, on: handler)
+        async let smudgeResult = Self.attempt(DetectLensSmudgeRequest(), .lensSmudge, if: available, on: handler)
+        async let faceResult = Self.detectFaces(on: handler, available: available)
         async let blinkResult = blinkDetector.detect(in: image)
 
         let observedFaces = await faceResult
@@ -72,7 +79,7 @@ public struct PhotoAnalyzer: Sendable {
         if let smudge = await smudgeResult {
             scores.smudgeConfidence = Double(smudge.confidence)
         }
-        let eyes = await eyeReadings(for: observedFaces, in: image)
+        let eyes = await eyeReadings(for: observedFaces, in: image, available: available)
         scores.timings.vision = (clock.now - visionStart).seconds
 
         scores.faces = faceScores(
@@ -107,7 +114,11 @@ public struct PhotoAnalyzer: Sendable {
     /// Reads both eyes of every face from its landmarks. Faces that come back without a reading,
     /// because Vision gives no usable landmarks for faces small in the frame (see `FaceCrop`),
     /// are measured again on a cut-out, one at a time, when they are large enough to judge.
-    private func eyeReadings(for faces: [FaceObservation], in image: CGImage) async -> [EyeReading] {
+    private func eyeReadings(
+        for faces: [FaceObservation],
+        in image: CGImage,
+        available: VisionAvailability
+    ) async -> [EyeReading] {
         let size = CGSize(width: image.width, height: image.height)
         let shortSide = min(image.width, image.height)
         var readings = faces.map { face -> EyeReading in
@@ -124,7 +135,7 @@ public struct PhotoAnalyzer: Sendable {
                 rightOpenness: readings[index].right,
                 faceHeight: Double(box.height),
                 imageShortSide: shortSide
-            ), let again = await Self.eyesOnCrop(of: box, in: image) else { continue }
+            ), let again = await Self.eyesOnCrop(of: box, in: image, available: available) else { continue }
             // Only missing eyes are filled in, so a reading from the first pass never changes.
             if readings[index].left == nil { readings[index].left = again.left }
             if readings[index].right == nil { readings[index].right = again.right }
@@ -136,7 +147,12 @@ public struct PhotoAnalyzer: Sendable {
     /// Measures the eyes of the face in `box` (pixels, origin at the top-left) on a cut-out of
     /// it, trying each padding in turn until one gives a reading. The face box is handed to
     /// Vision rather than detected again, so the cut-out always measures the same face.
-    private static func eyesOnCrop(of box: CGRect, in image: CGImage) async -> EyeReading? {
+    private static func eyesOnCrop(
+        of box: CGRect,
+        in image: CGImage,
+        available: VisionAvailability
+    ) async -> EyeReading? {
+        guard available.isUsable(.faceLandmarks) else { return nil }
         for padding in FaceCrop.paddings {
             guard let crop = FaceCrop(face: box, imageWidth: image.width, imageHeight: image.height, padding: padding),
                   let cut = await BlockingQueue.shared.run({ Self.cut(image, crop) })
@@ -224,21 +240,27 @@ public struct PhotoAnalyzer: Sendable {
 
     // MARK: - Vision helpers
 
+    /// Performs `request` when this Mac can run it; nil when it cannot or the request fails.
     private static func attempt<Request: VisionRequest>(
         _ request: Request,
+        _ kind: VisionRequestKind,
+        if available: VisionAvailability,
         on handler: ImageRequestHandler
     ) async -> Request.Result? where Request.Result: Sendable {
-        try? await handler.perform(request)
+        guard available.isUsable(kind) else { return nil }
+        return try? await handler.perform(request)
     }
 
     /// Finds faces with landmarks, then asks Vision to rate the capture quality of those same faces.
-    private static func detectFaces(on handler: ImageRequestHandler) async -> [FaceObservation] {
-        guard let faces = try? await handler.perform(DetectFaceLandmarksRequest()), !faces.isEmpty else {
+    private static func detectFaces(on handler: ImageRequestHandler, available: VisionAvailability) async -> [FaceObservation] {
+        guard let faces = await attempt(DetectFaceLandmarksRequest(), .faceLandmarks, if: available, on: handler),
+              !faces.isEmpty
+        else {
             return []
         }
         var qualityRequest = DetectFaceCaptureQualityRequest()
         qualityRequest.inputFaceObservations = faces
-        let rated = (try? await handler.perform(qualityRequest)) ?? []
+        let rated = await attempt(qualityRequest, .faceCaptureQuality, if: available, on: handler) ?? []
         let ratedBoxes = rated.map { unitRect($0.boundingBox) }
 
         return faces.map { face in
