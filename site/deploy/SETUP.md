@@ -5,7 +5,7 @@ assets of the releases on GitHub (`kpirliyev/culla`), and
 `https://cullaapp.com/download` is a short link that redirects there. The
 server makes one outbound request a day, to `api.github.com`, to note how
 often each disk image has been downloaded; nothing a visitor sends is
-stored except the access log (with shortened addresses, see the end).
+stored except the access log, kept 30 days (see the end).
 
 The server may be shared with other sites. Culla adds its own files and
 leaves the host's alone: `nginx.conf`, `conf.d/00-default.conf` (TLS
@@ -15,7 +15,8 @@ hook.
 
 On the Mac, the commands below run from the repository folder with the
 server's address and the upload account in the environment (never written
-into the repository):
+into the repository). The Mac needs podman with its machine running
+(`podman machine start`) for the build, and ssh and rsync for the upload:
 
 ```bash
 export CULLA_DEPLOY_HOST=<server address>
@@ -72,8 +73,13 @@ hold; put them in place, adjust, and continue below.
    - `CULLA_PASSWORDLESS=yes` for password-free nginx changes later (below).
 3. **Upload the site, from the Mac:**
    ```bash
+   site/test.sh                # optional first: build and every test, in podman
    site/deploy/deploy.sh
    ```
+   `deploy.sh` builds the site in a podman container first, exactly as
+   `site/test.sh build` does (it needs the podman machine running:
+   `podman machine start`), then uploads `site/.output/public/` with rsync
+   over SSH from the Mac. The Mac's own Node is never used.
 
 What `setup-host.sh` does, in order, as root:
 
@@ -191,9 +197,8 @@ exists: open `https://cullaapp.com/download` afterwards.
    Before the first release `downloads.csv` holds only its header line.
 6. `sudo logrotate -d /etc/logrotate.d/cullaapp.com`: prints what it would do
    and changes nothing; it must not say "insecure permissions".
-7. No full address in the logs:
-   `sudo grep -hoE '"ip":"[^"]*"' /data/cullaapp.com/log/*.log | sort -u | head`
-   shows only addresses ending in `.0` or `::`.
+7. The access log is one JSON object per line, with the visitor's address:
+   `sudo tail -n 3 /data/cullaapp.com/log/access.log`.
 8. `sudo crontab -l`: the host's certbot line as before, and one `count.py` line.
 
 ## What the logs keep, and for how long
@@ -204,19 +209,16 @@ object.
 
 | File | One line per | Fields |
 | --- | --- | --- |
-| `access.log` | page, asset or redirect (`/download` too) | time, shortened address, host, method, path, status, bytes, referrer, browser |
+| `access.log` | page, asset or redirect (`/download` too) | time, IP address, host, method, path, status, bytes, referrer, browser |
 | `error.log` | serious nginx error | nginx's own format |
 
-**Shortened address.** IPv4 keeps the first three numbers and ends in `.0`
-(`203.0.113.57` → `203.0.113.0`). IPv6 keeps the first 48 bits
-(`2001:db8:5:6::1` → `2001:db8:5::`): that is the size usually given to a
-whole site or customer, so it names a network rather than a household.
+**Address.** The access log keeps the visitor's IP address in full, as
+nginx sees it (`$remote_addr`), like any web server's log. It is deleted
+with the log after 30 days; the counts keep no addresses.
 
-**error.log** is written at level `crit`. nginx's error format cannot be
-changed and some messages name the client's full address; at `crit` the
-everyday ones (missing files, closed connections, failed TLS handshakes)
-are left out. What remains is rare and about the server itself, but a
-`crit` message about a connection can still carry an address. Requests for
+**error.log** is written at level `crit`, which keeps the everyday noise
+out (missing files, closed connections, failed TLS handshakes). What
+remains is rare and about the server itself. Requests for
 names nginx does not serve are answered by the host's default servers and
 logged in the host's own logs, not cullaapp.com's.
 

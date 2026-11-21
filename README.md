@@ -39,7 +39,7 @@ Every key can be changed in Settings ▸ Keys; Help ▸ Keyboard Shortcuts (⌘/
 Requirements: a Mac with macOS 26 or later and Xcode 27.
 
 ```bash
-git clone <this repository> Culla && cd Culla
+git clone https://github.com/kpirliyev/culla.git Culla && cd Culla
 open Culla.xcodeproj          # then Product ▸ Run
 # or from the command line:
 xcodebuild -project Culla.xcodeproj -scheme Culla -configuration Release build

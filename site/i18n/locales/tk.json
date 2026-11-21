@@ -176,7 +176,7 @@
     },
     "counting": {
       "q": "Bu sahypa bir zat sanaýarmy?",
-      "a": "Serwer gelişleri sanamak üçin adaty žurnal ýöredýär. Onda IP salgynyň diňe gysgaldylan görnüşi saklanýar, hiç haçan dolusy däl, žurnal bolsa 30 günden soň pozulýar. Cookie ýok, sizi yzarlaýan skript ýok. Programmanyň özi GitHub-dan ýüklenýär, GitHub bolsa ýüklemeleri özi sanaýar we öz žurnallaryny ýöredýär."
+      "a": "Serwer gelişleri sanamak üçin adaty žurnal ýöredýär. Islendik web-serweriň žurnaly ýaly, onda IP salgyňyz we brauzeriňiz ýazylýar, žurnal bolsa 30 günden soň pozulýar. Cookie ýok, sizi yzarlaýan skript ýok. Programmanyň özi GitHub-dan ýüklenýär, GitHub bolsa ýüklemeleri özi sanaýar we öz žurnallaryny ýöredýär."
     },
     "report": {
       "q": "Meseläni nädip habar bermeli?",

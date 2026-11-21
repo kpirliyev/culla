@@ -11,13 +11,16 @@
 //   icon-192.png, icon-512.png, icon-64.png and icon-128.png (top bar, 1x and 2x),
 //   og-image.png (1200 x 630, the icon on the page's dark grey).
 //
-// Resizing uses `sips`, which ships with macOS. No npm package is needed.
+// Resizing uses sharp, which @nuxt/image already installs (through ipx), so
+// the same code runs on macOS and in the Linux build container. No npm
+// package is added for it. The PNGs are 8-bit RGBA without metadata; with no
+// colour chunk a browser reads them as sRGB, which is what the source is.
 
-import { execFileSync } from 'node:child_process'
-import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
+import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+import sharp from 'sharp'
 
 const siteDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const publicDir = join(siteDir, 'public')
@@ -56,17 +59,18 @@ function findSource() {
   return candidates[0].path
 }
 
-function sips(args) {
-  execFileSync('sips', args, { stdio: ['ignore', 'ignore', 'pipe'] })
-}
-
-function resized(source, size, out) {
-  sips(['-s', 'format', 'png', '-z', String(size), String(size), source, '--out', out])
+// resized: the source scaled to size x size, as 8-bit RGBA PNG data.
+function resized(source, size) {
+  return sharp(source)
+    .resize(size, size, { fit: 'fill' })
+    .ensureAlpha()
+    .png()
+    .toBuffer()
 }
 
 // An ICO file may hold PNG images directly; every browser in use reads that.
-function writeIco(pngPaths, out) {
-  const images = pngPaths.map(({ path, size }) => ({ data: readFileSync(path), size }))
+function writeIco(pngs, out) {
+  const images = pngs.map(({ data, size }) => ({ data, size }))
   const header = Buffer.alloc(6)
   header.writeUInt16LE(0, 0)
   header.writeUInt16LE(1, 2)
@@ -90,31 +94,42 @@ function writeIco(pngPaths, out) {
 }
 
 const source = findSource()
-const work = mkdtempSync(join(tmpdir(), 'culla-icon-'))
 try {
-  const square = (size, name) => {
-    const out = join(publicDir, name)
-    resized(source, size, out)
-    return out
+  for (const [size, name] of [
+    [32, 'favicon-32.png'],
+    [180, 'apple-touch-icon.png'],
+    [192, 'icon-192.png'],
+    [512, 'icon-512.png'],
+    [64, 'icon-64.png'],
+    [128, 'icon-128.png'],
+  ]) {
+    writeFileSync(join(publicDir, name), await resized(source, size))
   }
-  square(32, 'favicon-32.png')
-  square(180, 'apple-touch-icon.png')
-  square(192, 'icon-192.png')
-  square(512, 'icon-512.png')
-  square(64, 'icon-64.png')
-  square(128, 'icon-128.png')
 
-  const ico16 = join(work, '16.png')
-  const ico32 = join(work, '32.png')
-  resized(source, 16, ico16)
-  resized(source, 32, ico32)
-  writeIco([{ path: ico16, size: 16 }, { path: ico32, size: 32 }], join(publicDir, 'favicon.ico'))
+  writeIco(
+    [{ data: await resized(source, 16), size: 16 }, { data: await resized(source, 32), size: 32 }],
+    join(publicDir, 'favicon.ico'),
+  )
 
-  const ogIcon = join(work, 'og-icon.png')
-  resized(source, 400, ogIcon)
-  sips(['-s', 'format', 'png', '--padToHeightWidth', '630', '1200', '--padColor', OG_BACKGROUND, ogIcon, '--out', join(publicDir, 'og-image.png')])
-} finally {
-  rmSync(work, { recursive: true, force: true })
+  // The icon at 400 x 400 in the middle of a 1200 x 630 background, laid
+  // over it (its transparent corners show the background), fully opaque.
+  const OG_W = 1200, OG_H = 630, OG_ICON = 400
+  const left = (OG_W - OG_ICON) / 2, top = Math.floor((OG_H - OG_ICON) / 2)
+  const background = {
+    r: parseInt(OG_BACKGROUND.slice(0, 2), 16),
+    g: parseInt(OG_BACKGROUND.slice(2, 4), 16),
+    b: parseInt(OG_BACKGROUND.slice(4, 6), 16),
+    alpha: 1,
+  }
+  const og = await sharp(await resized(source, OG_ICON))
+    .flatten({ background })
+    .extend({ top, bottom: OG_H - OG_ICON - top, left, right: OG_W - OG_ICON - left, background })
+    .ensureAlpha(1)
+    .png()
+    .toBuffer()
+  writeFileSync(join(publicDir, 'og-image.png'), og)
+} catch (error) {
+  fail(`could not make the icons from ${source}: ${error.message}`)
 }
 
 const kb = (name) => `${Math.round(statSync(join(publicDir, name)).size / 1024)} KB`

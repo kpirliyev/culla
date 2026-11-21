@@ -424,7 +424,7 @@ Nothing blocks the start of M0. The open items are needed at the milestone each 
 
 - [x] Git repository created in the Culla folder.
 - [x] Go-ahead to create the Xcode project.
-- [ ] A bundle identifier for the app. `com.kpirliyev.Culla` is in place as a placeholder.
+- [x] A bundle identifier for the app: `com.kpirliyev.Culla`, confirmed on 2026-11-21.
 - [x] Licence for the open-source release: MIT.
 - [ ] Two or three of your real shoots on disk to run `culla-eval` and the app on, ideally with bursts, group shots and some blurry frames. No sorting or labelling. Needed when the M0 detectors run. Keep them outside this repository.
 - [ ] The cameras or phones you shoot with, so their RAW formats are tested.

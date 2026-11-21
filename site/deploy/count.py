@@ -12,7 +12,7 @@ visits.csv (from access.log, for the previous day)
   Page view  A GET with status 200 or 304 of exactly /en/, /ru/ or /tk/ (a
              query string is ignored). 304 is a returning visitor whose
              browser revalidated the page (HTML is served "no-cache").
-  Visit      One distinct (shortened address, browser) per language per day.
+  Visit      One distinct (address, browser) per language per day.
              Every language gets a row each day, also with 0.
   Robots     Requests whose user agent matches ROBOT_PATTERNS below, or that
              have no user agent, are left out.

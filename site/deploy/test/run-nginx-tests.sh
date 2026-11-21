@@ -1,33 +1,52 @@
 #!/usr/bin/env bash
 # Tests the real nginx behaviour of cullaapp.com.conf and the bootstrap
-# config in a throwaway podman container (official nginx image), with a
-# self-signed certificate and a fixture web root. Needs podman (on a Mac, a
-# running podman machine) and network access to pull the image the first time.
+# config with the official nginx image's nginx, a self-signed certificate and
+# a fixture web root.
 #
-#   site/deploy/test/run-nginx-tests.sh
-#   CULLA_NGINX_IMAGE=docker.io/library/nginx:1.24 site/deploy/test/run-nginx-tests.sh
+#   site/test.sh nginx
+#   CULLA_NGINX_IMAGE=docker.io/library/nginx:1.24 site/test.sh nginx
 #
-# Exit status: 0 all passed, 1 a check failed, 2 skipped (podman not usable).
-# Ports 18080 and 18443 on 127.0.0.1 are used while it runs.
+# The whole test runs inside one throwaway container of the test image
+# (site/containers/test.Containerfile: the nginx image plus python3 and
+# rsync), started by site/test.sh with no network: this script puts the
+# host's stand-in files and Culla's rendered configuration into the
+# container's /etc/nginx, starts and stops nginx there, and talks to it with
+# curl over the container's loopback. Run on the Mac, it hands over to
+# site/test.sh nginx.
+#
+# Exit status: 0 all passed, 1 a check failed, 2 podman is not usable.
 
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 deploy="$(dirname "$here")"
-# Fully qualified, so podman never asks which registry to pull from.
-IMAGE="${CULLA_NGINX_IMAGE:-docker.io/library/nginx:1.26}"
-NAME="culla-nginx-test-$$"
-HTTP=18080
-HTTPS=18443
 
-if ! command -v podman >/dev/null || ! podman info >/dev/null 2>&1; then
-    echo "SKIPPED: podman is missing or not running (on a Mac: podman machine start); nginx behaviour is untested." >&2
+if [ "${CULLA_IN_CONTAINER:-}" != 1 ]; then
+    exec "$(dirname "$deploy")/test.sh" nginx
+fi
+# It rewrites /etc/nginx: never anywhere but in a container.
+if [ ! -e /run/.containerenv ] || [ "$(id -u)" != 0 ] || ! command -v nginx >/dev/null; then
+    echo "run-nginx-tests.sh: only for the test container as root; run site/test.sh nginx" >&2
     exit 2
 fi
 
+IMAGE="${CULLA_NGINX_IMAGE:-the test image}"
+HTTP=80
+HTTPS=443
+
 work="$(mktemp -d "${TMPDIR:-/tmp}/culla-nginx-test.XXXXXX")"
+nginx_out="$work/nginx.out"   # nginx's own output: the stand-in nginx.conf logs to stdout and stderr
+stop_nginx() {
+    if [ -s /run/nginx.pid ]; then
+        local pid; pid="$(cat /run/nginx.pid)"
+        kill -QUIT "$pid" 2>/dev/null || true
+        for _ in $(seq 1 50); do kill -0 "$pid" 2>/dev/null || break; sleep 0.1; done
+        kill -KILL "$pid" 2>/dev/null || true
+        rm -f /run/nginx.pid
+    fi
+}
 cleanup() {
-    podman rm -f "$NAME" >/dev/null 2>&1 || true
+    stop_nginx
     rm -rf "$work"
 }
 trap cleanup EXIT
@@ -36,7 +55,7 @@ pass=0
 ok()   { pass=$((pass + 1)); printf 'ok   %s\n' "$*"; }
 fail() {
     printf 'FAIL %s\n' "$*" >&2
-    echo "--- container log" >&2; podman logs "$NAME" 2>&1 | tail -20 >&2 || true
+    echo "--- nginx output" >&2; tail -20 "$nginx_out" 2>/dev/null >&2 || true
     echo "--- error.log" >&2; tail -20 "$log/error.log" 2>/dev/null >&2 || true
     exit 1
 }
@@ -83,28 +102,33 @@ gzip -k -9 "$w/_nuxt/app.abc123.js"
 chmod -R a+rX "$work"
 chmod 777 "$work/bootlog" "$work/log" "$work/log2"
 
-# /etc/nginx/cullaapp is writable only so that the container itself can put
-# download-target.conf in place and take it away again (see install_target).
-mounts=(-v "$fx/nginx.conf:/etc/nginx/nginx.conf:ro"
-        -v "$work/snippets:/etc/nginx/snippets:ro"
-        -v "$work/letsencrypt:/var/www/letsencrypt:ro"
-        -v "$work/cullaapp:/etc/nginx/cullaapp"
-        -v "$work/targets:/test/targets:ro"
-        -v "$work/tls:/test/tls:ro"
-        -v "$work/www:/data/cullaapp.com/www:ro")
+# The files go where they will be on the server, in this container only:
+# the host's nginx.conf, its snippets and acme webroot, Culla's files, the
+# test certificate, the web root, the log folder and conf.d. The log folder
+# and conf.d change between the steps below (use_config).
+cp "$fx/nginx.conf" /etc/nginx/nginx.conf
+rm -rf /etc/nginx/snippets /etc/nginx/cullaapp /var/www/letsencrypt /test /data/cullaapp.com
+mkdir -p /var/www /test /data/cullaapp.com
+cp -R "$work/snippets" /etc/nginx/snippets
+cp -R "$work/cullaapp" /etc/nginx/cullaapp
+cp -R "$work/letsencrypt" /var/www/letsencrypt
+cp -R "$work/tls" /test/tls
+cp -R "$work/www" /data/cullaapp.com/www
 # nginx -t and the bootstrap config log into bootlog/, each full config into
-# a fresh folder. One folder emptied with rm between two runs does not work
-# under a podman machine: once the host deletes a file the VM created, the VM
-# cannot create a file of that name again, and nginx fails to open its logs.
+# a fresh folder.
 log="$work/bootlog"
 
-podman pull -q "$IMAGE" >/dev/null
+use_config() {  # use_config <conf dir>: it becomes conf.d; logs go to $log
+    rm -rf /etc/nginx/conf.d /data/cullaapp.com/log
+    cp -R "$1" /etc/nginx/conf.d
+    ln -s "$log" /data/cullaapp.com/log
+}
 
 # --- nginx -t: the host's stand-in files plus each variant of Culla's ---------
 
 nginx_t() {  # nginx_t <conf dir> <what>
-    podman run --rm --sysctl net.ipv6.conf.all.disable_ipv6=0 "${mounts[@]}" \
-        -v "$log:/data/cullaapp.com/log" -v "$1:/etc/nginx/conf.d:ro" "$IMAGE" nginx -t >"$work/nginx-t.out" 2>&1 \
+    use_config "$1"
+    nginx -t >"$work/nginx-t.out" 2>&1 \
         || { cat "$work/nginx-t.out" >&2; fail "nginx -t fails for $2"; }
 }
 nginx_t "$work/check.d" "the host's stand-in files alone"
@@ -119,11 +143,10 @@ done
 sed 's/#.*//' "$work/conf.d/cullaapp.com.conf" "$work/boot-www.d/cullaapp.com.conf" | grep -q "default_server" && fail "Culla's configuration declares a default_server"
 ok "nginx -t passes for the host's stand-in nginx.conf and 00-default.conf with Culla's full and HTTP-only configuration, www and IPv6 each on and off (no duplicate http-level setting, no second default_server)"
 
-start() {  # start <conf dir>; logs go to $log
-    podman rm -f "$NAME" >/dev/null 2>&1 || true
-    podman run -d --name "$NAME" --sysctl net.ipv6.conf.all.disable_ipv6=0 \
-        -p "127.0.0.1:$HTTP:80" -p "127.0.0.1:$HTTPS:443" \
-        "${mounts[@]}" -v "$log:/data/cullaapp.com/log" -v "$1:/etc/nginx/conf.d:ro" "$IMAGE" >/dev/null
+start() {  # start <conf dir>: a fresh nginx with that conf.d; logs go to $log
+    stop_nginx
+    use_config "$1"
+    nginx >>"$nginx_out" 2>&1 || fail "nginx did not start"
     for _ in $(seq 1 50); do
         # The host's default server closes connections for unknown names, so
         # ask for a challenge file, which every configuration answers.
@@ -135,7 +158,7 @@ start() {  # start <conf dir>; logs go to $log
 }
 
 H="cullaapp.com"
-c() {  # curl against the container as if it were the real host names
+c() {  # curl against nginx as if it were the real host names
     curl -sk --max-time 10 \
         --resolve "cullaapp.com:$HTTP:127.0.0.1" --resolve "www.cullaapp.com:$HTTP:127.0.0.1" \
         --resolve "cullaapp.com:$HTTPS:127.0.0.1" --resolve "www.cullaapp.com:$HTTPS:127.0.0.1" "$@"
@@ -162,8 +185,8 @@ start "$work/boot-www.d"
 [ "$(status_of "http://www.$H:$HTTP/")" = 503 ] || fail "bootstrap: www not answered"
 acme "$H" "bootstrap"; acme "www.$H" "bootstrap with www"
 [ "$(status_of "http://$H:$HTTP/.well-known/acme-challenge/none")" = 404 ] || fail "bootstrap: a missing challenge is not 404"
-grep -q '"ip":"[0-9.]*\.0"' "$log/access.log" || fail "bootstrap: no shortened address in access.log"
-ok "bootstrap config (with www) serves HTTP for both names, answers challenges from the host's webroot and logs shortened addresses"
+grep -q '"ip":"127\.0\.0\.1"' "$log/access.log" || fail "bootstrap: the client's address is not in access.log"
+ok "bootstrap config (with www) serves HTTP for both names, answers challenges from the host's webroot and logs the client's address"
 log="$work/log"
 
 # --- Full config ---------------------------------------------------------------
@@ -251,10 +274,9 @@ ok "404 uses the site's 404.html; the old form address, /downloads/ and the 413/
 # remote-install.sh itself (with a stand-in root and no real nginx), so this
 # checks the exact line deploy.sh puts on the server.
 #
-# Each step gets a fresh stand-in root (a copy of the one before), and the
-# container copies or removes download-target.conf itself: under a podman
-# machine, once the host deletes a file the VM has seen, the VM does not see
-# a new file of that name, so the host must never delete and recreate one.
+# Each step gets a fresh stand-in root (a copy of the one before);
+# download-target.conf is then copied from it into /etc/nginx/cullaapp, or
+# removed there when the step removed it, and nginx reloads.
 GITHUB_URL="https://github.com/kpirliyev/culla/releases/download/v1.0/Culla-1.0.dmg"
 step=0
 install_target() {  # install_target <remote-install.sh download-target arguments>
@@ -264,11 +286,10 @@ install_target() {  # install_target <remote-install.sh download-target argument
     CULLA_ROOT="$work/targets/$step" CULLA_SUDO="" CULLA_NGINX=true CULLA_SYSTEMCTL=true \
         bash "$deploy/remote-install.sh" download-target "$@" >/dev/null
     chmod -R a+rX "$work/targets/$step"
-    podman exec "$NAME" sh -c "
-        rm -f /etc/nginx/cullaapp/download-target.conf
-        f=/test/targets/$step/etc/nginx/cullaapp/download-target.conf
-        if [ -f \"\$f\" ]; then cp \"\$f\" /etc/nginx/cullaapp/; fi
-        nginx -s reload" 2>/dev/null || fail "nginx did not reload after download-target $*"
+    rm -f /etc/nginx/cullaapp/download-target.conf
+    local f="$work/targets/$step/etc/nginx/cullaapp/download-target.conf"
+    if [ -f "$f" ]; then cp "$f" /etc/nginx/cullaapp/; fi
+    nginx -s reload >>"$nginx_out" 2>&1 || fail "nginx did not reload after download-target $*"
     sleep 1
 }
 download_503() {  # download_503 <what>
@@ -305,32 +326,26 @@ grep -q "^$day,en,1," "$work/stats/visits.csv" || fail "visits.csv: $(cat "$work
 grep -q ",v1.0,Culla-1.0.dmg,57,57$" "$work/stats/downloads.csv" || fail "downloads.csv: $(cat "$work/stats/downloads.csv")"
 ok "count.py counts the visit from the real access.log and the downloads from GitHub's answer"
 
-# No full client address anywhere on disk.
-python3 - "$work/log" <<'EOF' || fail "a full client address was written to a log"
-import glob, json, re, sys
-shorts = set()
-for path in glob.glob(sys.argv[1] + "/*.log"):
-    if path.endswith("error.log"):
-        continue
-    for line in open(path, encoding="utf-8"):
-        ip = json.loads(line)["ip"]
-        assert re.match(r"^(\d+\.\d+\.\d+\.0|[0-9a-f:]*::|-)$", ip), (path, ip)
-        shorts.add(ip)
-assert shorts, "no addresses logged"
+# Every access.log line is one JSON object with the expected fields and the
+# client's full address (the test talks to nginx from 127.0.0.1).
+python3 - "$work/log" <<'EOF' || fail "access.log lines are not as expected"
+import glob, json, sys
+FIELDS = ["time", "ip", "host", "method", "uri", "status", "bytes", "referrer", "ua"]
+lines = 0
+for line in open(sys.argv[1] + "/access.log", encoding="utf-8"):
+    entry = json.loads(line)
+    assert list(entry) == FIELDS, entry
+    assert entry["ip"] == "127.0.0.1", entry
+    assert isinstance(entry["status"], int) and isinstance(entry["bytes"], int), entry
+    lines += 1
+assert lines, "nothing logged"
 files = sorted(glob.glob(sys.argv[1] + "/*"))
 assert any(p.endswith("/error.log") for p in files), "error.log was not created"
-text = "".join(open(p, encoding="utf-8", errors="replace").read() for p in files)
-print("files checked:", ", ".join(p.rsplit("/", 1)[1] for p in files))
-for ip in shorts:
-    if ip.endswith(".0"):
-        prefix = re.escape(ip[:-1])
-        found = re.findall(prefix + r"(?:[1-9]\d{0,2})\b", text)
-        assert not found, found
-print("addresses logged:", ", ".join(sorted(shorts)))
+print("files checked:", ", ".join(p.rsplit("/", 1)[1] for p in files), "-", lines, "access.log lines")
 EOF
 files="$(ls "$work/log" | tr '\n' ' ')"
 [ "$files" = "access.log error.log " ] || fail "unexpected log files: $files"
-ok "only access.log and error.log are written, and neither holds a full client address"
+ok "only access.log and error.log are written; every access.log line is JSON with the expected fields and the client's full address"
 
 # --- Without www.cullaapp.com ---------------------------------------------------
 
@@ -348,12 +363,13 @@ security "acme challenge without www" "http://$H:$HTTP/.well-known/acme-challeng
 [ "$(status_of "$S/en/")" = 200 ] || fail "page without www"
 sed 's/#.*//' "$work/conf-nowww.d/cullaapp.com.conf" | grep -q 'www\.cullaapp\.com' && fail "the no-www configuration names www.cullaapp.com"
 sleep 1
-python3 - "$work/log2" <<'EOF' || fail "a full client address was written to a log (no-www run)"
-import glob, json, re, sys
-for path in glob.glob(sys.argv[1] + "/access.log"):
-    for line in open(path, encoding="utf-8"):
-        ip = json.loads(line)["ip"]
-        assert re.match(r"^(\d+\.\d+\.\d+\.0|[0-9a-f:]*::|-)$", ip), (path, ip)
+python3 - "$work/log2" <<'EOF' || fail "access.log lines are not as expected (no-www run)"
+import json, sys
+lines = 0
+for line in open(sys.argv[1] + "/access.log", encoding="utf-8"):
+    assert json.loads(line)["ip"] == "127.0.0.1", line
+    lines += 1
+assert lines, "nothing logged"
 EOF
 ok "without www: cullaapp.com works as before; www.cullaapp.com is left to the host's default servers (challenges answered, otherwise closed, TLS refused)"
 

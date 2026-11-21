@@ -33,7 +33,7 @@ BOT = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
 DOWNLOADS_HEADER = ["date", "tag", "file", "total", "new"]
 
 
-def page(uri, status=200, ip="203.0.113.0", ua=SAFARI, day=DAY, method="GET"):
+def page(uri, status=200, ip="203.0.113.57", ua=SAFARI, day=DAY, method="GET"):
     return {"time": day + "T09:30:00+05:00", "ip": ip, "host": "cullaapp.com",
             "method": method, "uri": uri, "status": status, "bytes": 5000,
             "referrer": "", "ua": ua}
@@ -109,20 +109,20 @@ class VisitTests(CountTestCase):
             page("/en/", day="2026-11-13"),                    # other day
         ], gz=True)
         write_log(self.log("access.log.1"), [
-            page("/en/?ref=forum", ip="198.51.100.0", ua=FIREFOX),
+            page("/en/?ref=forum", ip="198.51.100.23", ua=FIREFOX),
             page("/ru/"),
             page("/en/", ua=BOT),
             page("/download", status=302),                     # not a page view
         ])
         write_log(self.log("access.log"), [
-            page("/tk/", status=304, ip="192.0.2.0", ua=FIREFOX),  # returning visitor
+            page("/tk/", status=304, ip="192.0.2.14", ua=FIREFOX),  # returning visitor
             page("/tk/", status=404),
             page("/en/", status=301),
             page("/en/index.html"),
             page("/ru/release-notes/"),
             page("/", status=302),
             page("/tk/", method="POST"),
-            page("/tk/", ip="2001:db8:5::"),
+            page("/tk/", ip="2001:db8:5:6::1"),
             page("/en/", ua=""),                               # no user agent
         ])
         with open(self.log("access.log"), "ab") as f:
@@ -172,6 +172,18 @@ class VisitTests(CountTestCase):
         days = sorted({r[0] for r in self.csv_rows("visits.csv")[1:]})
         self.assertEqual(days, ["2026-11-10", "2026-11-13", "2026-11-15"])
         self.assertNotIn(TODAY, days)
+
+    def test_visit_is_full_address_and_browser(self):
+        # Addresses are logged in full: neighbours in the same network are
+        # two visitors, the same address and browser twice is one.
+        write_log(self.log("access.log"), [
+            page("/en/", ip="203.0.113.57"), page("/en/", ip="203.0.113.58"),
+            page("/en/", ip="203.0.113.57"), page("/en/", ip="203.0.113.57", ua=FIREFOX),
+            page("/ru/", ip="2001:db8:5:6::1"), page("/ru/", ip="2001:db8:5:6::2"),
+        ])
+        self.run_count("--date", DAY)
+        self.assertEqual(self.csv_rows("visits.csv")[1:], [
+            [DAY, "en", "3", "4"], [DAY, "ru", "2", "2"], [DAY, "tk", "0", "0"]])
 
     def test_rotated_file_seen_twice_is_read_once(self):
         # logrotate renamed access.log while count.py was starting: the same

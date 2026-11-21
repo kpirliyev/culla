@@ -42,7 +42,7 @@
 #   CULLA_DEPLOY_LOCAL=1           "server" is this machine: no ssh, rsync to
 #                                  local paths, remote commands run locally
 #   CULLA_DEPLOY_WWW_ROOT          default /data/cullaapp.com/www
-#   CULLA_DEPLOY_SKIP_BUILD=1      do not run npm
+#   CULLA_DEPLOY_SKIP_BUILD=1      do not build (no site/test.sh build)
 #   CULLA_DEPLOY_OUTPUT            default site/.output/public
 #   CULLA_DEPLOY_RELEASE_JSON      default site/release.json
 #   CULLA_ROOT                     prefixes /etc/... when reading the current
@@ -217,15 +217,10 @@ build_site() {
     if [ "${CULLA_DEPLOY_SKIP_BUILD:-0}" = 1 ]; then
         say "skipping the build (CULLA_DEPLOY_SKIP_BUILD=1)"
     else
-        command -v npm >/dev/null || die "npm is not installed"
-        cd "$site"
-        if [ ! -d node_modules ] || [ package-lock.json -nt node_modules/.package-lock.json ]; then
-            say "npm ci"
-            npm ci
-        fi
-        say "npm run generate"
-        npm run generate
-        cd - >/dev/null
+        # In a podman container, exactly as `site/test.sh build`: the Mac's
+        # own Node is never used.
+        say "building the site in a container (site/test.sh build)"
+        "$site/test.sh" build || die "the build failed; nothing was uploaded"
     fi
 
     local missing=0 f

@@ -1,6 +1,6 @@
 """Static checks of the nginx configuration that need no nginx.
 
-The regexes of the two maps are taken from cullaapp.com.conf and run with
+The regexes of the language maps are taken from cullaapp.com.conf and run with
 Python's re module, which behaves like nginx's PCRE for these patterns. The
 real nginx behaviour is tested by run-nginx-tests.sh (needs podman).
 """
@@ -99,32 +99,6 @@ def apply_map(block, value):
 class MapTests(unittest.TestCase):
     conf = read("cullaapp.com.conf")
 
-    def test_ip_short(self):
-        block = map_block(self.conf, "$remote_addr", "$ip_short")
-        cases = {
-            "203.0.113.57": "203.0.113.0",
-            "192.0.2.255": "192.0.2.0",
-            "::ffff:198.51.100.7": "198.51.100.0",
-            "2001:db8:5:6:7:8:9:a": "2001:db8:5::",
-            "2001:db8:5::1": "2001:db8:5::",
-            "2001:db8::1": "2001:db8::",
-            "2001::1": "2001::",
-            "2a02:aa1:1005:9c6:1d3c:6f1:fe2b:1": "2a02:aa1:1005::",
-            "::1": "::",
-            "unix:": "-",
-        }
-        for address, expected in cases.items():
-            self.assertEqual(apply_map(block, address), expected, address)
-            # The full address never survives, except where it has no host part.
-            if address not in ("::1", "unix:"):
-                self.assertNotEqual(apply_map(block, address), address)
-
-    def test_bootstrap_uses_the_same_ip_map(self):
-        full = map_block(self.conf, "$remote_addr", "$ip_short")
-        boot = map_block(read("cullaapp.com.bootstrap.conf"), "$remote_addr", "$ip_short")
-        self.assertEqual([(r.pattern, v) for r, v in full[0]], [(r.pattern, v) for r, v in boot[0]])
-        self.assertEqual(full[1], boot[1])
-
     def test_language(self):
         found = map_block(self.conf, "$http_accept_language", "$cullaapp_lang_found")
         lower = map_block(self.conf, "$cullaapp_lang_found", "$cullaapp_lang")
@@ -179,14 +153,20 @@ class StructureTests(unittest.TestCase):
             if "add_header" in own:
                 self.assertIn("security-headers.conf", own, header)
 
-    def test_no_full_address_in_any_log_format(self):
+    def test_access_log_format(self):
+        # Both files write the same JSON line, with the client's full address.
+        expected = ('{"time":"$time_iso8601","ip":"$remote_addr","host":"$host",'
+                    '"method":"$request_method","uri":"$request_uri","status":$status,'
+                    '"bytes":$body_bytes_sent,"referrer":"$http_referer",'
+                    '"ua":"$http_user_agent"}')
         for name in ("cullaapp.com.conf", "cullaapp.com.bootstrap.conf"):
             text = strip_comments(rendered(name, "yes", "yes"))
-            for fmt in re.findall(r"log_format\s+\S+\s+escape=json(.*?);\n", text, re.S):
-                self.assertNotIn("$remote_addr", fmt)
-                self.assertNotIn("$binary_remote_addr", fmt)
-                self.assertNotIn("$http_x_forwarded_for", fmt)
-                self.assertIn("$ip_short", fmt)
+            formats = re.findall(r"log_format\s+(\S+)\s+escape=json(.*?);\n", text, re.S)
+            self.assertEqual([f[0] for f in formats], ["cullaapp_access"], name)
+            joined = "".join(re.findall(r"'([^']*)'", formats[0][1]))
+            self.assertEqual(joined, expected, name)
+            self.assertNotIn("$ip_short", text)
+            self.assertNotIn("$http_x_forwarded_for", joined)
             # Every server block writes its access log in one of our formats or not at all.
             for server in re.split(r"\nserver\s*\{", text)[1:]:
                 logs = re.findall(r"access_log\s+([^;]+);", server)
@@ -250,11 +230,13 @@ class StructureTests(unittest.TestCase):
         # The host's nginx.conf and conf.d/00-default.conf set TLS protocols,
         # ciphers, session cache and tickets, server_tokens, gzip and the
         # timeouts at http level; a second one there is an error. Culla adds
-        # only its maps, its log format and its servers.
-        for name in ("cullaapp.com.conf", "cullaapp.com.bootstrap.conf"):
+        # only its maps, its log format and its servers (the bootstrap file
+        # has no map).
+        for name, allowed in (("cullaapp.com.conf", {"map", "log_format", "server"}),
+                              ("cullaapp.com.bootstrap.conf", {"log_format", "server"})):
             for www, ipv6 in VARIANTS:
                 self.assertEqual(set(top_level_directives(rendered(name, www, ipv6))),
-                                 {"map", "log_format", "server"}, (name, www, ipv6))
+                                 allowed, (name, www, ipv6))
         tls = [line for line in strip_comments(read("snippets/tls.conf")).splitlines() if line.strip()]
         self.assertEqual([line.split()[0] for line in tls], ["ssl_certificate", "ssl_certificate_key"])
 

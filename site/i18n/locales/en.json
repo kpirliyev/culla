@@ -176,7 +176,7 @@
     },
     "counting": {
       "q": "Does this site count anything?",
-      "a": "The server keeps an ordinary log to count visits. It stores a shortened IP address, never the whole one, and the log is deleted after 30 days. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
+      "a": "The server keeps an ordinary log to count visits. Like any web server's log, it records your IP address and browser, and it is deleted after 30 days. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
     },
     "report": {
       "q": "How do I report a problem?",

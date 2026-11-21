@@ -3,12 +3,19 @@
 # CULLA_DEPLOY_LOCAL=1 makes a temporary folder stand in for the server, and
 # fake nginx/systemctl commands stand in for the real ones.
 #
-#   site/deploy/test/run-deploy-tests.sh
+#   site/test.sh deploy
+#
+# It runs in the test container (site/containers/test.Containerfile) as an
+# ordinary user with no network; run on the Mac, it hands over to
+# site/test.sh deploy.
 
 set -euo pipefail
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 deploy="$(dirname "$here")"
+if [ "${CULLA_IN_CONTAINER:-}" != 1 ]; then
+    exec "$(dirname "$deploy")/test.sh" deploy
+fi
 work="$(mktemp -d "${TMPDIR:-/tmp}/culla-deploy-test.XXXXXX")"
 trap 'rm -rf "$work"' EXIT
 
@@ -92,7 +99,8 @@ snapshot() { (cd "$www" && find . -type f | sort | xargs shasum) ; }
 before="$(snapshot)"
 check_out="$("$deploy/deploy.sh" --check)"
 [ "$(snapshot)" = "$before" ] || fail "--check changed the server"
-grep -q 'deleting stale.html' <<<"$check_out" || fail "--check does not show stale.html going: $check_out"
+# rsync 3 itemizes it as "*deleting   stale.html", older ones as "deleting stale.html".
+grep -Eq 'deleting +stale\.html$' <<<"$check_out" || fail "--check does not show stale.html going: $check_out"
 ok "--check shows the changes (stale.html would go) and changes nothing"
 
 # --- A real deploy -----------------------------------------------------------
@@ -386,9 +394,9 @@ cat > "$work/fake-ssh" <<EOF
 # Stands in for ssh: notes its arguments, then runs the command here.
 echo "\$*" >> "$work/ssh.calls"
 while [ \$# -gt 0 ]; do
-    case "\$1" in -p|-i|-o) shift 2 ;; -t) shift ;; *) break ;; esac
+    case "\$1" in -p|-i|-o|-l) shift 2 ;; -t) shift ;; *) break ;; esac
 done
-shift   # user@host
+shift   # user@host, or the host after "-l user" (rsync 3 passes the user so)
 exec bash -c "\$*"
 EOF
 chmod +x "$work/fake-ssh"

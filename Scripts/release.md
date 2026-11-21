@@ -64,12 +64,15 @@ This builds the Release configuration (ad hoc signed, which is what the project 
 
 1. Join the Apple Developer Program and, in Xcode ▸ Settings ▸ Accounts, sign in with that Apple ID.
 2. Create a **Developer ID Application** certificate (Xcode ▸ Settings ▸ Accounts ▸ Manage Certificates ▸ +). It lands in the login keychain.
-3. Settle the bundle identifier. `com.kpirliyev.Culla` is a placeholder; changing it later moves everyone's settings and sessions to a new container.
-4. Store notarization credentials once, under a profile name, with an app-specific password from appleid.apple.com:
+3. The bundle identifier is `com.kpirliyev.Culla`, settled on 2026-11-21. Do not change it: a change moves everyone's settings and sessions to a new container.
+4. Store notarization credentials once, under the profile name `culla-notary`, with an App Store Connect API key (the same key the GitHub workflow uses) or with an app-specific password from account.apple.com:
 
 ```bash
-xcrun notarytool store-credentials culla-notary --apple-id <apple id> --team-id <TEAMID> --password <app-specific password>
+xcrun notarytool store-credentials culla-notary --key AuthKey_<key id>.p8 --key-id <key id> --issuer <issuer id>
+xcrun notarytool store-credentials culla-notary --apple-id <apple id> --team-id <TEAMID>     # asks for the app-specific password
 ```
+
+The team ID is `Z32TPH2T97`; `Scripts/release.sh` uses it by default, and it replaces `<TEAMID>` in the commands below.
 
 ## 3. Archive and sign with Developer ID
 
@@ -137,7 +140,7 @@ The disk image is published as an asset of a GitHub Release in `kpirliyev/culla`
    stat -f %z build/Culla-1.0.dmg
    ```
 
-2. Create the release with the image attached. The notes are the "Status" section of the README and the checksum:
+2. Create the release with the image attached (skip this step when the GitHub workflow made the draft: check its image as in section 5, then publish the draft). The notes are the "Status" section of the README and the checksum:
 
    ```bash
    gh release create v1.0 build/Culla-1.0.dmg --repo kpirliyev/culla --title "Culla 1.0" --notes-file <notes file>

@@ -41,14 +41,16 @@ After adding or changing text, run `python3 Scripts/l10n.py check --require ru,t
 
 `culla-eval` writes scores and contact sheets to `culla-eval-output/`, which is not committed.
 
-The site:
+The site, everything in podman containers (needs `podman machine start`; the Mac's own Node and Python are never used):
 
 ```bash
-cd site && npm install && npm run generate
-cd site && npm run preview:static
-python3 -m unittest discover -s site/deploy/test
-site/deploy/test/run-deploy-tests.sh
-site/deploy/test/run-nginx-tests.sh
+site/test.sh              # build and every site test
+site/test.sh build        # npm ci when the lockfile changed, npm run generate, checks; output in site/.output/public/
+site/test.sh unit         # the Python unit tests of site/deploy/
+site/test.sh deploy       # the deploy script's tests
+site/test.sh nginx        # the nginx configuration in the official nginx image
+site/test.sh preview      # serve the build on http://localhost:4173 with the production Content-Security-Policy
+site/test.sh clean        # remove the volumes and the test image
 ```
 
-`preview:static` serves the built site on port 4173 with the same Content-Security-Policy as the server. `run-nginx-tests.sh` runs the configuration in the official nginx image with podman and needs the podman machine running (`podman machine start`). Containers are run with podman only, never Docker. Testing on the Mac goes through podman containers: run the site's build and the tests of `site/deploy/` in a container, not with the Mac's own Node or Python. The app itself (Xcode, Swift, the interface scripts) can only run on macOS.
+Containers are run with podman only, never Docker. Testing on the Mac goes through podman containers; `site/deploy/deploy.sh` builds through the same container. The app itself (Xcode, Swift, the interface scripts) can only run on macOS.

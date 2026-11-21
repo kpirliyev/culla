@@ -1,6 +1,6 @@
 # Culla — Landing Page Plan
 
-Last updated: 2026-11-20
+Last updated: 2026-11-21
 
 A plan for the public website of Culla, `https://cullaapp.com`. The site is in `site/`; its README says how to build and deploy it. The page has one job: a photographer who lands on it understands in five seconds that Culla is free and open source, that it runs on their Mac's own hardware, and that culling happens from the keyboard, and can download it without scrolling.
 
@@ -17,7 +17,7 @@ A plan for the public website of Culla, `https://cullaapp.com`. The site is in `
 | Source code | Open source under the MIT licence at `https://github.com/kpirliyev/culla`. The page says so on the first screen, in the proof strip, in the maker's note, in the questions and in the footer | Decided by the owner on 2026-11-20. It is the strongest answer to "what's the catch?": anyone can read what the app does |
 | Languages | English, Russian, Turkmen, as in the app. English is the default: it is shown whenever the browser asks for none of the three | Same audience; reuse `docs/localization.md` for terms |
 | Contact | GitHub: an issue form for bugs, an issue form for feature requests, and Discussions for questions. No form on the page, and no email address on the page or in this repository | Decided by the owner on 2026-11-20. Bugs and ideas are public and searchable, the maker's address stays private, and the server has nothing to receive or send |
-| Counting | Visits are counted from the nginx log, with shortened IP addresses. Downloads of each version are read once a day from GitHub's own count for each release asset. Both go into CSV files. A report page (GoAccess) is left for later | The owner needs both numbers; neither needs a script or cookie on the page |
+| Counting | Visits are counted from the nginx log, which stores full IP addresses and is kept for 30 days. Downloads of each version are read once a day from GitHub's own count for each release asset. Both go into CSV files. A report page (GoAccess) is left for later | The owner needs both numbers; neither needs a script or cookie on the page |
 | Tracking | None. No cookies, no analytics script, no third-party fonts or scripts, and the page loads nothing from GitHub; it only links there. The page says plainly what the server log keeps and that the download comes from GitHub | The app has no network access; the site makes the same promise and needs no consent banner |
 | Language switch | Three round flags (United Kingdom, Russia, Turkmenistan) in the top bar and the footer, each named for screen readers by the language's own name | Asked for by the owner on 2026-11-20 |
 | Icon | The page's icon and favicon are made from the Xcode project's app icon at every build | The owner plans to change the icon; replacing it in Xcode changes the site too |
@@ -131,7 +131,7 @@ One quiet line under them: "These open on GitHub, where you need a free account 
 Which Macs and cameras; does it need the internet; does it change my photos; what happens to rejects; how is it free; is it open source; does this site count anything; how to report a problem.
 
 - On open source: "Yes. The code is on GitHub under the MIT licence. You can read it, build it yourself, or send a fix." It links to the repository and to `CONTRIBUTING.md`.
-- On counting: "The server keeps an ordinary log to count visits. It stores a shortened IP address, never the whole one, and the log is deleted after 30 days. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
+- On counting: "The server keeps an ordinary log to count visits. Like any web server's log, it records your IP address and browser, and it is deleted after 30 days. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
 - On reporting a problem: the same three links as in "Tell me".
 
 Marked up as FAQ structured data.
@@ -173,7 +173,7 @@ The configuration is kept in the repository as `site/deploy/cullaapp.com.conf`. 
 
 - **Names.** The site is `https://cullaapp.com`. `www.cullaapp.com` and plain HTTP both redirect to it.
 - **Files.** `root /data/cullaapp.com/www;`
-- **Logs.** `access_log /data/cullaapp.com/log/access.log;` and `error_log /data/cullaapp.com/log/error.log;`. Because the folder is outside `/var/log`, a logrotate rule for it is kept beside the configuration. Every log line carries a shortened IP address, never the whole one, and raw logs are kept for 30 days. What is counted from them is under [Counting downloads and visits](#counting-downloads-and-visits).
+- **Logs.** `access_log /data/cullaapp.com/log/access.log;` and `error_log /data/cullaapp.com/log/error.log;`. Because the folder is outside `/var/log`, a logrotate rule for it is kept beside the configuration. Every log line carries the visitor's full IP address (the owner's decision on 2026-11-21: no shortening), and raw logs are kept for 30 days. What is counted from them is under [Counting downloads and visits](#counting-downloads-and-visits).
 - **Language.** `/` redirects to `/en/`, `/ru/` or `/tk/`: the first of Culla's languages in the browser's `Accept-Language` list, chosen by a `map`. English when none of the three is in the list.
 - **Downloads.** The server holds no disk image. `/download` redirects to the release asset on GitHub, `https://github.com/kpirliyev/culla/releases/download/v<version>/Culla-<version>.dmg`; every deploy writes that line from `release.json`. While `release.json` has no release date, `/download` answers with a friendly "not yet" page. The page shows the SHA-256 beside the release notes.
 - **Caching.** Files with a hash in their name are cached for a year as immutable; HTML is always revalidated. Compression comes from files compressed at build time (`gzip_static`).
@@ -220,8 +220,8 @@ Nothing on the server receives a message. The page links to GitHub, and the repo
 
 Nothing is added to the page.
 
-- **Shortened addresses.** An nginx `map` replaces the last part of each visitor's IP address with zero before any log line is written.
-- **Visits.** A page view is a successful load of `/en/`, `/ru/` or `/tk/`. A visit is one distinct shortened address and browser in a day. The split by language and the referring sites come from the same lines.
+- **Addresses.** The log stores each visitor's IP address as nginx sees it. Nothing is shortened; the 30-day rotation is what limits how long it is kept.
+- **Visits.** A page view is a successful load of `/en/`, `/ru/` or `/tk/`. A visit is one distinct address and browser in a day. The split by language and the referring sites come from the same lines.
 - **Downloads per version.** GitHub counts how often each release asset is downloaded and gives the number through its public API. Once a day the server asks for it (one request, no account needed) and writes a row for each disk image: the date, the release tag, the file name, the downloads so far and how many are new since the day before. If GitHub does not answer, that day has no rows and the next day's "new" covers both.
 - **The record.** `site/deploy/count.py` runs from crontab once a day and writes into two files in `/data/cullaapp.com/stats/`, which is not served: `downloads.csv` and `visits.csv` (date, language, visits, page views).
 - **Kept how long.** The raw log 30 days. The two CSV files are kept for good; they hold counts, not addresses.
