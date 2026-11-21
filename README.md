@@ -17,7 +17,7 @@ It is for anyone who comes home with hundreds or thousands of photos and wants t
 - **Similar stacks**: bursts and frames taken close together that look alike, each with a best pick.
 - **Duplicates**: byte-identical copies, and near-identical images such as a resized copy.
 
-Detection uses Apple's Vision, Core Image and ImageIO frameworks, on your Mac. Every threshold is a setting with a live count of what it would flag.
+Detection uses Apple's Vision, Core Image and ImageIO frameworks, on your Mac. The lens smudge check needs the Neural Engine, so it is left out on a Mac without one, such as a virtual machine. Every threshold is a setting with a live count of what it would flag.
 
 ## How culling works
 

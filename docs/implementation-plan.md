@@ -373,6 +373,12 @@ Top bar, 2026-11-12 (after localization):
 - The bar holds English, Russian and Turkmen at 1280 pt and at the 900 pt minimum width; the walks snapshot it analysing and paused at both widths.
 - Not checked: real pointer use (hover fills, dragging the window by the bar, double-click to zoom or minimise), full screen, macOS 26, Full Keyboard Access through the bar, and the system's Increase Contrast setting on the bar.
 
+Release pipeline, 2026-11-21:
+
+- The first run of the release workflow on GitHub's runner (a virtual Mac without a Neural Engine) lost two test processes to a trap inside Vision's lens-smudge request. The analyzer now skips a Vision request this Mac has no device for (`VisionAvailability`); the tests pass on the runner with lens smudge skipped there.
+- Not done: on a Mac without a Neural Engine, Settings still shows the Lens smudge switch, its threshold and a count that is always 0, which reads as "no smudged photos" although the check never ran. Saying so needs new text in three languages.
+- Not checked: an Intel Mac. The app is built for both architectures, but nothing has been run on one.
+
 **Gate.** The notarized build opens without a security warning on a Mac that has never seen it, and all eight flows pass from the keyboard alone.
 
 ## M7 — Detection tuning
