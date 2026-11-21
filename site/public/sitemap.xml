@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://cullaapp.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cullaapp.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://cullaapp.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://cullaapp.com/tk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cullaapp.com/en/"/>
+  </url>
+  <url>
+    <loc>https://cullaapp.com/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cullaapp.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://cullaapp.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://cullaapp.com/tk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cullaapp.com/en/"/>
+  </url>
+  <url>
+    <loc>https://cullaapp.com/tk/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cullaapp.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://cullaapp.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://cullaapp.com/tk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cullaapp.com/en/"/>
+  </url>
+  <url>
+    <loc>https://cullaapp.com/en/release-notes/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cullaapp.com/en/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://cullaapp.com/ru/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://cullaapp.com/tk/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cullaapp.com/en/release-notes/"/>
+  </url>
+  <url>
+    <loc>https://cullaapp.com/ru/release-notes/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cullaapp.com/en/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://cullaapp.com/ru/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://cullaapp.com/tk/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cullaapp.com/en/release-notes/"/>
+  </url>
+  <url>
+    <loc>https://cullaapp.com/tk/release-notes/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cullaapp.com/en/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://cullaapp.com/ru/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="tk" href="https://cullaapp.com/tk/release-notes/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cullaapp.com/en/release-notes/"/>
+  </url>
+</urlset>

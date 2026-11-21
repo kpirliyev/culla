@@ -1,0 +1,815 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "language": "en",
+  "timeout": 420,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset, in English. Every screen with text, including the top bar while analysis runs and is paused, for judging translations and clipped text: snapshots, the accessibility tree of each window and dumps holding the menu bar (mainMenu). Scripts/l10n-screens.py compares a run with the English one (65-screens-en) and lists text left in English."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "language.running": "en",
+        "screen": "welcome"
+      }
+    },
+    {
+      "firstRun": "reset"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "01-first-run"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-01-first-run"
+    },
+    {
+      "dump": "01-first-run",
+      "photos": false
+    },
+    {
+      "window": "help"
+    },
+    {
+      "snapshot": "02-keyboard-shortcuts",
+      "window": "help"
+    },
+    {
+      "accessibility": "help",
+      "save": "a11y-02-keyboard-shortcuts"
+    },
+    {
+      "window": "about"
+    },
+    {
+      "snapshot": "03-about",
+      "window": "about"
+    },
+    {
+      "accessibility": "about",
+      "save": "a11y-03-about"
+    },
+    {
+      "window": "close"
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "snapshot": "03a-analysing"
+    },
+    {
+      "analysis": "pause"
+    },
+    {
+      "sleep": 4
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "analysis.phase": "paused"
+      }
+    },
+    {
+      "snapshot": "03b-paused"
+    },
+    {
+      "windowSize": [
+        900,
+        700
+      ]
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "03c-narrow-paused"
+    },
+    {
+      "command": "toggleInspector"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "03d-narrow-paused-inspector"
+    },
+    {
+      "command": "toggleInspector"
+    },
+    {
+      "command": "toggleAnalysis"
+    },
+    {
+      "sleep": 0.5
+    },
+    {
+      "snapshot": "03e-narrow-analysing"
+    },
+    {
+      "windowSize": [
+        1280,
+        800
+      ]
+    },
+    {
+      "wait": "analysis",
+      "timeout": 150
+    },
+    {
+      "injectScores": "burst",
+      "frames": [
+        "sonoma_burst0.jpg",
+        "sonoma_burst1.jpg",
+        "sonoma_burst2.jpg",
+        "sonoma_burst3.jpg"
+      ],
+      "people": [
+        {
+          "box": [
+            0.3,
+            0.3,
+            0.09,
+            0.12
+          ]
+        },
+        {
+          "box": [
+            0.56,
+            0.33,
+            0.08,
+            0.11
+          ]
+        }
+      ],
+      "blink": [
+        [
+          2,
+          1
+        ]
+      ],
+      "missing": [
+        [
+          3,
+          0
+        ]
+      ],
+      "sharpness": [
+        52,
+        64,
+        70,
+        58
+      ]
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "04-grid"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-04-grid"
+    },
+    {
+      "dump": "04-grid",
+      "photos": false
+    },
+    {
+      "click": "sonoma_0.jpg"
+    },
+    {
+      "command": "toggleInspector"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "05-grid-inspector"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "06-grid-stacks-expanded"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "click": "horizon_0_over.jpg"
+    },
+    {
+      "key": "space"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "07-loupe-inspector"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-07-loupe-inspector"
+    },
+    {
+      "command": "toggleClippingOverlay",
+      "allowUnavailable": true
+    },
+    {
+      "command": "toggleFaceStrip",
+      "allowUnavailable": true
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "08-loupe-overlays"
+    },
+    {
+      "command": "toggleClippingOverlay",
+      "allowUnavailable": true
+    },
+    {
+      "command": "toggleFaceStrip",
+      "allowUnavailable": true
+    },
+    {
+      "command": "toggleInspector"
+    },
+    {
+      "key": "escape"
+    },
+    {
+      "group": "blurry"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "09-blurry-group"
+    },
+    {
+      "popover": "tuning"
+    },
+    {
+      "snapshot": "10-tuning-panel"
+    },
+    {
+      "popover": "close"
+    },
+    {
+      "key": "shift+x"
+    },
+    {
+      "wait": "confirmation"
+    },
+    {
+      "snapshot": "11-reject-certain-confirmation"
+    },
+    {
+      "confirm": "cancel"
+    },
+    {
+      "group": "eyesClosed"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "12-eyes-closed-group"
+    },
+    {
+      "group": "kept"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "13-empty-kept"
+    },
+    {
+      "group": "similarStacks"
+    },
+    {
+      "keys": [
+        "down",
+        "down"
+      ]
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "14-stack-review-two-panes"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-14-stack-review-two-panes"
+    },
+    {
+      "dump": "14-stack-review-two-panes",
+      "photos": false
+    },
+    {
+      "key": "h"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "15-stack-review-one-pane"
+    },
+    {
+      "key": "f"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "16-stack-review-no-faces"
+    },
+    {
+      "keys": [
+        "f",
+        "h"
+      ]
+    },
+    {
+      "group": "duplicates"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "17-duplicate-review-exact"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-17-duplicate-review-exact"
+    },
+    {
+      "key": "return"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "18-duplicate-review-near"
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "click": "sonoma_2.jpg"
+    },
+    {
+      "click": "sonoma_3.jpg",
+      "modifiers": "cmd"
+    },
+    {
+      "key": "c"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "19-compare"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-19-compare"
+    },
+    {
+      "key": "x"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "20-compare-rejected-notice"
+    },
+    {
+      "key": "escape"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "click": "horizon_1.jpg"
+    },
+    {
+      "keys": [
+        "x",
+        "4"
+      ]
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "21-grid-after-decisions"
+    },
+    {
+      "dump": "21-grid-after-decisions",
+      "photos": false
+    },
+    {
+      "key": "cmd+return"
+    },
+    {
+      "wait": "apply"
+    },
+    {
+      "snapshot": "22-apply-move"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-22-apply-move"
+    },
+    {
+      "dump": "22-apply-move",
+      "photos": false
+    },
+    {
+      "applyAction": "markOnly"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "23-apply-mark-only"
+    },
+    {
+      "applyAction": "moveToTrash"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "24-apply-trash"
+    },
+    {
+      "applyAction": "moveToRejectedFolder"
+    },
+    {
+      "key": "shift+cmd+return"
+    },
+    {
+      "wait": "applied"
+    },
+    {
+      "snapshot": "25-applied-banner"
+    },
+    {
+      "dump": "25-applied-banner",
+      "photos": false
+    },
+    {
+      "bannerAction": "undo"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "26-undone-banner"
+    },
+    {
+      "settingsWindow": "general"
+    },
+    {
+      "snapshot": "27-settings-general",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-27-settings-general"
+    },
+    {
+      "settingsWindow": "eyes"
+    },
+    {
+      "snapshot": "28-settings-eyes",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-28-settings-eyes"
+    },
+    {
+      "settingsWindow": "blur"
+    },
+    {
+      "snapshot": "29-settings-blur",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-29-settings-blur"
+    },
+    {
+      "settingsWindow": "similarity"
+    },
+    {
+      "snapshot": "30-settings-similarity",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-30-settings-similarity"
+    },
+    {
+      "settingsWindow": "duplicates"
+    },
+    {
+      "snapshot": "31-settings-duplicates",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-31-settings-duplicates"
+    },
+    {
+      "settingsWindow": "exposure"
+    },
+    {
+      "snapshot": "32-settings-exposure",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-32-settings-exposure"
+    },
+    {
+      "settingsWindow": "other"
+    },
+    {
+      "snapshot": "33-settings-other",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-33-settings-other"
+    },
+    {
+      "settingsWindow": "performance"
+    },
+    {
+      "snapshot": "34-settings-performance",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-34-settings-performance"
+    },
+    {
+      "settingsWindow": "keys"
+    },
+    {
+      "snapshot": "35-settings-keys",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-35-settings-keys"
+    },
+    {
+      "settings": {
+        "language": "tk"
+      }
+    },
+    {
+      "settingsWindow": "general"
+    },
+    {
+      "expect": {
+        "language.reopenOffered": true
+      }
+    },
+    {
+      "snapshot": "36-settings-general-language-changed",
+      "window": "settings"
+    },
+    {
+      "settings": {
+        "language": "system"
+      }
+    },
+    {
+      "scanToggle": "includeSubfolders",
+      "value": false
+    },
+    {
+      "snapshot": "37-settings-rescan-confirmation",
+      "window": "settings"
+    },
+    {
+      "scanToggle": "cancel"
+    },
+    {
+      "settingsWindow": "keys"
+    },
+    {
+      "bindKey": "keep",
+      "chord": "x"
+    },
+    {
+      "snapshot": "38-settings-key-conflict",
+      "window": "settings"
+    },
+    {
+      "keyRecorder": "cancel"
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "windowSize": [
+        900,
+        700
+      ]
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "40-narrow-grid"
+    },
+    {
+      "command": "toggleInspector"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "41-narrow-grid-inspector"
+    },
+    {
+      "command": "toggleInspector"
+    },
+    {
+      "group": "blurry"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "42-narrow-loupe-badges"
+    },
+    {
+      "popover": "tuning"
+    },
+    {
+      "snapshot": "43-narrow-tuning-panel"
+    },
+    {
+      "popover": "close"
+    },
+    {
+      "group": "similarStacks"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "44-narrow-stack-review"
+    },
+    {
+      "key": "h"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "45-narrow-stack-review-one-pane"
+    },
+    {
+      "key": "h"
+    },
+    {
+      "group": "duplicates"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "46-narrow-duplicate-review"
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "click": "sonoma_2.jpg"
+    },
+    {
+      "click": "horizon_3.jpg",
+      "modifiers": "cmd"
+    },
+    {
+      "key": "c"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "47-narrow-compare"
+    },
+    {
+      "key": "escape"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "key": "cmd+return"
+    },
+    {
+      "wait": "apply"
+    },
+    {
+      "snapshot": "48-narrow-apply"
+    },
+    {
+      "key": "shift+cmd+return"
+    },
+    {
+      "wait": "applied"
+    },
+    {
+      "snapshot": "49-narrow-applied-banner"
+    },
+    {
+      "bannerAction": "undo"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "50-narrow-undone-banner"
+    },
+    {
+      "windowSize": [
+        1280,
+        800
+      ]
+    },
+    {
+      "fixture": {
+        "add": [
+          "sonoma_2.jpg",
+          "aa_new.jpg"
+        ]
+      }
+    },
+    {
+      "rescan": "focus"
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "key": "home"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "51-new-pill"
+    },
+    {
+      "dump": "99-final",
+      "photos": false
+    },
+    {
+      "quit": true
+    }
+  ]
+}

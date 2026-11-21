@@ -1,0 +1,27 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Files renamed, added and deleted outside Culla while it is open: a focus rescan picks them up, decisions follow the renamed file, the new one is marked New, focus stays."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"click": "sonoma_3.jpg"},
+    {"key": "x"},
+    {"click": "sonoma_2.jpg"},
+    {"key": "p"},
+    {"click": "sonoma_2.jpg"},
+    {"rescan": "focus"},
+    {"expect": {"disk.rescan.last.changed": false}},
+    {"fixture": {"rename": ["sonoma_3.jpg", "sonoma_3_renamed.jpg"]}},
+    {"fixture": {"add": ["horizon_1.jpg", "added_later.jpg"]}},
+    {"fixture": {"delete": "sonoma_4_small.jpg"}},
+    {"rescan": "focus"},
+    {"snapshot": "01-after-rescan"},
+    {"dump": "01-after-rescan"},
+    {"expect": {"disk.rescan.last.changed": true, "disk.rescan.last.renamed.0.to": "sonoma_3_renamed.jpg", "disk.rescan.last.added": ["added_later.jpg"], "disk.rescan.last.removed": ["sonoma_4_small.jpg"], "photo:sonoma_3_renamed.jpg.decision": "rejected", "photo:added_later.jpg.isNew": true, "focus": "sonoma_2.jpg", "totals.photos": 35}},
+    {"rescan": "menu"},
+    {"expect": {"disk.rescan.last.changed": false}},
+    {"quit": true}
+  ]
+}

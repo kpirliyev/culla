@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "Culla: suratlary saýlamak üçin mugt Mac programmasy",
+    "description": "Culla surata düşüriş bukjasyndaky ýumuk gözleri, bulaşyk we meňzeş kadrlary Apple-yň Vision freýmworky bilen Mac-yňyzyň özünde tapýar. Karary siz berýärsiňiz, her gezek bir düwme bilen. Mugt, hasap gerek däl, hiç zat ýüklenmeýär.",
+    "releaseNotesTitle": "Wersiýa bellikleri · Culla",
+    "notFoundTitle": "Sahypa tapylmady · Culla",
+    "ogAlt": "Culla programmasynyň nyşany"
+  },
+  "nav": {
+    "skip": "Esasy mazmuna geç",
+    "languages": "Dil",
+    "home": "Culla, baş sahypa"
+  },
+  "hero": {
+    "title": "Culla iň gowy kadrlary saýlamaga kömek edýär.",
+    "lead": "Ol ýumuk gözleri, bulaşyk we meňzeş kadrlary Apple-yň Vision freýmworky bilen tapýar, Vision bolsa Mac-yňyzyň Neural Engine-inde işleýär. Karary siz berýärsiňiz, her gezek bir düwme bilen.",
+    "download": "Mac üçin ýükläp al",
+    "github": "GitHub-da aç",
+    "copy": "Salgyny Mac üçin nusgala",
+    "copied": "Salgy nusgalandy",
+    "copiedSay": "Salgy nusgalandy. Ony Mac-yňyzda açyň.",
+    "copyFailed": "Nusgalamak üçin basyp saklaň"
+  },
+  "version": {
+    "label": "Ýükleme barada",
+    "version": "Wersiýa {version}",
+    "size": "{size} MB",
+    "system": "macOS 26 ýa-da täzesi",
+    "free": "Mugt we açyk çeşmeli. Hasap gerek däl."
+  },
+  "shots": {
+    "placeholder": "Bu ýerde ekran suraty bolar",
+    "hero-stack-review": {
+      "label": "Tapgyry gözden geçiriş",
+      "alt": "Culla-da tapgyry gözden geçiriş: bir seriýanyň kadrlary ýanaşyk, iň gowy kadr ýyldyz bilen bellenen, aşakda her kadryň ýüzler zolagy."
+    },
+    "how-1-open": {
+      "label": "Bukjany açmak",
+      "alt": "Bukja açylandan soň Culla-nyň penjiresi: suratlaryň tory, ýokarda derňew barýar."
+    },
+    "how-2-groups": {
+      "label": "Gapdal paneldäki toparlar",
+      "alt": "Culla-nyň gapdal paneli we toparlary: Dublikatlar, Meňzeş tapgyrlar, Ýumuk gözler, Bulaşyk we Ekspozisiýa, her biriniň ýanynda sany."
+    },
+    "how-3-decide": {
+      "label": "Tapgyr we onuň iň gowy kadry",
+      "alt": "Culla-da meňzeş kadrlaryň tapgyry: iň gowy kadr ýyldyz bilen bellenen, käbir kadrlar galdyrylan ýa-da ret edilen."
+    },
+    "vision-evidence": {
+      "label": "Suratyň üstünde görkezilen subutnamalar",
+      "alt": "Culla-da doly ölçegde açylan surat: bir ýüz çarçuwa alnan, belgi gözleriň ýumukdygyny we Culla-nyň munuňa näçe ynamlydygyny aýdýar."
+    }
+  },
+  "proof": {
+    "label": "Gysgaça",
+    "free": "Mugt, gizlin şert ýok",
+    "open": "Açyk çeşmeli",
+    "account": "Hasap gerek däl",
+    "ads": "Mahabat ýok, yzarlamak ýok",
+    "offline": "Internetsiz işleýär, hiç zat ýüklenmeýär"
+  },
+  "how": {
+    "title": "Nähili işleýär",
+    "step1": "Bukjany açyň.",
+    "step2": "Culla suratlary toparlara bölýär: dublikatlar, meňzeş tapgyrlar, ýumuk gözler, bulaşyklar, ekspozisiýasy şowsuzlar.",
+    "step3": "P — galdyr, X — ret et. Siz aýdýançaňyz hiç zat ýerinden süýşmeýär."
+  },
+  "vision": {
+    "title": "Mac-yňyzda Apple Vision",
+    "lead": "Culla-nyň tapýan zatlarynyň hemmesi Apple-yň öz freýmworklaryndan gelýär: Vision, Core Image we ImageIO. Üçünji tarapyň modelleri ýok.",
+    "what": "Culla näme tapýar",
+    "how": "Nädip",
+    "eyes": "Ýumuk gözler",
+    "eyesHow": "Vision-yň ýüz nokatlary, Core Image bilen barlanýar",
+    "blur": "Bulaşyklyk",
+    "blurHow": "Vision-yň iň göze ilýän ýer hökmünde tapýan esasy obýektindäki gyralaryň anyklygy, üstesine ýüzüň surata düşüş hili",
+    "alike": "Meňzeş kadrlar we dublikatlar",
+    "alikeHow": "Vision-yň alamat yzlary we düşürilen wagty; takyk nusgalar faýl heşi boýunça",
+    "smudge": "Hapa obýektiw",
+    "smudgeHow": "Vision-yň hapa obýektiwi gözleýän haýyşy",
+    "eyesOpen": "Gözler açyk",
+    "eyesClosed": "Gözler ýumuk",
+    "soft": "Bulaşyk",
+    "caption": "Culla tapanyny suratyň üstünde görkezýär: ýüzi ýakynlaşdyrýar, ony çarçuwa alýar we gözleriň ýumukdygyny hem-de munuňa näçe ynamlydygyny ýazýar.",
+    "closing1": "Ýüklemeli model ýok. Bulut ýok. Suratlaryňyz Mac-yňyzdan çykmaýar.",
+    "closing2": "Culla teklip edýär, karary siz berýärsiňiz. Her belligiň sebäbi görkezilýär."
+  },
+  "keyboard": {
+    "title": "Klawiaturadan",
+    "line1": "Her karar üçin bir düwme.",
+    "line2": "Culla bukjany barlap durka, işe başlap bilersiňiz.",
+    "line3": "Islendik düwmäni üýtgedip bolýar."
+  },
+  "demo": {
+    "label": "Düwmeleri synap görmek üçin bäş kadrly tapgyr",
+    "keysLabel": "Düwmeler",
+    "hintKeys": "Synap görüň: düwmeler şu ýerde işleýär.",
+    "hintTouch": "Düwmelere basyň.",
+    "pick": "Iň gowy",
+    "frame1": "Gözler ýumuk",
+    "frame2": "Gözler açyk, ýylgyrýar. Culla-nyň saýlany.",
+    "frame3": "Bulaşyk, fokusdan çykan",
+    "frame4": "Başga ýere seredýär",
+    "frame5": "Gözler ýarym ýumuk",
+    "keyKeep": "galdyr",
+    "keyReject": "ret et",
+    "keyPrev": "öňki",
+    "keyNext": "indiki",
+    "keyAccept": "kabul et",
+    "keyKeepLabel": "P: bu kadry galdyr",
+    "keyRejectLabel": "X: bu kadry ret et",
+    "keyPrevLabel": "Çep peýkam: öňki kadr",
+    "keyNextLabel": "Sag peýkam: indiki kadr",
+    "keyAcceptLabel": "Return: iň gowy kadry galdyr, galanlaryny ret et",
+    "current": "Kadr {n} / {total}.",
+    "currentPick": "Kadr {n} / {total}, iň gowy kadr.",
+    "kept": "Kadr {n} galdyryldy.",
+    "rejected": "Kadr {n} ret edildi.",
+    "done": "Taýýar. Galdyrylanlar ýerinde, galanlary ret edildi.",
+    "again": "Ýene bir gezek",
+    "reset": "Tapgyr öňki ýagdaýyna gaýtdy."
+  },
+  "safe": {
+    "title": "Suratlaryňyz siziňki bolup galýar",
+    "nothingMoves": "Kararlary ulanýançaňyz hiç zat ýerinden süýşmeýär.",
+    "rejects": "Ret edilen suratlar bukjanyň içindäki {folder} bukjasyna geçirilýär. Hiç zat pozulmaýar.",
+    "undo": "Ulanmagy yzyna alyp bolýar.",
+    "beta": "Beta",
+    "sidecar": "Bahalary we galdyr ýa-da ret et kararlaryny suratlaryňyzyň ýanyndaky XMP goşmaça faýllaryna hem ýazyp bolýar. Culla surat faýlyny hiç haçan üýtgetmeýär."
+  },
+  "catch": {
+    "title": "Onda gizlin şerti näme?",
+    "answer": "Hiç hili gizlin şert ýok.",
+    "note1": "Culla şahsy taslama hökmünde başlandy: ony öz suratlarym üçin ýasadym. Paýlaşmaga mynasypdygy belli boldy, şonuň üçin paýlaşýaryn. Bar gürrüň şu.",
+    "note2": "Munuň arkasynda garaşyp duran tölegli wersiýa ýok. Mahabat ýok, hasap ýok, siz ýa-da suratlaryňyz barada hiç zat ýygnalmaýar. Kod {github}-da MIT ygtyýarnamasy bilen açyk, şonuň üçin meniň sözüme ynanmagyňyz hökman däl. Culla size peýdaly bolsa, gowy. Bir zat bozuk bolsa ýa-da bir zat ýetmeýän bolsa, maňa ýazyň."
+  },
+  "todo": {
+    "title": "Entek gutarylmadyk zatlar",
+    "lead": "Culla täze, käbir zatlary heniz doly taýýar däl.",
+    "tuning": "Ýüze çykaryş sazlamalary entek hakyky surata düşürişlerde sazlanýar, şonuň üçin kararlary ulanmazdan öň Culla-nyň bellän suratlaryny barlaň.",
+    "eyes": "Ýumuk gözler heniz diňe az sanly hakyky ýüzde barlandy. Culla ýumuk gözi sypdyrsa ýa-da ýok ýerinde görse, maňa ýazyň.",
+    "sidecars": "XMP faýllaryny ýazmak heniz beta ýagdaýynda.",
+    "trash": "Ret edilenleri Sebede taşlamak {folder} bukjasyndan azrak barlandy.",
+    "tellTitle": "Maňa ýazyň",
+    "bug": "Ýalňyşlyk barada habar beriň",
+    "feature": "Täze mümkinçilik teklip ediň",
+    "question": "Sorag beriň",
+    "githubNote": "Bular GitHub-da açylýar, ol ýerde ýazmak üçin mugt hasap gerek. Iňlis, rus ýa-da türkmen dilinde ýazyp bilersiňiz."
+  },
+  "faq": {
+    "title": "Soraglar",
+    "systems": {
+      "q": "Culla haýsy Mac we kameralar bilen işleýär?",
+      "a": "macOS 26 ýa-da täzesi bolan islendik Mac bilen. Culla JPEG, HEIC we macOS-yň özi okap bilýän RAW formatlaryny okaýar."
+    },
+    "internet": {
+      "q": "Internet gerekmi?",
+      "a": "Ýok. Programmanyň tora asla girip bilmegi ýok, şonuň üçin hiç zat hiç ýere ýüklenmeýär. Suratlaryňyz Mac-yňyzda galýar."
+    },
+    "changes": {
+      "q": "Culla suratlarymy üýtgedýärmi?",
+      "a": "Ýok. Culla surat faýlyny hiç haçan üýtgetmeýär. Ulanýançaňyz kararlaryňyz diňe bellik bolup durýar. Ulananyňyzda faýllar diňe geçirilýär, olaryň içine degilmeýär."
+    },
+    "rejects": {
+      "q": "Ret edilen suratlar näme bolýar?",
+      "a": "Kararlary ulananyňyzda olar bukjanyň içindäki {folder} bukjasyna geçirilýär. Sazlamalarda olary Sebede taşlamagy ýa-da diňe bellemegi saýlap bilersiňiz. Culla hiç zady pozmaýar, ulanmagy bolsa yzyna alyp bolýar."
+    },
+    "free": {
+      "q": "Bu nädip mugt?",
+      "a": "Culla şahsy taslama hökmünde başlandy, men ony diňe paýlaşýaryn. Tölegli wersiýa ýok, mahabat hem ýok."
+    },
+    "open": {
+      "q": "Culla açyk çeşmelimi?",
+      "a": "Hawa. Kod {github}-da MIT ygtyýarnamasy bilen ýerleşýär. Ony okap, özüňiz ýygnap ýa-da {fix} bilersiňiz.",
+      "fix": "düzediş iberip"
+    },
+    "counting": {
+      "q": "Bu sahypa bir zat sanaýarmy?",
+      "a": "Serwer gelişleri sanamak üçin adaty žurnal ýöredýär. Onda IP salgynyň diňe gysgaldylan görnüşi saklanýar, hiç haçan dolusy däl, žurnal bolsa 30 günden soň pozulýar. Cookie ýok, sizi yzarlaýan skript ýok. Programmanyň özi GitHub-dan ýüklenýär, GitHub bolsa ýüklemeleri özi sanaýar we öz žurnallaryny ýöredýär."
+    },
+    "report": {
+      "q": "Meseläni nädip habar bermeli?",
+      "a": "GitHub arkaly: ol ýerde {bug}, {feature} ýa-da {question} bilersiňiz. Ol ýerde ýazmak üçin mugt GitHub hasaby gerek.",
+      "bug": "ýalňyşlyk barada habar berip",
+      "feature": "täze mümkinçilik teklip edip",
+      "question": "sorag berip"
+    }
+  },
+  "closing": {
+    "title": "Indiki surata düşürişiňizde synap görüň."
+  },
+  "footer": {
+    "releaseNotes": "Wersiýa bellikleri",
+    "source": "Çeşme kody",
+    "report": "Mesele barada habar beriň",
+    "copyright": "© {year} Kerim Pirliýew"
+  },
+  "release": {
+    "title": "Wersiýa bellikleri",
+    "lead": "Culla-nyň her wersiýasynda näme üýtgändigi.",
+    "heading": "Culla {version}",
+    "date": "Çykan senesi: {date}",
+    "sha": "Disk şekiliniň SHA-256 heşi",
+    "shaHelp": "Ýüklän faýlyňyzy barlamak üçin şu buýrugy Terminalda işlediň we netijäni ýokardaky setir bilen deňeşdiriň:",
+    "back": "Culla sahypasyna gaýt",
+    "github": "Bu wersiýa GitHub-da"
+  },
+  "notFound": {
+    "title": "Bu sahypa ýok.",
+    "body": "Salgyda ýalňyşlyk bolmagy ýa-da sahypanyň göçürilmegi mümkin. Culla sahypasy şu ýerde:"
+  }
+}

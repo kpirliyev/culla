@@ -1,0 +1,27 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "A moved file changed in _Rejected before Undo Apply: it is left alone and reported, nothing is overwritten, and undo can be tried again."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"group": "allPhotos"},
+    {"click": "horizon_1.jpg"},
+    {"key": "x"},
+    {"click": "sonoma_3.jpg"},
+    {"key": "x"},
+    {"click": "horizon_0_under.jpg"},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"applyScreen": "open"},
+    {"key": "shift+cmd+return"},
+    {"wait": "applied"},
+    {"fixture": {"modify": "_Rejected/horizon_1.jpg"}},
+    {"bannerAction": "undo"},
+    {"snapshot": "01-undo-report"},
+    {"dump": "01-undo-report", "listing": true},
+    {"expect": {"apply.undoReport.state": "partlyUndone", "apply.undoReport.skipped.0.reason": "changed", "apply.undoReport.skipped.0.path": "_Rejected/horizon_1.jpg", "apply.banner.canRetry": true, "totals.photos": 34}},
+    {"quit": true}
+  ]
+}

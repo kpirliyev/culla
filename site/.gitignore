@@ -1,0 +1,19 @@
+node_modules/
+.nuxt/
+.output/
+.data/
+.nitro/
+.cache/
+dist
+*.log
+.DS_Store
+
+# Made from the app icon by scripts/sync-icon.mjs on every dev and generate.
+public/favicon.ico
+public/favicon-32.png
+public/apple-touch-icon.png
+public/icon-64.png
+public/icon-128.png
+public/icon-192.png
+public/icon-512.png
+public/og-image.png

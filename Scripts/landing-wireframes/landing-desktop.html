@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Landing page, wide</title>
+<link rel="stylesheet" href="wireframe.css">
+<script src="measure.js"></script>
+</head>
+<body>
+<div class="sheet">
+  <div class="caption">The whole page, wide: download buttons on the first screen</div>
+
+  <div class="canvas">
+    <div class="page wide" data-fold="720" data-name="English, 1280 × 720">
+      <div class="fold" style="top: 720px"><span>First screen ends here (1280 × 720)</span></div>
+
+      <div class="topbar">
+        <div class="brand"><div class="icon"></div>Culla</div>
+        <div class="langs"><b>English</b> · Русский · Türkmençe</div>
+      </div>
+
+      <!-- 1 Hero -->
+      <section class="hero">
+        <div class="tag">1 Hero</div>
+        <div>
+          <h1>Culla helps you pick the keepers.</h1>
+          <p class="lead">It finds the blinks, the blur and the lookalikes with Apple’s Vision framework, which runs on your Mac’s Neural Engine. You decide, one key at a time.</p>
+          <div class="buttons" data-check="buttons">
+            <span class="btn primary">Download for Mac</span>
+            <span class="btn">See how it works</span>
+          </div>
+          <div class="version" data-check="version line"><span>Version 1.0</span> · <span>00 MB</span> · <span>macOS 26 or later</span> · <span>Free. No account.</span></div>
+        </div>
+        <div class="ph">Screenshot: stack review</div>
+      </section>
+
+      <!-- 2 Proof strip -->
+      <section class="strip">
+        <div class="tag">2 Proof strip</div>
+        <div class="proof">
+          <div>Free, no catch</div>
+          <div>No account</div>
+          <div>No ads, no tracking</div>
+          <div>Works offline, nothing uploaded</div>
+          <div>English, Русский, Türkmençe</div>
+        </div>
+      </section>
+
+      <!-- 3 How it works -->
+      <section>
+        <div class="tag">3 How it works</div>
+        <h2>How it works</h2>
+        <div class="steps">
+          <div>
+            <div class="ph">Screenshot: choosing a folder</div>
+            <div class="row"><span class="step-num">1</span><span>Open a folder.</span></div>
+          </div>
+          <div>
+            <div class="ph">Screenshot: the piles in the sidebar</div>
+            <div class="row"><span class="step-num">2</span><span>Culla sorts it into piles: duplicates, lookalikes, closed eyes, blurry, badly exposed.</span></div>
+          </div>
+          <div>
+            <div class="ph">Screenshot: a stack with one pick</div>
+            <div class="row"><span class="step-num">3</span><span>Press P to keep, X to reject. Nothing moves until you say so.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 Apple Vision on your Mac -->
+      <section>
+        <div class="tag">4 Apple Vision on your Mac</div>
+        <h2>Apple Vision on your Mac</h2>
+        <div class="vision">
+          <div class="ph evidence">
+            <div class="face" style="left: 92px; top: 118px; width: 96px; height: 112px;"><i>Eyes open</i></div>
+            <div class="face closed" style="left: 252px; top: 96px; width: 104px; height: 120px;"><i>Eyes closed</i></div>
+            <div class="face" style="left: 420px; top: 132px; width: 88px; height: 104px;"><i>Eyes open</i></div>
+            <div class="soft" style="left: 300px; top: 270px; width: 240px; height: 84px;"><i>Soft region</i></div>
+            <div class="label">Photo with evidence drawn on it</div>
+          </div>
+          <table class="how-table">
+            <tr><th>What Culla finds</th><th>How</th></tr>
+            <tr><td>Closed eyes</td><td>Vision face landmarks, checked against Core Image</td></tr>
+            <tr><td>Blur</td><td>Edge strength on the subject Vision’s saliency finds, plus face capture quality</td></tr>
+            <tr><td>Lookalikes and duplicates</td><td>Vision feature prints and capture time; exact copies by file hash</td></tr>
+            <tr><td>Lens smudge</td><td>Vision’s smudge request</td></tr>
+          </table>
+        </div>
+        <div class="closing-lines">
+          <p>No model to download. No cloud. Your photos never leave your Mac.</p>
+          <p>Culla suggests, you decide. Every flag shows why.</p>
+        </div>
+      </section>
+
+      <!-- 5 From the keyboard -->
+      <section>
+        <div class="tag">5 From the keyboard</div>
+        <h2>From the keyboard</h2>
+        <div class="kbd">
+          <div>
+            <div class="frames">
+              <div class="frame"></div>
+              <div class="frame pick"><div class="star">★ Pick</div></div>
+              <div class="frame"></div>
+              <div class="frame"></div>
+              <div class="frame"></div>
+            </div>
+            <div class="keys">
+              <span class="key">P</span><span class="key">X</span><span class="key">←</span><span class="key">→</span><span class="key">Return</span>
+            </div>
+            <div class="note">Try it: the keys work here</div>
+          </div>
+          <div class="kbd-lines">
+            <p>One key per decision.</p>
+            <p>Start while Culla is still looking.</p>
+            <p>Every key can be changed.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6 Your photos stay yours -->
+      <section>
+        <div class="tag">6 Your photos stay yours</div>
+        <h2>Your photos stay yours</h2>
+        <div class="points">
+          <div class="point">Nothing moves until you apply.</div>
+          <div class="point">Rejects go to a _Rejected folder inside the shoot. Nothing is deleted.</div>
+          <div class="point">Apply can be undone.</div>
+        </div>
+        <p class="sidecar"><span class="beta">Beta</span>Ratings and keep or reject marks can also be written to XMP sidecars beside your photos. Culla never changes an image file.</p>
+      </section>
+
+      <!-- 7 So what's the catch? -->
+      <section>
+        <div class="tag">7 The catch</div>
+        <h2>So what’s the catch?</h2>
+        <p class="catch-answer">There isn’t one.</p>
+        <div class="maker">
+          <p>I’m Kerim. Culla started as a personal project: a tool I built for my own photos. It turned out to be worth sharing, so I’m sharing it. That’s the whole story.</p>
+          <p>No paid version is waiting behind this one. No ads, no account, and nothing collected about you or your photos. If Culla is useful to you, good. If something is broken or missing, tell me.</p>
+        </div>
+      </section>
+
+      <!-- 8 Not finished yet -->
+      <section>
+        <div class="tag">8 Not finished yet</div>
+        <h2>Not finished yet</h2>
+        <p class="todo-lead">Culla is new, and a few things are still rough.</p>
+        <ul class="todo">
+          <li>Detection settings are still being tuned on real shoots, so check what Culla flags before you apply.</li>
+          <li><span class="beta">Beta</span>XMP sidecars are still in beta.</li>
+          <li class="placeholder-text">[Anything else still open at launch]</li>
+        </ul>
+        <div class="contact" id="write">
+          <h3>Write to me</h3>
+          <div class="field"><span class="label">Your message</span><div class="input area"></div></div>
+          <div class="field"><span class="label">Your email, only if you want an answer</span><div class="input"></div></div>
+          <span class="btn send">Send</span>
+          <p class="contact-note">Goes straight to me. No account, no mailing list.</p>
+        </div>
+      </section>
+
+      <!-- 9 Questions -->
+      <section>
+        <div class="tag">9 Questions</div>
+        <h2>Questions</h2>
+        <div class="qs">
+          <div class="q"><span>Which Macs and cameras does it work with?</span><span>+</span></div>
+          <div class="q"><span>Does it need the internet?</span><span>+</span></div>
+          <div class="q"><span>Does it change my photos?</span><span>+</span></div>
+          <div class="q"><span>What happens to the rejects?</span><span>+</span></div>
+          <div class="q"><span>How is it free?</span><span>+</span></div>
+          <div class="q"><span>How do I report a problem?</span><span>+</span></div>
+        </div>
+      </section>
+
+      <!-- 10 Closing download -->
+      <section class="final">
+        <div class="tag">10 Closing download</div>
+        <h2>Try it on your next shoot.</h2>
+        <span class="btn primary">Download for Mac</span>
+        <div class="version"><span>Version 1.0</span> · <span>00 MB</span> · <span>macOS 26 or later</span> · <span>Free. No account.</span></div>
+      </section>
+      <footer>
+        <span><u>Release notes</u> · <u>Write to me</u></span>
+        <span class="langs"><b>English</b> · Русский · Türkmençe</span>
+        <span>Made by Kerim Pirliyev</span>
+      </footer>
+    </div>
+  </div>
+</div>
+<script type="application/json" id="metrics"></script>
+</body>
+</html>

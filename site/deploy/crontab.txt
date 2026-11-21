@@ -1,0 +1,15 @@
+# Root's crontab line for cullaapp.com. setup-host.sh adds it when it is not
+# there yet; the line below is what it adds. Times are the server's local time.
+#
+# Certificate renewal is the host's: its own crontab line runs
+# `certbot renew` and its renewal hook reloads nginx. Nothing here for it.
+#
+# Counts: visits for yesterday from access.log, and a snapshot of the
+# download numbers GitHub keeps for the releases (one request to
+# api.github.com). 01:30 rather than just after midnight: logrotate's daily
+# timer fires at a random moment between 00:00 and 01:00 on current Debian,
+# Ubuntu and Fedora, and counting while it rotates is avoided. (A late
+# rotation loses nothing either way: count.py reads the rotated files.)
+# Anything the script prints goes to the system journal:
+#   journalctl -t cullaapp-count
+30 1 * * * /usr/bin/python3 /usr/local/lib/cullaapp/count.py 2>&1 | logger -t cullaapp-count

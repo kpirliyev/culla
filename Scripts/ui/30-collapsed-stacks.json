@@ -1,0 +1,287 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 200,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "All Photos shows each stack as one tile with its frame count and its frames' decisions. P and X never decide a collapsed stack; Return or a double click opens it in stack review, and accepting it comes back to All Photos. S expands every stack. G joins photos (and whole stacks) in one stack."
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "analysis",
+      "timeout": 150
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "01-collapsed-default-size"
+    },
+    {
+      "dump": "01-collapsed",
+      "photos": false
+    },
+    {
+      "expect": {
+        "gridEntryCount": 26,
+        "gridEntries.9.kind": "stack",
+        "gridEntries.9.representative": "sonoma_1 copy.jpg",
+        "gridEntries.9.frameCount": 2,
+        "gridEntries.9.summary": "unreviewed"
+      }
+    },
+    {
+      "log": "P on a collapsed stack decides nothing and says why."
+    },
+    {
+      "click": "sonoma_1 copy.jpg"
+    },
+    {
+      "key": "p"
+    },
+    {
+      "expect": {
+        "photo:sonoma_1 copy.jpg.decision": "unreviewed",
+        "photo:sonoma_1.jpg.decision": "unreviewed",
+        "notice": "A collapsed stack is decided frame by frame: press ↩ to review it."
+      }
+    },
+    {
+      "log": "A range across a collapsed stack: X rejects the single photos only."
+    },
+    {
+      "click": "sonoma_0_under.jpg"
+    },
+    {
+      "click": "sonoma_2.jpg",
+      "modifiers": "shift"
+    },
+    {
+      "dump": "02-range",
+      "photos": false
+    },
+    {
+      "key": "x"
+    },
+    {
+      "expect": {
+        "photo:sonoma_0_under.jpg.decision": "rejected",
+        "photo:sonoma_2.jpg.decision": "rejected",
+        "photo:sonoma_1 copy.jpg.decision": "unreviewed",
+        "photo:sonoma_1.jpg.decision": "unreviewed",
+        "notice": "Left 1 collapsed stack undecided: open a stack with ↩ to decide its frames."
+      }
+    },
+    {
+      "key": "cmd+z"
+    },
+    {
+      "log": "Return opens the stack in stack review; accepting it comes back to All Photos, on its tile."
+    },
+    {
+      "click": "sonoma_1 copy.jpg"
+    },
+    {
+      "key": "return"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "viewMode": "stackReview",
+        "currentGroup": "allPhotos",
+        "stackReview.origin": "grid",
+        "stackReview.current": "sonoma_1.jpg"
+      }
+    },
+    {
+      "snapshot": "02-opened-from-grid"
+    },
+    {
+      "key": "return"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "viewMode": "grid",
+        "currentGroup": "allPhotos",
+        "focus": "sonoma_1 copy.jpg",
+        "gridEntries.9.summary": "mixed",
+        "gridEntries.9.decisions": {
+          "kept": 1,
+          "rejected": 1,
+          "unreviewed": 0
+        }
+      }
+    },
+    {
+      "log": "A double click opens another; Escape comes back without deciding."
+    },
+    {
+      "click": "sonoma_burst1.jpg",
+      "count": 2
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "viewMode": "stackReview",
+        "stackReview.frames.count": 4
+      }
+    },
+    {
+      "key": "x"
+    },
+    {
+      "key": "escape"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "viewMode": "grid",
+        "focus": "sonoma_burst1.jpg",
+        "photo:sonoma_burst0.jpg.decision": "rejected"
+      }
+    },
+    {
+      "snapshot": "03-mixed-stack-tiles"
+    },
+    {
+      "log": "Moving with the arrows steps over a stack as one tile."
+    },
+    {
+      "key": "s"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "stacksExpanded": true,
+        "gridOrder.count": 35
+      }
+    },
+    {
+      "snapshot": "04-expanded"
+    },
+    {
+      "key": "s"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "stacksExpanded": false,
+        "gridEntryCount": 26
+      }
+    },
+    {
+      "log": "The smallest thumbnails."
+    },
+    {
+      "settings": {
+        "thumbnailSize": 80
+      }
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "05-collapsed-smallest"
+    },
+    {
+      "settings": {
+        "thumbnailSize": 168
+      }
+    },
+    {
+      "log": "G joins two single photos in a stack, then that stack with another collapsed stack."
+    },
+    {
+      "click": "sonoma_2.jpg"
+    },
+    {
+      "click": "sonoma_3.jpg",
+      "modifiers": "cmd"
+    },
+    {
+      "key": "g"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "undoTitle": "Undo Add to Stack",
+        "stackEdits.joined": [
+          [
+            "sonoma_2.jpg",
+            "sonoma_3.jpg"
+          ]
+        ],
+        "stackCount": 6,
+        "gridEntryCount": 25
+      }
+    },
+    {
+      "dump": "06-joined",
+      "photos": false
+    },
+    {
+      "click": "sonoma_4_small.jpg",
+      "modifiers": "cmd"
+    },
+    {
+      "key": "g"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "stackCount": 5,
+        "gridEntryCount": 24
+      }
+    },
+    {
+      "snapshot": "06-joined-stacks"
+    },
+    {
+      "dump": "07-merged",
+      "photos": false
+    },
+    {
+      "keys": [
+        "cmd+z",
+        "cmd+z"
+      ]
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "stackCount": 5,
+        "stackEdits.joined": [],
+        "gridEntryCount": 26
+      }
+    },
+    {
+      "quit": true
+    }
+  ]
+}

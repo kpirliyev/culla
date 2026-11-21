@@ -1,0 +1,33 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Sidecars: an existing sidecar is merged (its other fields kept), one that cannot be read is left alone and listed, and undo puts both back byte for byte."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"fixture": {"write": ["sonoma_2.xmp", "<?xpacket begin=\"﻿\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n  <rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\" xmp:CreatorTool=\"Some Editor 2.0\">\n   <dc:creator><rdf:Seq><rdf:li>Jane Doe</rdf:li></rdf:Seq></dc:creator>\n  </rdf:Description>\n </rdf:RDF>\n</x:xmpmeta>\n<?xpacket end=\"w\"?>\n"]}},
+    {"fixture": {"write": ["sonoma_3.xmp", "this is not XMP <<<"]}},
+    {"saveHash": "35-original"},
+    {"click": "sonoma_2.jpg"},
+    {"key": "p"},
+    {"click": "sonoma_2.jpg"},
+    {"key": "5"},
+    {"click": "sonoma_3.jpg"},
+    {"key": "p"},
+    {"click": "horizon_1.jpg"},
+    {"key": "x"},
+    {"applyScreen": "open"},
+    {"applyAction": "markOnly"},
+    {"key": "shift+cmd+return"},
+    {"wait": "applied"},
+    {"snapshot": "01-skipped-sidecar-banner"},
+    {"dump": "01-applied", "listing": true},
+    {"fileContains": "sonoma_2.xmp", "text": ["Jane Doe", "Some Editor 2.0", "Green"]},
+    {"fileContains": "sonoma_3.xmp", "text": ["this is not XMP"], "absent": ["Green"]},
+    {"expect": {"apply.result.skippedSidecars.count": 1, "apply.banner.kind": "result"}},
+    {"bannerAction": "undo"},
+    {"expectHash": "35-original"},
+    {"quit": true}
+  ]
+}

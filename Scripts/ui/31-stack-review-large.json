@@ -1,0 +1,200 @@
+{
+  "needs": {
+    "reset": true,
+    "shoot": "large"
+  },
+  "timeout": 300,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Stack review on the 24 MP burst: small injected faces over the resolution chart, so the strip's crops need the full-size decode. Records the time to the first and to the sharp crops, frame steps, stepping at 100%, and memory."
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "analysis",
+      "timeout": 240
+    },
+    {
+      "injectScores": "burst",
+      "frames": [
+        "burst_1.jpg",
+        "burst_2.jpg",
+        "burst_3.jpg",
+        "burst_4.jpg",
+        "burst_5.jpg",
+        "burst_6.jpg"
+      ],
+      "people": [
+        {
+          "box": [
+            0.55,
+            0.36,
+            0.016,
+            0.024
+          ],
+          "size": 0.05
+        },
+        {
+          "box": [
+            0.62,
+            0.38,
+            0.016,
+            0.024
+          ],
+          "size": 0.05
+        },
+        {
+          "box": [
+            0.69,
+            0.35,
+            0.03,
+            0.045
+          ],
+          "size": 0.06
+        }
+      ],
+      "blink": [
+        [
+          1,
+          0
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "missing": [
+        [
+          5,
+          1
+        ]
+      ],
+      "drift": 0.0005,
+      "sharpness": [
+        50,
+        62,
+        66,
+        60,
+        70,
+        55
+      ]
+    },
+    {
+      "group": "similarStacks"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "dump": "01-opened",
+      "photos": false
+    },
+    {
+      "expect": {
+        "viewMode": "stackReview",
+        "faceStrip.rows": 3,
+        "faceStrip.sharpCrops": 17,
+        "faceStrip.cropsShown": 17
+      }
+    },
+    {
+      "snapshot": "01-large-fitted"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "right"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "dump": "02-step",
+      "photos": false
+    },
+    {
+      "key": "z"
+    },
+    {
+      "wait": "idle",
+      "timeout": 30
+    },
+    {
+      "expect": {
+        "stackReview.currentPane.zoomPercent": 100,
+        "stackReview.currentPane.resolution": "full",
+        "stackReview.pickPane.resolution": "full"
+      }
+    },
+    {
+      "snapshot": "03-large-100"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "dump": "03-zoomed",
+      "photos": false
+    },
+    {
+      "key": "right"
+    },
+    {
+      "wait": "idle",
+      "timeout": 30
+    },
+    {
+      "dump": "04-step-at-100",
+      "photos": false
+    },
+    {
+      "key": "right"
+    },
+    {
+      "wait": "idle",
+      "timeout": 30
+    },
+    {
+      "dump": "05-step-at-100",
+      "photos": false
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "z"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "dump": "06-fit-again",
+      "photos": false
+    },
+    {
+      "log": "Zooming back to fit from 100% stalls the main thread for less than 50 ms (it was 112 ms while the hidden full-size tiles were still laid out)."
+    },
+    {
+      "expect": {
+        "stall.windowLongestMs": 25
+      },
+      "tolerance": 25
+    },
+    {
+      "quit": true
+    }
+  ]
+}

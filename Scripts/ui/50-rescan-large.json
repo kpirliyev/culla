@@ -1,0 +1,20 @@
+{
+  "needs": {"reset": true, "shoot": "5000", "slow": true, "timeout": 600},
+  "timeout": 600,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Focus rescans of 5,000 photos where nothing changed: time and the longest main-thread stall."},
+    {"open": "$SHOOT"},
+    {"analysis": "pause"},
+    {"wait": "idle"},
+    {"resetStalls": true},
+    {"rescan": "focus"},
+    {"dump": "01-rescan", "photos": false},
+    {"rescan": "focus"},
+    {"rescan": "focus"},
+    {"dump": "02-rescans", "photos": false},
+    {"expect": {"disk.rescan.last.changed": false, "disk.rescan.last.mainMs": 0}},
+    {"expect": {"stall.windowLongestMs": 25}, "tolerance": 25},
+    {"quit": true}
+  ]
+}

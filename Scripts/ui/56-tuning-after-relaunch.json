@@ -1,0 +1,18 @@
+{
+  "needs": {"after": "55-tuning-default-vs-shoot"},
+  "timeout": 120,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run after 55 without --reset. After a relaunch the default is the one saved in 55, and the shoot still has its own value; Use Defaults for This Shoot in Settings puts it back on the default."},
+    {"openRecent": "CullaSampleShoot"},
+    {"wait": "analysis", "timeout": 60},
+    {"expect": {"tuningDefault.blurryBelow": 20, "tuning.blurryBelow": 30, "tuningScope.hasOwnTuning": true, "analysis.analysedThisOpen": 0}},
+    {"settingsWindow": "blur"},
+    {"tuningAction": "useDefaultFromSettings"},
+    {"expect": {"tuning.blurryBelow": 20, "tuningScope.hasOwnTuning": false,
+                "settingsWindow.scopeNote": "Defaults for every shoot. “CullaSampleShoot” uses them, and the counts are from it."}},
+    {"snapshot": "01-back-on-default", "window": "settings"},
+    {"settingsWindow": "close"},
+    {"quit": true}
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 200,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset. The first launch: the welcome view's introduction with the five keys, read from the live key map; Help ▸ Keyboard Shortcuts following a remapped key; About; Help ▸ Culla Documentation opening the repository's docs folder (recorded, not opened); the Dock menu's recent shoots; the window title; the sidebar width remembered."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "screen": "welcome",
+        "introductionShown": true,
+        "window.title": "Culla"
+      }
+    },
+    {
+      "snapshot": "01-first-run"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-01-welcome",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "window": "dockMenu"
+    },
+    {
+      "expectMatch": {
+        "auxiliary.dockMenu": "Open…"
+      }
+    },
+    {
+      "window": "help"
+    },
+    {
+      "snapshot": "02-keyboard-shortcuts",
+      "window": "help"
+    },
+    {
+      "accessibility": "help",
+      "save": "a11y-02-help",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "keys"
+    },
+    {
+      "bindKey": "keep",
+      "chord": "k"
+    },
+    {
+      "expect": {
+        "keyMap.keep": [
+          "k"
+        ]
+      }
+    },
+    {
+      "snapshot": "03-keyboard-shortcuts-remapped",
+      "window": "help"
+    },
+    {
+      "keyRecorder": "resetAll"
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "window": "about"
+    },
+    {
+      "snapshot": "04-about",
+      "window": "about"
+    },
+    {
+      "accessibility": "about",
+      "save": "a11y-04-about",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "window": "close"
+    },
+    {
+      "window": "docs"
+    },
+    {
+      "expectMatch": {
+        "auxiliary.opened": "/docs$"
+      }
+    },
+    {
+      "log": "Opening a first shoot ends the introduction for good."
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "introductionShown": false,
+        "window.title": "CullaSampleShoot",
+        "window.subtitle": "35 photos",
+        "splitWidths.sidebar": 220
+      }
+    },
+    {
+      "window": "dockMenu"
+    },
+    {
+      "expectMatch": {
+        "auxiliary.dockMenu": "CullaSampleShoot.*Open…"
+      }
+    },
+    {
+      "settings": {
+        "sidebarWidth": 268
+      }
+    },
+    {
+      "close": true
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "introductionShown": false
+      }
+    },
+    {
+      "snapshot": "05-welcome-after"
+    },
+    {
+      "openRecent": 0
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "splitWidths.sidebar": 268
+      }
+    },
+    {
+      "snapshot": "06-wider-sidebar"
+    },
+    {
+      "quit": true
+    }
+  ]
+}

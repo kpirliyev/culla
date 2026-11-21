@@ -1,0 +1,28 @@
+{
+  "needs": {"reset": true},
+  "timeout": 180,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --reset. Pausing analysis starts nothing new (photos in flight finish), the toolbar and the empty groups say so, and resuming carries on to the end. Culling works throughout."},
+    {"open": "$SHOOT"},
+    {"analysis": "pause"},
+    {"sleep": 4},
+    {"wait": "idle"},
+    {"expect": {"analysis.phase": "paused", "analysis.running": 0, "analysis.isPaused": true}},
+    {"group": "eyesClosed"},
+    {"wait": "idle"},
+    {"snapshot": "01-paused"},
+    {"dump": "01-paused", "photos": false},
+    {"group": "allPhotos"},
+    {"key": "p"},
+    {"expect": {"totals.kept": 1}},
+    {"command": "toggleAnalysis"},
+    {"sleep": 0.5},
+    {"expect": {"analysis.phase": "running"}},
+    {"snapshot": "02-resumed-analysing"},
+    {"wait": "analysis", "timeout": 150},
+    {"expect": {"analysis.phase": "finished", "analysis.done": 34, "totals.kept": 1, "stackCount": 5}},
+    {"snapshot": "03-done"},
+    {"quit": true}
+  ]
+}

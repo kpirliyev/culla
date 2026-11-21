@@ -1,0 +1,32 @@
+{
+  "needs": {"reset": true},
+  "timeout": 180,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --reset. The empty group lines: not analysed yet, still analysing, none found, all decided."},
+    {"open": "$SHOOT"},
+    {"analysis": "pause"},
+    {"group": "duplicates"},
+    {"wait": "idle"},
+    {"expect": {"emptyReason": "notAnalysedYet"}},
+    {"snapshot": "01-not-analysed-yet"},
+    {"analysis": "resume"},
+    {"group": "eyesClosed"},
+    {"wait": "idle"},
+    {"snapshot": "02-still-analysing"},
+    {"dump": "02-still-analysing", "photos": false},
+    {"wait": "analysis", "timeout": 150},
+    {"expect": {"currentGroup": "eyesClosed", "emptyReason": "noneFound(checked: 35)"}},
+    {"snapshot": "03-none-found"},
+    {"group": "allPhotos"},
+    {"log": "Collapsed stacks are never decided by P: S expands them so Select All takes every frame."},
+    {"key": "s"},
+    {"key": "cmd+a"},
+    {"key": "p"},
+    {"group": "unreviewed"},
+    {"wait": "idle"},
+    {"expect": {"emptyReason": "allDecided", "totals.left": 0}},
+    {"snapshot": "04-all-decided"},
+    {"quit": true}
+  ]
+}

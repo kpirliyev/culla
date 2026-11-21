@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /en/thanks/
+Disallow: /ru/thanks/
+Disallow: /tk/thanks/
+
+Sitemap: https://cullaapp.com/sitemap.xml

@@ -1,0 +1,54 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSHumanReadableCopyright" : {
+      "comment" : "The copyright line under the app's name in Finder's Get Info window and in About Culla. Keep the © year and the name Kerim Pirliyev as they are; 'MIT License' is the licence's name.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "© 2026 Kerim Pirliyev. Free and open source under the MIT License."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "© 2026 Kerim Pirliyev. Бесплатное приложение с открытым исходным кодом по лицензии MIT."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "© 2026 Kerim Pirliyev. Mugt we açyk çeşme kodly, MIT ygtyýarnamasy esasynda."
+          }
+        }
+      }
+    },
+    "Shoot Folder" : {
+      "comment" : "The kind of document Culla opens, as Finder names it in Open With and Get Info: a folder of photos from one shoot. A noun.",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Shoot Folder"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Папка съёмки"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surata düşüriş bukjasy"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

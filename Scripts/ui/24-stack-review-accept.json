@@ -1,0 +1,86 @@
+{
+  "needs": {"reset": true},
+  "timeout": 200,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Similar Stacks opens in stack review on the first undecided stack. Return keeps the pick and rejects the rest; P on other frames then Return keeps those instead; ↓ skips; after the last stack the screen says so and offers the next group."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"group": "similarStacks"},
+    {"wait": "idle"},
+    {"snapshot": "01-first-stack"},
+    {"dump": "01-first-stack", "photos": false},
+    {"expect": {
+      "viewMode": "stackReview", "stackReview.stackIndex": 0, "stackReview.stackCount": 5,
+      "stackReview.current": "sonoma_1.jpg", "stackReview.pick": "sonoma_1 copy.jpg", "stackReview.rightPane": "sonoma_1 copy.jpg",
+      "stackReview.rightPaneRole": "bestPick", "stackReview.title": "Stack 1 of 5 · 2 frames"
+    }},
+
+    {"log": "The pick is right: Return keeps it, rejects the other and opens the next stack. One undo step."},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {
+      "photo:sonoma_1 copy.jpg.decision": "kept", "photo:sonoma_1.jpg.decision": "rejected",
+      "stackReview.stackIndex": 1, "stackReview.current": "sonoma_4.jpg", "undoTitle": "Undo Accept Stack", "stacksLeft": 4
+    }},
+    {"key": "cmd+z"},
+    {"wait": "idle"},
+    {"expect": {"photo:sonoma_1 copy.jpg.decision": "unreviewed", "photo:sonoma_1.jpg.decision": "unreviewed", "stackReview.stackIndex": 0, "redoTitle": "Redo Accept Stack"}},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.stackIndex": 1, "photo:sonoma_1.jpg.decision": "rejected"}},
+
+    {"log": "↓ skips a stack without deciding it."},
+    {"key": "down"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.stackIndex": 2, "stackReview.current": "sonoma_burst0.jpg", "stackReview.pick": "sonoma_burst1.jpg",
+                "photo:sonoma_4.jpg.decision": "unreviewed", "photo:sonoma_4_small.jpg.decision": "unreviewed"}},
+    {"snapshot": "02-burst"},
+
+    {"log": "The pick is wrong: P on the frames worth keeping (each moves to the next frame of this stack), then Return rejects the rest."},
+    {"key": "p"},
+    {"expect": {"stackReview.current": "sonoma_burst1.jpg", "stackReview.stackIndex": 2, "photo:sonoma_burst0.jpg.decision": "kept"}},
+    {"key": "right"},
+    {"key": "p"},
+    {"expect": {"stackReview.current": "sonoma_burst3.jpg", "photo:sonoma_burst2.jpg.decision": "kept"}},
+    {"wait": "idle"},
+    {"snapshot": "03-marked-two"},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {
+      "photo:sonoma_burst0.jpg.decision": "kept", "photo:sonoma_burst1.jpg.decision": "rejected",
+      "photo:sonoma_burst2.jpg.decision": "kept", "photo:sonoma_burst3.jpg.decision": "rejected",
+      "stackReview.stackIndex": 3
+    }},
+    {"key": "down"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.stackIndex": 4}},
+
+    {"log": "Accepting the last stack comes round to the stacks skipped with ↓, then says everything is decided."},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.stackIndex": 1, "stackReview.done": false}},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.stackIndex": 3}},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.done": true, "stacksLeft": 0, "groups.similarStacks.left": 0}},
+    {"snapshot": "04-all-stacks-decided"},
+    {"dump": "04-done", "photos": false},
+    {"key": "up"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.done": false}},
+    {"snapshot": "05-decided-stack"},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.done": true}},
+
+    {"log": "Return on the end screen opens the group it offers."},
+    {"dump": "06-before-next", "photos": false},
+    {"key": "return"},
+    {"wait": "idle"},
+    {"expect": {"currentGroup": "blurry"}},
+    {"quit": true}
+  ]
+}

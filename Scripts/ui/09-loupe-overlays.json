@@ -1,0 +1,51 @@
+{
+  "needs": {"reset": true},
+  "timeout": 180,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --reset. Exposure opens in the loupe with the clipping overlay on; injected scores stand in for two photos, real analysis finds horizon_0_under. The clipping overlay shows in Exposure and with J anywhere; face boxes and clipping together."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 120},
+    {"injectScores": {
+      "sonoma_0_over.jpg": {"clipping": [0.45, 0.0]},
+      "sonoma_0_under.jpg": {"clipping": [0.0, 0.62]},
+      "sonoma_0.jpg": {"faces": [{"box": [0.4, 0.35, 0.14, 0.2], "eyes": [0.1, 0.12]}], "focus": [0.47, 0.43]}
+    }},
+    {"log": "Only flags far from their thresholds are checked: Vision's lens smudge reading moves between model versions, so whether horizon_0_under also has it is not asserted."},
+    {"expect": {"groups.exposure.total": 3, "photo:horizon_0_under.jpg.tiers.clippedShadows": "likely", "photo:horizon_0_under.jpg.tiers.lowAesthetics": "likely",
+                "photo:sonoma_0_over.jpg.flags": ["clippedHighlights"]}},
+
+    {"group": "exposure"},
+    {"wait": "idle"},
+    {"snapshot": "01-exposure-highlights"},
+    {"dump": "01-exposure", "photos": false},
+    {"expect": {"focus": "sonoma_0_over.jpg", "loupe.clipping": true, "loupe.faceBoxes": false}},
+    {"key": "right"},
+    {"wait": "idle"},
+    {"snapshot": "02-exposure-shadows"},
+    {"dump": "02-exposure", "photos": false},
+    {"expect": {"focus": "sonoma_0_under.jpg", "loupe.clipping": true}},
+    {"key": "j"},
+    {"wait": "idle"},
+    {"expect": {"loupe.clipping": false}},
+    {"snapshot": "03-clipping-off"},
+
+    {"log": "All Photos: both overlays off until toggled with B and J; they stay with the zoom."},
+    {"group": "allPhotos"},
+    {"click": "sonoma_0.jpg"},
+    {"log": "All Photos opens in the grid; Space shows the loupe."},
+    {"key": "space"},
+    {"wait": "idle"},
+    {"expect": {"loupe.clipping": false, "loupe.faceBoxes": false}},
+    {"keys": ["b", "j"]},
+    {"wait": "idle"},
+    {"snapshot": "04-both-overlays"},
+    {"expect": {"loupe.clipping": true, "loupe.faceBoxes": true}},
+    {"key": "z"},
+    {"wait": "idle"},
+    {"snapshot": "05-both-overlays-zoomed"},
+    {"expect": {"loupe.zoomPercent": 100, "loupe.targetedFace": 0}},
+    {"dump": "final", "photos": false},
+    {"quit": true}
+  ]
+}

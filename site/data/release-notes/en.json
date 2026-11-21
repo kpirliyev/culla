@@ -1,0 +1,14 @@
+[
+  {
+    "version": "1.0",
+    "notes": [
+      "First public version.",
+      "Detection settings are provisional. They are still being tuned on real shoots, so check what Culla flags before you apply.",
+      "Closed eyes have been checked on only a few real faces so far.",
+      {
+        "text": "Writing XMP sidecars is in beta.",
+        "beta": true
+      }
+    ]
+  }
+]

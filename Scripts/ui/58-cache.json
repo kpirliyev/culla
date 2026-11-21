@@ -1,0 +1,35 @@
+{
+  "needs": {"reset": true},
+  "timeout": 300,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --reset. Settings ▸ Performance shows what the caches take; Clear Cache removes the thumbnails, and with scores, every cached score, so the shoot is analysed again when it next opens. Decisions are untouched."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"key": "p"},
+    {"cache": "measure"},
+    {"expectMatch": {"cache.thumbnailBytes": "^[1-9][0-9]*$"}},
+    {"expect": {"cache.cachedScores": 34, "cache.limitBytes": 5000000000}},
+    {"settingsWindow": "performance"},
+    {"expectMatch": {"settingsWindow.concurrency.count": "^[1-8]$", "settingsWindow.concurrency.explanation": "^One per processor core"}},
+    {"snapshot": "01-usage", "window": "settings"},
+    {"cache": "clear"},
+    {"expect": {"cache.thumbnailBytes": 0, "cache.cachedScores": 34}},
+    {"snapshot": "02-thumbnails-cleared", "window": "settings"},
+    {"cache": "clearAll"},
+    {"expect": {"cache.thumbnailBytes": 0, "cache.cachedScores": 0}},
+    {"settings": {"cacheLimitGB": 2}},
+    {"expect": {"settings.cacheLimitGB": 2, "cache.limitBytes": 2000000000}},
+    {"snapshot": "03-limit-and-cleared", "window": "settings"},
+    {"settingsWindow": "close"},
+
+    {"log": "Reopening analyses again; the decision made before is kept."},
+    {"close": true},
+    {"openRecent": "CullaSampleShoot"},
+    {"wait": "analysis", "timeout": 150},
+    {"expect": {"analysis.analysedThisOpen": 34, "analysis.cachedCount": 0, "totals.kept": 1}},
+    {"cache": "measure"},
+    {"expect": {"cache.cachedScores": 34}},
+    {"quit": true}
+  ]
+}

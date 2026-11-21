@@ -1,0 +1,58 @@
+Culla: Russian terms and conventions settled during translation (2026-11-12). New text must match.
+Glossary: docs/localization.md. Decided on top of it:
+
+sidecar: «файл XMP» in buttons, counts, headlines, second mentions; full «сопроводительный файл XMP»
+  only where a sentence first explains the file (once per screen/paragraph). 1 файл XMP / 3 файла XMP /
+  5 файлов XMP / из 5 файлов XMP.
+unreviewed: sidebar group «Непросмотренные»; count «86 не просмотрено»; attributive «непросмотренные фото».
+inspector: lower case («Показать инспектор»).
+flag (detection) = пометка / помечать.  mark (decision, Mark Only) = отметить / «Только отметить».
+Certain / Likely = «Точно» / «Вероятно» (in ёлочки as names).  undecided = без решения.
+set (duplicates) = набор.  copy = копия.  exact copies = точные копии.  near-duplicates = почти одинаковые копии.
+accept = принять.  stack review = просмотр серий.  duplicate review = просмотр дубликатов.  Start Reviewing = Начать просмотр.
+keepers = оставленные фото.  rejects = отклонённые фото.  likely rejects = кандидаты на отклонение.
+the apply = применение; Undo Apply = отмена применения / «Отменить применение…»; cancelled = отменено; stopped = остановлено;
+  retry = «Ещё раз отменить применение».  Undo %@ = «Отменить: %@», Redo %@ = «Повторить: %@».
+blown highlights = выбитые света.  crushed shadows = проваленные тени.  clipping = пересветы и провалы.
+lens smudge = грязь на объективе.  cut-off face = обрезанное лицо.  accidental shot = случайный кадр.  weak shot = слабый кадр.
+screenshot = снимок экрана.  main face = главное лицо.  background face = фоновое лицо.  subject = объект.
+camera burst = серийная съёмка.  aesthetics = эстетика.  tile = плитка.  thumbnail = миниатюра.
+selection = выбор / выбранное.  group = группа.  pane (compare) = панель.  item (file/folder) = объект.
+presets: Мягкий / Сбалансированный / Строгий.  Settings panes: Глаза, Резкость, Сходство, Дубликаты, Экспозиция, Другое.
+Keys sections: Решения, Навигация, Вид, Анализ, Файл и Правка.  Menus: Файл, Правка, Вид, Переход, Окно, Справка.
+Zoom to 100% = Увеличить до 100%; Zoom to Fit = Вписать в окно.  units: с, мин, ч.
+macOS names: Выбрать все, Отменить выбор, Убрать в Dock, Круговое переключение окон, Скрыть остальные, Завершить Culla,
+  Переместить в Корзину, Пробел; modifier/navigation keys stay Latin.
+Conventions: no gendered past tense for Culla; plural `other` = `many`; `one` forms must also read right for 21, 31…
+  (no singular pronouns); localized names go after a colon or in «» so they are not declined;
+  Go-menu items are noun phrases; switches read by VoiceOver: Включено / Выключено.
+
+Batch 2 (app strings) additions:
+rescue (a reject, on Review and Apply) = спасти / спасение.  culling = отбор; Keep Culling = «Продолжить отбор».
+session = сеанс.  scores (cached analysis results) = оценки; score = оценка.  decided = решено / «Все серии решены (N)».
+left (status bar, no decision) = «N без решения»; left (to review) = «осталось N»; to review = «на просмотр».
+Open Keepers In… = «Открыть оставленные в…»; Reveal in Finder = «Показать в Finder»; Copy Keepers To… = «Скопировать оставленные в…».
+Settings tabs: Основные, Клавиши, Ресурсы (Performance) + Глаза, Резкость, Сходство, Дубликаты, Экспозиция, Другое.
+Settings sections: Отбор, Применение решений, Файлы XMP, Язык, Анализ, Кэш.  System default (language) = «Как в системе».
+Preset = «Набор настроек»; Custom = «Свой»; Provisional = «Временное».  Analysis speed: Полная / Ниже от аккумулятора.
+tuning panel heading = «Настройка: <group>»; Reset to Default = «Сбросить»; Save as Default = «Сохранить по умолчанию».
+flag badge names (nouns): Нерезкость, Закрытые глаза, Выбитые света, Проваленные тени, Обрезанное лицо, Грязь на объективе,
+  Слабый кадр, Заваленный горизонт, Случайный кадр, Точный дубликат, Почти одинаковая копия.  inspector section Flags = «Пометки».
+decision states: Оставлено / Отклонено / Не просмотрено.  colour labels (feminine, with «метка»): Красная, Жёлтая, Зелёная, Синяя, Пурпурная.
+runner-up = «Второй лучший»; Culla's pick (short) = «выбор Culla»; person = «Человек N»; face = «Лицо N».
+clipped (inspector value) = «без деталей»; Fit (zoom) = «Вписано»; Zoom to Fit = «Вписать в окно»; closer look = «Крупный план».
+inspector rows: Снято, Камера, Объектив, Выдержка, Диафрагма, ISO, Фокусное, Размер, Разрешение, Формат, Имя, Папка, Размер файла, Изменён, В паре с.
+units: ГБ, МБ, Мп, мм, с.  macOS menus: О приложении Culla, Службы, Показать все, Открыть недавние, Очистить меню,
+  Все окна — на передний план, Изменить масштаб.  drag-and-drop = «Перетяните».
+Embedded names: group, command and pane names go in «» or after a colon; run titles go in «».
+
+Round 3 additions and changes:
+clipped (inspector values) = «N% выбито» (Highlights) / «N% провалено» (Shadows); replaces «без деталей».
+pair (RAW with JPEG/HEIC) = «объединить в пару»; button Pair Them = «Объединить»; inspector «В паре с».
+Mark Only sentences: «N фото отмечается как отклонённое в своём файле XMP: рейтинг X, метка «Name»» (agreement lives in the
+  `photos` substitution). The label name is the value written to the file (Red, Purple…), shown in «» untranslated,
+  also in the defaults sentence («рейтинг −1 и метка «Red»»).
+skipped sidecar reasons (lower case, in brackets after the file name): «некорректный XML», «не текст в кодировке UTF-8»,
+  «структура, которую Culla не изменяет», «оставлен как есть».
+face-strip row by position: «1-й слева» (masculine: a person).  eye reading note: «Наименьшее значение среди N проверенных лиц».
+Reduced on battery = «Ниже от аккумулятора» (the explanation starts with that name and a colon).

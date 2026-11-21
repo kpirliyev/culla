@@ -1,0 +1,359 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 240,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset. The two settings that rescan ask first, saying how many photos with decisions would leave; recording a key keeps a command's other keys, and + adds one; the tall panes scroll within a 13-inch screen; Tab moves through Settings with a focus ring."
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "analysis",
+      "timeout": 150
+    },
+    {
+      "settings": {
+        "advanceAfterDecision": false
+      }
+    },
+    {
+      "click": "sub/Big Sur Aerial.jpg"
+    },
+    {
+      "key": "x"
+    },
+    {
+      "click": "sub/Big Sur Coastline.jpg"
+    },
+    {
+      "key": "3"
+    },
+    {
+      "expect": {
+        "totals.photos": 35
+      }
+    },
+    {
+      "settingsWindow": "general"
+    },
+    {
+      "scanToggle": "includeSubfolders",
+      "value": false
+    },
+    {
+      "expect": {
+        "settingsWindow.scanConfirmation.question": "Stop including subfolders?",
+        "settingsWindow.scanConfirmation.detail": "3 photos in subfolders of “CullaSampleShoot” will leave this session. 2 photos with a decision or a rating will lose it. ⌘Z cannot bring it back. Nothing on disk changes.",
+        "settings.includeSubfolders": true
+      }
+    },
+    {
+      "snapshot": "01-confirm-subfolders",
+      "window": "settings"
+    },
+    {
+      "scanToggle": "cancel"
+    },
+    {
+      "expect": {
+        "settings.includeSubfolders": true,
+        "totals.photos": 35,
+        "photo:sub/Big Sur Aerial.jpg.decision": "rejected"
+      }
+    },
+    {
+      "scanToggle": "includeSubfolders",
+      "value": false
+    },
+    {
+      "scanToggle": "confirm"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "sleep": 0.5
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "settings.includeSubfolders": false,
+        "totals.photos": 32
+      }
+    },
+    {
+      "log": "Turning it back on drops nothing, so it does not ask."
+    },
+    {
+      "scanToggle": "includeSubfolders",
+      "value": true
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "sleep": 0.5
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "settings.includeSubfolders": true,
+        "settingsWindow.scanConfirmation": null,
+        "totals.photos": 35
+      }
+    },
+    {
+      "log": "Separating RAW and JPEG drops nothing; pairing them again drops the decided RAW photo, so it asks."
+    },
+    {
+      "settingsWindow": "duplicates"
+    },
+    {
+      "scanToggle": "pairRAWWithRendered",
+      "value": false
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "sleep": 0.5
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "settings.pairRAWWithRendered": false,
+        "settingsWindow.scanConfirmation": null,
+        "totals.photos": 36
+      }
+    },
+    {
+      "click": "horizon_2.dng"
+    },
+    {
+      "key": "p"
+    },
+    {
+      "scanToggle": "pairRAWWithRendered",
+      "value": true
+    },
+    {
+      "expect": {
+        "settingsWindow.scanConfirmation.question": "Treat RAW+JPEG pairs as one photo?",
+        "settingsWindow.scanConfirmation.detail": "1 RAW file now shown on its own will be paired with the JPEG or HEIC file of the same name and no longer appear as a separate photo. 1 photo with a decision or a rating will lose it. ⌘Z cannot bring it back. Nothing on disk changes."
+      }
+    },
+    {
+      "snapshot": "02-confirm-pairing",
+      "window": "settings"
+    },
+    {
+      "scanToggle": "confirm"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "sleep": 0.5
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "settings.pairRAWWithRendered": true,
+        "totals.photos": 35
+      }
+    },
+    {
+      "log": "Keys: changing ⌘+ keeps ⌘=, changing C keeps ⌘3, and + adds a key."
+    },
+    {
+      "settingsWindow": "keys"
+    },
+    {
+      "bindKey": "largerThumbnails",
+      "replacing": "cmd++",
+      "chord": "cmd+l"
+    },
+    {
+      "expect": {
+        "keyMap.largerThumbnails": [
+          "cmd+=",
+          "cmd+l"
+        ],
+        "menuKeys.largerThumbnails": "⌘="
+      }
+    },
+    {
+      "bindKey": "showCompare",
+      "replacing": "c",
+      "chord": "v"
+    },
+    {
+      "expect": {
+        "keyMap.showCompare": [
+          "v",
+          "cmd+3"
+        ],
+        "menuKeys.showCompare": "V"
+      }
+    },
+    {
+      "bindKey": "keep",
+      "add": true,
+      "chord": "k"
+    },
+    {
+      "expect": {
+        "keyMap.keep": [
+          "p",
+          "k"
+        ]
+      }
+    },
+    {
+      "bindKey": "keep",
+      "add": true
+    },
+    {
+      "expect": {
+        "settingsWindow.recording": "keep"
+      }
+    },
+    {
+      "snapshot": "03-keys-alternates",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-03-keys",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "keyRecorder": "cancel"
+    },
+    {
+      "click": "horizon_0.jpg"
+    },
+    {
+      "key": "k"
+    },
+    {
+      "expect": {
+        "photo:horizon_0.jpg.decision": "kept"
+      }
+    },
+    {
+      "keyRecorder": "resetAll"
+    },
+    {
+      "expect": {
+        "keyMap.largerThumbnails": [
+          "cmd+=",
+          "cmd++"
+        ],
+        "keyMap.showCompare": [
+          "c",
+          "cmd+3"
+        ],
+        "keyMap.keep": [
+          "p"
+        ]
+      }
+    },
+    {
+      "log": "Tall panes scroll at a height that fits a 13-inch laptop."
+    },
+    {
+      "settingsWindow": "eyes"
+    },
+    {
+      "expect": {
+        "settingsWindow.scrolls": true
+      }
+    },
+    {
+      "sleep": 0.6
+    },
+    {
+      "expectAtMost": {
+        "settingsWindow.size.1": 720
+      }
+    },
+    {
+      "snapshot": "04-eyes-pane",
+      "window": "settings"
+    },
+    {
+      "settingsWindow": "other"
+    },
+    {
+      "expect": {
+        "settingsWindow.scrolls": true
+      }
+    },
+    {
+      "sleep": 0.6
+    },
+    {
+      "expectAtMost": {
+        "settingsWindow.size.1": 720
+      }
+    },
+    {
+      "snapshot": "05-other-pane",
+      "window": "settings"
+    },
+    {
+      "settingsWindow": "blur"
+    },
+    {
+      "sleep": 0.6
+    },
+    {
+      "expectAtMost": {
+        "settingsWindow.size.1": 720
+      }
+    },
+    {
+      "log": "Tab moves through the Keys pane; the focused control has a focus ring."
+    },
+    {
+      "settingsWindow": "keys"
+    },
+    {
+      "keyboardFocus": "next",
+      "repeat": 3,
+      "window": "settings"
+    },
+    {
+      "snapshot": "06-keys-focus",
+      "window": "settings"
+    },
+    {
+      "dump": "06-focus",
+      "photos": false
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "quit": true
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Apply, then quit. 43 reopens the shoot and undoes from the menu."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"saveHash": "42-original"},
+    {"group": "allPhotos"},
+    {"click": "horizon_1.jpg"},
+    {"key": "x"},
+    {"click": "sonoma_3.jpg"},
+    {"key": "x"},
+    {"click": "horizon_0_under.jpg"},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"applyScreen": "open"},
+    {"key": "shift+cmd+return"},
+    {"wait": "applied"},
+    {"expect": {"totals.photos": 32}},
+    {"quit": true}
+  ]
+}

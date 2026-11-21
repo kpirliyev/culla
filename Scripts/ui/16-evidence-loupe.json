@@ -1,0 +1,52 @@
+{
+  "needs": {"reset": true},
+  "timeout": 180,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --reset. Eyes Closed and Blurry open the loupe zoomed to the evidence; X moves to the next undecided photo and the zoom follows its evidence; Exposure opens fitted with the clipping overlay. The sample has no faces, so two are injected (pinned while real analysis runs)."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"injectScores": {
+      "horizon_1.jpg": {"faces": [{"box": [0.20, 0.30, 0.10, 0.15], "eyes": [0.30, 0.31]}, {"box": [0.62, 0.40, 0.12, 0.18], "eyes": [0.06, 0.08]}], "sharpness": 50},
+      "horizon_3.jpg": {"faces": [{"box": [0.30, 0.20, 0.12, 0.18], "eyes": [0.22, 0.24]}], "sharpness": 50}
+    }},
+    {"expect": {"groups.eyesClosed.total": 2, "photo:horizon_1.jpg.tiers.eyesClosed": "certain", "photo:horizon_3.jpg.tiers.eyesClosed": "likely"}},
+
+    {"group": "eyesClosed"},
+    {"wait": "idle"},
+    {"snapshot": "01-eyes-closed-zoomed-to-face"},
+    {"dump": "01-eyes", "photos": false},
+    {"expect": {"viewMode": "loupe", "focus": "horizon_1.jpg", "loupe.zoomPercent": 100, "loupe.targetedFace": 1, "loupe.faceBoxes": true}},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"snapshot": "02-next-closed-eyes"},
+    {"expect": {"focus": "horizon_3.jpg", "loupe.zoomPercent": 100, "loupe.targetedFace": 0, "photo:horizon_1.jpg.decision": "rejected"}},
+
+    {"group": "blurry"},
+    {"wait": "idle"},
+    {"snapshot": "03-blurry-zoomed-to-focus"},
+    {"dump": "03-blurry", "photos": false},
+    {"expect": {"viewMode": "loupe", "focus": "sonoma_0.jpg", "loupe.zoomPercent": 100, "loupe.isFit": false, "loupe.faceBoxes": false}},
+
+    {"group": "exposure"},
+    {"wait": "idle"},
+    {"snapshot": "04-exposure-clipping"},
+    {"expect": {"viewMode": "loupe", "focus": "sonoma_0_over.jpg", "loupe.isFit": true, "loupe.clipping": true}},
+
+    {"group": "otherIssues"},
+    {"wait": "idle"},
+    {"expect": {"viewMode": "loupe", "loupe.isFit": true, "loupe.clipping": false}},
+    {"log": "A view chosen by hand sticks while the group is open."},
+    {"key": "space"},
+    {"key": "right"},
+    {"key": "p"},
+    {"expect": {"viewMode": "grid"}},
+    {"group": "kept"},
+    {"wait": "idle"},
+    {"expect": {"viewMode": "grid"}},
+    {"group": "unreviewed"},
+    {"wait": "idle"},
+    {"expect": {"viewMode": "loupe", "loupe.isFit": true}},
+    {"quit": true}
+  ]
+}

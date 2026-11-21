@@ -1,0 +1,70 @@
+{
+  "needs": {"after": "02-cull-and-undo"},
+  "timeout": 120,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run after 02-cull-and-undo without --reset. Reopens the shoot from the recent list."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "00-welcome-with-recents"
+    },
+    {
+      "expect": {
+        "screen": "welcome",
+        "recents.0.photos": 35
+      }
+    },
+    {
+      "openRecent": 0
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "currentGroup": "rejected",
+        "viewMode": "loupe",
+        "focus": "sub/Big Sur Aerial.jpg",
+        "totals.kept": 4,
+        "totals.rejected": 4,
+        "photo:sub/Big Sur Coastline.jpg.decision": "kept",
+        "photo:sub/Big Sur Horizon.jpg.decision": "rejected",
+        "photo:sub/Big Sur Aerial.jpg.decision": "rejected",
+        "photo:sub/Big Sur Aerial.jpg.rating": 3,
+        "photo:sonoma_0.jpg.rating": 0,
+        "photo:sonoma_1.jpg.decision": "kept",
+        "photo:sonoma_3.jpg.decision": "kept",
+        "photo:sonoma_0_blur3.jpg.decision": "kept",
+        "canUndo": false
+      }
+    },
+    {
+      "snapshot": "01-reopened-loupe"
+    },
+    {
+      "key": "space"
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "02-reopened-grid"
+    },
+    {
+      "dump": "reopened"
+    },
+    {
+      "quit": true
+    }
+  ]
+}

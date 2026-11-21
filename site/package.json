@@ -1,0 +1,28 @@
+{
+  "name": "culla-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "icons": "node scripts/sync-icon.mjs",
+    "predev": "node scripts/sync-icon.mjs",
+    "dev": "nuxt dev",
+    "pregenerate": "node scripts/sync-icon.mjs",
+    "generate": "nuxt generate",
+    "preview:static": "node scripts/preview.mjs",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/image": "^2.2.1",
+    "@nuxtjs/i18n": "^10.6.0",
+    "nuxt": "^4.6.4",
+    "vue": "^3.5.45",
+    "vue-router": "^5.4.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  },
+  "allowScripts": {
+    "esbuild": false,
+    "fsevents": false
+  }
+}

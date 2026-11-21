@@ -1,0 +1,25 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Cancelled" : {
+      "comment" : "Shown as the reason a photo has no analysis results, in the loupe and the inspector, when its analysis was stopped before it finished. A past participle: 'analysis cancelled'. At most about 20 characters.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отменён"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ýatyryldy"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

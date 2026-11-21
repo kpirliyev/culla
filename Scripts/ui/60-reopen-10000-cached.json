@@ -1,0 +1,61 @@
+{
+  "needs": {
+    "after": "59-performance-10000",
+    "shoot": "10000",
+    "slow": true,
+    "keepShoot": true,
+    "timeout": 600
+  },
+  "timeout": 500,
+  "window": [
+    1440,
+    900
+  ],
+  "steps": [
+    {
+      "log": "Run after 59 without --reset: a fresh launch reopening the 10,000-photo shoot with every score cached. Records the time to the grid and to fully populated groups."
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "openRecent": 0,
+      "timeout": 300
+    },
+    {
+      "wait": "analysis",
+      "timeout": 300
+    },
+    {
+      "record": "coldReopen",
+      "values": {
+        "shownMs": "open.shownMs",
+        "photosKnownMs": "open.photosKnownMs",
+        "cachedAppliedS": "analysis.timings.cachedAppliedS",
+        "groupsPopulatedS": "analysis.timings.finishedS",
+        "analysed": "analysis.analysedThisOpen",
+        "cached": "analysis.cachedCount"
+      }
+    },
+    {
+      "snapshot": "01-reopened"
+    },
+    {
+      "dump": "01-reopened",
+      "photos": false
+    },
+    {
+      "expect": {
+        "analysis.analysedThisOpen": 0
+      }
+    },
+    {
+      "expectAtMost": {
+        "measurements.coldReopen.groupsPopulatedS": 3
+      }
+    },
+    {
+      "quit": true
+    }
+  ]
+}

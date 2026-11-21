@@ -1,0 +1,196 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "All Photos" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Every photo of the shoot.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Все фото"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ähli suratlar"
+          }
+        }
+      }
+    },
+    "Blurry" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos that are out of focus or shaken. An adjective standing for 'blurry photos'.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нерезкие"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bulaşyk"
+          }
+        }
+      }
+    },
+    "Duplicates" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Sets of copies of the same photo.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дубликаты"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dublikatlar"
+          }
+        }
+      }
+    },
+    "Exposure" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos with blown highlights or crushed shadows (exposure problems).",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Экспозиция"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekspozisiýa"
+          }
+        }
+      }
+    },
+    "Eyes Closed" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos where someone's eyes are closed.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрытые глаза"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ýumuk gözler"
+          }
+        }
+      }
+    },
+    "Kept" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos the person decided to keep. Past participle standing for 'kept photos'.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Оставленные"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Galdyrylan"
+          }
+        }
+      }
+    },
+    "Other Issues" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos with other problems: tilted horizon, face cut off, lens smudge, accidental shot, weak shot.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Другие проблемы"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beýleki kemçilikler"
+          }
+        }
+      }
+    },
+    "Rejected" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos the person decided to reject. Past participle standing for 'rejected photos'.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отклонённые"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ret edilen"
+          }
+        }
+      }
+    },
+    "Similar Stacks" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Bursts of similar shots, shown as stacks (glossary: stack).",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Похожие серии"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meňzeş tapgyrlar"
+          }
+        }
+      }
+    },
+    "Unreviewed" : {
+      "comment" : "The name of a group in the sidebar of the main window; also used in buttons such as 'Next: <group>' and 'Back to <group>'. Title case, a short noun phrase, at most about 20 characters. Photos with no decision yet. An adjective standing for 'unreviewed photos'.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Непросмотренные"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seredilmedik"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

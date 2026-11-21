@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "Culla: a free Mac app for culling photos",
+    "description": "Culla finds the blinks, the blur and the lookalikes in a shoot with Apple’s Vision framework, on your Mac. You decide, one key at a time. Free, no account, nothing uploaded.",
+    "releaseNotesTitle": "Release notes · Culla",
+    "notFoundTitle": "Page not found · Culla",
+    "ogAlt": "The Culla app icon"
+  },
+  "nav": {
+    "skip": "Skip to the content",
+    "languages": "Language",
+    "home": "Culla, home page"
+  },
+  "hero": {
+    "title": "Culla helps you pick the keepers.",
+    "lead": "It finds the blinks, the blur and the lookalikes with Apple’s Vision framework, which runs on your Mac’s Neural Engine. You decide, one key at a time.",
+    "download": "Download for Mac",
+    "github": "View on GitHub",
+    "copy": "Copy link for your Mac",
+    "copied": "Link copied",
+    "copiedSay": "Link copied. Open it on your Mac.",
+    "copyFailed": "Press and hold to copy"
+  },
+  "version": {
+    "label": "About the download",
+    "version": "Version {version}",
+    "size": "{size} MB",
+    "system": "macOS 26 or later",
+    "free": "Free and open source. No account."
+  },
+  "shots": {
+    "placeholder": "Screenshot to come",
+    "hero-stack-review": {
+      "label": "Stack review",
+      "alt": "Culla’s stack review: two similar frames side by side, the best pick starred, and the faces of each frame in a strip below."
+    },
+    "how-1-open": {
+      "label": "Opening a folder",
+      "alt": "Culla’s window just after a folder is opened: the grid of photos, with the analysis running at the top."
+    },
+    "how-2-groups": {
+      "label": "The groups in the sidebar",
+      "alt": "Culla’s sidebar with its groups: Duplicates, Similar Stacks, Eyes Closed, Blurry and Exposure, each with a count."
+    },
+    "how-3-decide": {
+      "label": "A stack and its best pick",
+      "alt": "A stack of similar frames in Culla, with the best pick starred and some frames marked to keep or reject."
+    },
+    "vision-evidence": {
+      "label": "Evidence drawn on a photo",
+      "alt": "A photo open at full size in Culla, with a box around one face and a label saying the eyes are closed and how sure Culla is."
+    }
+  },
+  "proof": {
+    "label": "In short",
+    "free": "Free, no catch",
+    "open": "Open source",
+    "account": "No account",
+    "ads": "No ads, no tracking",
+    "offline": "Works offline, nothing uploaded"
+  },
+  "how": {
+    "title": "How it works",
+    "step1": "Open a folder.",
+    "step2": "Culla sorts it into piles: duplicates, lookalikes, closed eyes, blurry, badly exposed.",
+    "step3": "Press P to keep, X to reject. Nothing moves until you say so."
+  },
+  "vision": {
+    "title": "Apple Vision on your Mac",
+    "lead": "Everything Culla finds comes from Apple’s own frameworks: Vision, Core Image and ImageIO. There are no third-party models.",
+    "what": "What Culla finds",
+    "how": "How",
+    "eyes": "Closed eyes",
+    "eyesHow": "Vision face landmarks, checked against Core Image",
+    "blur": "Blur",
+    "blurHow": "Edge strength on the subject Vision’s saliency finds, plus face capture quality",
+    "alike": "Lookalikes and duplicates",
+    "alikeHow": "Vision feature prints and capture time; exact copies by file hash",
+    "smudge": "Lens smudge",
+    "smudgeHow": "Vision’s smudge request",
+    "eyesOpen": "Eyes open",
+    "eyesClosed": "Eyes closed",
+    "soft": "Soft",
+    "caption": "Culla shows its evidence on the photo: it zooms in on the face, draws a box around it and says how sure it is that the eyes are closed.",
+    "closing1": "No model to download. No cloud. Your photos never leave your Mac.",
+    "closing2": "Culla suggests, you decide. Every flag shows why."
+  },
+  "keyboard": {
+    "title": "From the keyboard",
+    "line1": "One key per decision.",
+    "line2": "Start while Culla is still looking.",
+    "line3": "Every key can be changed."
+  },
+  "demo": {
+    "label": "A stack of five frames to try the keys on",
+    "keysLabel": "Keys",
+    "hintKeys": "Try it: the keys work here.",
+    "hintTouch": "Tap the keys.",
+    "pick": "Pick",
+    "frame1": "Eyes closed",
+    "frame2": "Eyes open and smiling. Culla’s pick.",
+    "frame3": "Soft, out of focus",
+    "frame4": "Looking away",
+    "frame5": "Eyes half closed",
+    "keyKeep": "keep",
+    "keyReject": "reject",
+    "keyPrev": "previous",
+    "keyNext": "next",
+    "keyAccept": "accept",
+    "keyKeepLabel": "P: keep this frame",
+    "keyRejectLabel": "X: reject this frame",
+    "keyPrevLabel": "Left arrow: previous frame",
+    "keyNextLabel": "Right arrow: next frame",
+    "keyAcceptLabel": "Return: keep the pick, reject the rest",
+    "current": "Frame {n} of {total}.",
+    "currentPick": "Frame {n} of {total}, the pick.",
+    "kept": "Frame {n} kept.",
+    "rejected": "Frame {n} rejected.",
+    "done": "Done. The keepers stay, the rest are rejected.",
+    "again": "Again",
+    "reset": "The stack is back."
+  },
+  "safe": {
+    "title": "Your photos stay yours",
+    "nothingMoves": "Nothing moves until you apply.",
+    "rejects": "Rejects go to a {folder} folder inside the shoot. Nothing is deleted.",
+    "undo": "Apply can be undone.",
+    "beta": "Beta",
+    "sidecar": "Ratings and keep or reject marks can also be written to XMP sidecars beside your photos. Culla never changes an image file."
+  },
+  "catch": {
+    "title": "So what’s the catch?",
+    "answer": "There isn’t one.",
+    "note1": "Culla started as a personal project: a tool I built for my own photos. It turned out to be worth sharing, so I’m sharing it. That’s the whole story.",
+    "note2": "No paid version is waiting behind this one. No ads, no account, and nothing collected about you or your photos. The code is open on {github} under the MIT licence, so you don’t have to take my word for any of it. If Culla is useful to you, good. If something is broken or missing, tell me."
+  },
+  "todo": {
+    "title": "Not finished yet",
+    "lead": "Culla is new, and a few things are still rough.",
+    "tuning": "Detection settings are still being tuned on real shoots, so check what Culla flags before you apply.",
+    "eyes": "Closed eyes have been checked on only a few real faces so far. If Culla misses a blink, or sees one that isn’t there, tell me.",
+    "sidecars": "Writing XMP sidecars is still in beta.",
+    "trash": "Sending rejects to the Trash has had less testing than the {folder} folder.",
+    "tellTitle": "Tell me",
+    "bug": "Report a bug",
+    "feature": "Suggest a feature",
+    "question": "Ask a question",
+    "githubNote": "These open on GitHub, where you need a free account to write. Write in English, Russian or Turkmen."
+  },
+  "faq": {
+    "title": "Questions",
+    "systems": {
+      "q": "Which Macs and cameras does it work with?",
+      "a": "Any Mac with macOS 26 or later. Culla reads JPEG, HEIC and the RAW formats macOS itself can read."
+    },
+    "internet": {
+      "q": "Does it need the internet?",
+      "a": "No. The app has no network access at all, so nothing is uploaded anywhere. Your photos stay on your Mac."
+    },
+    "changes": {
+      "q": "Does it change my photos?",
+      "a": "No. Culla never changes an image file. Until you apply, your decisions are only marks. When you apply, files are moved, not edited."
+    },
+    "rejects": {
+      "q": "What happens to the rejects?",
+      "a": "When you apply, they move to a {folder} folder inside the shoot. In Settings you can send them to the Trash instead, or only mark them. Culla doesn’t delete anything, and Apply can be undone."
+    },
+    "free": {
+      "q": "How is it free?",
+      "a": "It started as a personal project, and I’m sharing it. There is no paid tier and there are no ads."
+    },
+    "open": {
+      "q": "Is it open source?",
+      "a": "Yes. The code is on {github} under the MIT licence. You can read it, build it yourself, or {fix}.",
+      "fix": "send a fix"
+    },
+    "counting": {
+      "q": "Does this site count anything?",
+      "a": "The server keeps an ordinary log to count visits. It stores a shortened IP address, never the whole one, and the log is deleted after 30 days. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
+    },
+    "report": {
+      "q": "How do I report a problem?",
+      "a": "On GitHub, where you can {bug}, {feature} or {question}. You need a free GitHub account to write there.",
+      "bug": "report a bug",
+      "feature": "suggest a feature",
+      "question": "ask a question"
+    }
+  },
+  "closing": {
+    "title": "Try it on your next shoot."
+  },
+  "footer": {
+    "releaseNotes": "Release notes",
+    "source": "Source code",
+    "report": "Report a problem",
+    "copyright": "© {year} Kerim Pirliyev"
+  },
+  "release": {
+    "title": "Release notes",
+    "lead": "What changed in each version of Culla.",
+    "heading": "Culla {version}",
+    "date": "Released {date}",
+    "sha": "SHA-256 of the disk image",
+    "shaHelp": "To check your download, run this in Terminal and compare the result with the line above:",
+    "back": "Back to the Culla page",
+    "github": "This release on GitHub"
+  },
+  "notFound": {
+    "title": "This page isn’t here.",
+    "body": "The address may have a typo, or the page has moved. The Culla page is here:"
+  }
+}

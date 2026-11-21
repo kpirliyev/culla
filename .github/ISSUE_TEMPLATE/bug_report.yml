@@ -1,0 +1,70 @@
+name: Report a bug
+description: Something in Culla doesn't work the way it should.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to tell me. Write in English, Russian or Turkmen, whichever is easiest for you.
+
+        Please don't attach photos you wouldn't show in public. Everything here is public. If a photo would help, a screenshot of Culla's window or a test shot of something ordinary is enough.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did Culla do?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: What should it have done instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps
+      description: How can I make it happen on my Mac?
+      placeholder: |
+        1. Open a folder of …
+        2. Press …
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: culla-version
+    attributes:
+      label: Culla version
+      description: In Culla, choose Culla > About Culla.
+      placeholder: "1.0"
+    validations:
+      required: true
+  - type: input
+    id: macos-version
+    attributes:
+      label: macOS version
+      description: In the Apple menu, choose About This Mac.
+      placeholder: "26.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: mac
+    attributes:
+      label: Mac
+      options:
+        - Apple silicon (M1 or later)
+        - Intel
+        - I'm not sure
+    validations:
+      required: true
+  - type: input
+    id: camera
+    attributes:
+      label: Camera or file type
+      description: The camera the photos came from, or the kind of file (JPEG, HEIC, a RAW format).
+      placeholder: "Fujifilm X-T5, RAF"
+    validations:
+      required: false

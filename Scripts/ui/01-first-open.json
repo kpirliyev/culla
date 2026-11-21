@@ -1,0 +1,42 @@
+{
+  "needs": {"reset": true},
+  "timeout": 120,
+  "window": [1280, 800],
+  "steps": [
+    {"wait": "idle"},
+    {"snapshot": "00-welcome"},
+    {"open": "$SHOOT"},
+    {"wait": "idle"},
+    {"snapshot": "01-grid"},
+    {"dump": "01-grid"},
+    {"expect": {
+      "screen": "shoot",
+      "totals.photos": 35,
+      "totals.unreadable": 1,
+      "totals.left": 34,
+      "groups.allPhotos.total": 35,
+      "currentGroup": "allPhotos",
+      "viewMode": "grid",
+      "photo:horizon_2.jpg.companions": ["horizon_2.dng"],
+      "photo:broken.jpg.unreadable": true
+    }},
+    {"key": "i"},
+    {"wait": "idle"},
+    {"snapshot": "02-inspector"},
+    {"key": "space"},
+    {"wait": "idle"},
+    {"snapshot": "03-loupe"},
+    {"expect": {"viewMode": "loupe"}},
+    {"key": "space"},
+    {"key": "i"},
+    {"wait": "idle"},
+    {"expect": {"viewMode": "grid", "inspectorVisible": false}},
+    {"group": "kept"},
+    {"wait": "idle"},
+    {"snapshot": "04-empty-kept"},
+    {"group": "eyesClosed"},
+    {"wait": "idle"},
+    {"snapshot": "05-empty-eyes"},
+    {"quit": true}
+  ]
+}

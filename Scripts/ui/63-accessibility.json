@@ -1,0 +1,495 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 300,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset. The accessibility tree of each view and each Settings pane: nothing a person acts on is unlabelled, tiles, filmstrip cells, face-strip cells and badges have names and actions. Then the grid with Increase Contrast, and with Reduce Motion."
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "analysis",
+      "timeout": 150
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "settings": {
+        "collapseStacksInAllPhotos": false
+      }
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-01-grid",
+      "check": {
+        "unlabelled": 0,
+        "contains": [
+          [
+            "AXImage",
+            "sonoma_0.jpg, unreviewed"
+          ],
+          [
+            "AXImage",
+            "sonoma_1 copy.jpg, unreviewed, blurry"
+          ],
+          [
+            "AXList",
+            "Photos"
+          ],
+          [
+            "AXButton",
+            "Review and Apply"
+          ],
+          [
+            "AXRadioButton",
+            "Loupe"
+          ],
+          [
+            "AXSlider",
+            "Thumbnail size"
+          ],
+          [
+            "AXButton",
+            "Open"
+          ],
+          [
+            "AXRadioGroup",
+            "View"
+          ],
+          [
+            "AXButton",
+            "Inspector"
+          ]
+        ],
+        "actions": [
+          [
+            "AXImage",
+            "sonoma_0.jpg",
+            "Keep"
+          ],
+          [
+            "AXImage",
+            "sonoma_0.jpg",
+            "Reject"
+          ],
+          [
+            "AXImage",
+            "sonoma_0.jpg",
+            "Clear Decision"
+          ]
+        ],
+        "absent": [
+          [
+            "AXImage",
+            "photo"
+          ]
+        ]
+      }
+    },
+    {
+      "click": "horizon_0.jpg"
+    },
+    {
+      "key": "space"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-02-loupe",
+      "check": {
+        "unlabelled": 0,
+        "contains": [
+          [
+            "",
+            "Filmstrip"
+          ],
+          [
+            "AXImage",
+            "horizon_1.jpg"
+          ]
+        ],
+        "actions": [
+          [
+            "AXImage",
+            "horizon_1.jpg",
+            "press"
+          ]
+        ]
+      }
+    },
+    {
+      "key": "escape"
+    },
+    {
+      "injectScores": "burst",
+      "frames": [
+        "sonoma_burst0.jpg",
+        "sonoma_burst1.jpg",
+        "sonoma_burst2.jpg",
+        "sonoma_burst3.jpg"
+      ],
+      "people": [
+        {
+          "box": [
+            0.3,
+            0.3,
+            0.09,
+            0.12
+          ]
+        },
+        {
+          "box": [
+            0.56,
+            0.33,
+            0.08,
+            0.11
+          ]
+        }
+      ],
+      "blink": [
+        [
+          2,
+          1
+        ]
+      ],
+      "missing": [
+        [
+          3,
+          0
+        ]
+      ],
+      "sharpness": [
+        52,
+        64,
+        70,
+        58
+      ]
+    },
+    {
+      "group": "similarStacks"
+    },
+    {
+      "keys": [
+        "down",
+        "down"
+      ]
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "stackReview.current": "sonoma_burst0.jpg"
+      }
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-03-stack-review",
+      "check": {
+        "unlabelled": 0,
+        "contains": [
+          [
+            "",
+            "Face strip"
+          ],
+          [
+            "AXImage",
+            "Person 2, frame 3 of 4, eyes closed"
+          ],
+          [
+            "",
+            "Frames of the stack"
+          ],
+          [
+            "AXImage",
+            "sonoma_burst1.jpg"
+          ]
+        ],
+        "actions": [
+          [
+            "AXImage",
+            "Person 1, frame 2 of 4",
+            "press"
+          ],
+          [
+            "AXImage",
+            "sonoma_burst2.jpg",
+            "press"
+          ]
+        ]
+      }
+    },
+    {
+      "group": "duplicates"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-04-duplicates",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "click": "sonoma_2.jpg"
+    },
+    {
+      "click": "sonoma_3.jpg",
+      "modifiers": "cmd"
+    },
+    {
+      "key": "c"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-05-compare",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "key": "escape"
+    },
+    {
+      "group": "blurry"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-06-defect-loupe",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "click": "horizon_1.jpg"
+    },
+    {
+      "key": "x"
+    },
+    {
+      "key": "i"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-07-inspector",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "key": "i"
+    },
+    {
+      "applyScreen": "open"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-08-apply",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "applyScreen": "close"
+    },
+    {
+      "settingsWindow": "general"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-general",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "eyes"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-eyes",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "blur"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-blur",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "similarity"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-similarity",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "duplicates"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-duplicates",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "exposure"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-exposure",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "other"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-other",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "performance"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-performance",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "keys"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-settings-keys",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "log": "Increase Contrast: opaque badge rims, heavier selection and focus outlines."
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "click": "horizon_burst0.jpg"
+    },
+    {
+      "key": "p"
+    },
+    {
+      "click": "horizon_burst1.jpg"
+    },
+    {
+      "click": "horizon_burst2.jpg",
+      "modifiers": "cmd"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "snapshot": "10-grid-normal"
+    },
+    {
+      "systemAccessibility": {
+        "increaseContrast": true
+      }
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "systemAccessibility.increaseContrast": true
+      }
+    },
+    {
+      "snapshot": "11-grid-increase-contrast"
+    },
+    {
+      "systemAccessibility": {
+        "increaseContrast": null,
+        "reduceMotion": true
+      }
+    },
+    {
+      "key": "i"
+    },
+    {
+      "key": "i"
+    },
+    {
+      "key": "space"
+    },
+    {
+      "key": "right",
+      "repeat": 3
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "systemAccessibility.reduceMotion": true
+      }
+    },
+    {
+      "systemAccessibility": {
+        "reduceMotion": null
+      }
+    },
+    {
+      "quit": true
+    }
+  ]
+}

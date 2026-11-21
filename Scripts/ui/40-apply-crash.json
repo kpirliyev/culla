@@ -1,0 +1,30 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Culla is ended abruptly in the middle of an apply (a simulated crash). 41 reopens the shoot and expects the recovery offer."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"saveHash": "40-original"},
+    {"group": "allPhotos"},
+    {"click": "horizon_1.jpg"},
+    {"key": "x"},
+    {"click": "sonoma_3.jpg"},
+    {"key": "x"},
+    {"click": "horizon_0_under.jpg"},
+    {"key": "x"},
+    {"click": "horizon_2.jpg"},
+    {"key": "x"},
+    {"click": "horizon_3.jpg"},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"sleep": 0.5},
+    {"applyScreen": "open"},
+    {"fault": {"crashAt": 5}},
+    {"key": "shift+cmd+return"},
+    {"sleep": 10},
+    {"log": "Should not get here"},
+    {"expect": {"crashed": true}}
+  ]
+}

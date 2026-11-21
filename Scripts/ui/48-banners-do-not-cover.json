@@ -1,0 +1,22 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "The analysis summary is docked above the grid (not over photos) and goes away when a group is opened; the review screens show no banner over their photos."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"snapshot": "01-summary-docked"},
+    {"dump": "01-summary", "photos": false},
+    {"expectMatch": {"summaryBanner": "^35 photos · 5 stacks · \\d+ likely rejects$"}},
+    {"group": "similarStacks"},
+    {"wait": "idle"},
+    {"snapshot": "02-stack-review-clear"},
+    {"expect": {"summaryBanner": null, "noticeBar.height": 0, "viewMode": "stackReview"}},
+    {"group": "blurry"},
+    {"wait": "idle"},
+    {"snapshot": "03-loupe-clear"},
+    {"expect": {"noticeBar.height": 0, "viewMode": "loupe"}},
+    {"quit": true}
+  ]
+}

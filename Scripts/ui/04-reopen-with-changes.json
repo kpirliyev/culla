@@ -1,0 +1,25 @@
+{
+  "needs": {"after": "03-reopen", "keepShoot": true, "prepare": [["copy", "horizon_1.jpg", "added_late.jpg"], ["remove", "sonoma_4_small.jpg"]]},
+  "timeout": 120,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --keep-shoot after 02 and 03, once added_late.jpg was added to the container's copy of the shoot and sonoma_4_small.jpg removed (see Scripts/README.md)."},
+    {"openRecent": 0},
+    {"wait": "idle"},
+    {"expect": {
+      "totals.photos": 35,
+      "totals.kept": 4,
+      "photo:added_late.jpg.isNew": true,
+      "photo:added_late.jpg.decision": "unreviewed",
+      "photo:sonoma_4_small.jpg.decision": null,
+      "merge.added": ["added_late.jpg"],
+      "merge.removed": ["sonoma_4_small.jpg"]
+    }},
+    {"group": "unreviewed"},
+    {"click": "added_late.jpg"},
+    {"wait": "idle"},
+    {"snapshot": "01-new-file-marked"},
+    {"dump": "with-changes"},
+    {"quit": true}
+  ]
+}

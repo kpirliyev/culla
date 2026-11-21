@@ -1,0 +1,234 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Blurry" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos that are out of focus or shaken (adjective used as a heading: 'blurry photos').",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Нерезкие"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bulaşyk"
+          }
+        }
+      }
+    },
+    "Clipped Highlights" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos whose bright areas are blown out to pure white.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выбитые света"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aşa ýagty ýerler"
+          }
+        }
+      }
+    },
+    "Clipped Shadows" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos whose dark areas are crushed to pure black.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проваленные тени"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aşa garaňky kölegeler"
+          }
+        }
+      }
+    },
+    "Duplicates" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Extra copies of the same photo.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Дубликаты"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dublikatlar"
+          }
+        }
+      }
+    },
+    "Eyes Closed" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos where a main face has closed eyes.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Закрытые глаза"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ýumuk gözler"
+          }
+        }
+      }
+    },
+    "Face Cut Off" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos where a main face touches the edge of the frame.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обрезанное лицо"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kesilen ýüz"
+          }
+        }
+      }
+    },
+    "Lens Smudge" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos taken through a dirty lens.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Грязь на объективе"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapa obýektiw"
+          }
+        }
+      }
+    },
+    "Low Aesthetics" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos Apple's Vision framework scored as weak shots.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слабые кадры"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pes estetika"
+          }
+        }
+      }
+    },
+    "No Flag" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos the person rejected although Culla found nothing wrong with them.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Без пометок"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Belliksiz"
+          }
+        }
+      }
+    },
+    "Screenshots and Accidental Shots" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Screenshots, photos of documents and shots taken by accident, such as in a pocket.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Снимки экрана и случайные кадры"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran suratlary we tötänleýin kadrlar"
+          }
+        }
+      }
+    },
+    "Similar Stacks" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Frames of a burst of similar shots (a 'stack') that were not chosen.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Похожие серии"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meňzeş tapgyrlar"
+          }
+        }
+      }
+    },
+    "Tilted Horizon" : {
+      "comment" : "Section heading on the Review and Apply screen, above the rejected photos Culla rejected for this reason. Title case, a noun phrase. Photos with a horizon that is not level.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заваленный горизонт"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gyşyk gorizont"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

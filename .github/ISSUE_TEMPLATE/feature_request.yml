@@ -1,0 +1,25 @@
+name: Suggest a feature
+description: Something you'd like Culla to do.
+title: "Idea: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea. Write in English, Russian or Turkmen, whichever is easiest for you.
+
+        Please don't attach photos you wouldn't show in public. Everything here is public.
+  - type: textarea
+    id: want
+    attributes:
+      label: What do you want to do?
+      description: Describe what you're trying to get done, more than how Culla should do it.
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: How do you do it today?
+      description: In Culla, in another app, or by hand.
+    validations:
+      required: false

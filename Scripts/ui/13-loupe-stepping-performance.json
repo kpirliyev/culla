@@ -1,0 +1,33 @@
+{
+  "needs": {"reset": true, "shoot": "5000", "slow": true, "timeout": 900},
+  "timeout": 600,
+  "window": [1440, 900],
+  "steps": [
+    {"log": "Run with --reset --shoot <a shoot made with make_sample_shoot.py --count 5000>. Steps through 200 photos in the loupe at fit, then 50 at 100%, and records the longest main-thread stall and memory."},
+    {"open": "$SHOOT", "timeout": 300},
+    {"wait": "idle", "timeout": 120},
+    {"key": "space"},
+    {"wait": "idle", "timeout": 60},
+    {"sleep": 0.3},
+    {"resetStalls": true},
+    {"key": "right", "repeat": 200, "interval": 0.05},
+    {"wait": "idle", "timeout": 60},
+    {"snapshot": "01-after-200-steps"},
+    {"dump": "01-after-200-steps", "photos": false},
+    {"expect": {"focusPosition": 200, "viewMode": "loupe"}},
+    {"key": "z"},
+    {"wait": "idle", "timeout": 60},
+    {"sleep": 0.3},
+    {"resetStalls": true},
+    {"key": "right", "repeat": 50, "interval": 0.08},
+    {"wait": "idle", "timeout": 60},
+    {"dump": "02-after-50-steps-at-100", "photos": false},
+    {"expect": {"focusPosition": 250, "loupe.zoomPercent": 100}},
+    {"key": "z"},
+    {"key": "space"},
+    {"wait": "idle", "timeout": 60},
+    {"sleep": 3},
+    {"dump": "03-back-in-grid", "photos": false},
+    {"quit": true}
+  ]
+}

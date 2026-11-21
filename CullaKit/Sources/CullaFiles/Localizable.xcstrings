@@ -1,0 +1,177 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ is missing" : {
+      "comment" : "An error message when applying decisions could not start; shown in an alert or the result banner. Nothing on disk was changed. %@ is the path of a photo file that is no longer where it was when the plan was made.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Файл не найден: %@"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faýl tapylmady: %@"
+          }
+        }
+      }
+    },
+    "%@ is not a regular file" : {
+      "comment" : "An error message when applying decisions could not start; shown in an alert or the result banner. Nothing on disk was changed. %@ is the path of an item that is a folder or a link, which Culla does not move.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Это не обычный файл: %@"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adaty faýl däl: %@"
+          }
+        }
+      }
+    },
+    "Cannot decode %@" : {
+      "comment" : "Shown under 'Culla can't read this file' in the loupe and the inspector when a photo cannot be read. %@ is the file name, such as IMG_0042.CR3. The file opened but its image data could not be decoded.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось декодировать %@"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faýldaky suraty okap bolmaýar: %@"
+          }
+        }
+      }
+    },
+    "Cannot open %@" : {
+      "comment" : "Shown under 'Culla can't read this file' in the loupe and the inspector when a photo cannot be read. %@ is the file name, such as IMG_0042.CR3. The file could not be opened at all.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось открыть %@"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faýly açyp bolmaýar: %@"
+          }
+        }
+      }
+    },
+    "Cannot write %@" : {
+      "comment" : "An error message when an image could not be written to a file, such as a thumbnail into Culla's cache. %@ is the name of the file being written (not necessarily the photo's own name). The app shows its own sentence for photos it cannot read, so this text is rarely seen.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось записать %@"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faýly ýazyp bolmaýar: %@"
+          }
+        }
+      }
+    },
+    "The plan cannot be applied." : {
+      "comment" : "An error message when applying decisions could not start; shown in an alert or the result banner. Nothing on disk was changed. The shoot folder cannot be changed, or the chosen destination is not usable.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Применить решения невозможно"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kararlary ulanyp bolmaýar."
+          }
+        }
+      }
+    },
+    "a layout Culla does not change" : {
+      "comment" : "Why a sidecar (XMP file beside a photo) was left unchanged by Apply, shown in brackets after its file name in the list of skipped sidecars in the result banner: 'IMG_0042.xmp (not well-formed XML)'. The file is valid but arranged in a way Culla does not edit safely. Lower case, a short phrase.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "структура, которую Culla не изменяет"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla üýtgetmeýän gurluş"
+          }
+        }
+      }
+    },
+    "not UTF-8 text" : {
+      "comment" : "Why a sidecar (XMP file beside a photo) was left unchanged by Apply, shown in brackets after its file name in the list of skipped sidecars in the result banner: 'IMG_0042.xmp (not well-formed XML)'. The file is not text in the UTF-8 encoding. Lower case, a short phrase.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "не текст в кодировке UTF-8"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UTF-8 tekst däl"
+          }
+        }
+      }
+    },
+    "not well-formed XML" : {
+      "comment" : "Why a sidecar (XMP file beside a photo) was left unchanged by Apply, shown in brackets after its file name in the list of skipped sidecars in the result banner: 'IMG_0042.xmp (not well-formed XML)'. The file is not valid XML. Lower case, a short phrase.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "некорректный XML"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dogry düzülmedik XML"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

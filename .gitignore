@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.xcuserstate
+build/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# culla-eval results
+culla-eval-output/
+
+# Agent worktrees
+.claude/worktrees/
+
+# Demo photos for the site screenshots (public-domain files from Wikimedia Commons)
+culla-demo-shoot/
+
+# Local notes for Claude sessions: server address and access, never committed
+CLAUDE.local.md

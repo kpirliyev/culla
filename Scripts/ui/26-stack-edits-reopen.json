@@ -1,0 +1,23 @@
+{
+  "needs": {"after": "25-stack-split-and-pick", "keepShoot": true},
+  "timeout": 200,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Reopening brings back the hand-chosen pick and the frame split out, and a regrouping after a tuning change keeps both."},
+    {"openRecent": 0},
+    {"wait": "analysis", "timeout": 60},
+    {"expect": {"stackEdits.bestPicks": ["sonoma_burst3.jpg"], "stackEdits.splitOut": ["sonoma_burst2.jpg"],
+                "stacks.2.members": ["sonoma_burst0.jpg", "sonoma_burst1.jpg", "sonoma_burst3.jpg"], "stacks.2.bestPick": "sonoma_burst3.jpg",
+                "viewMode": "stackReview", "currentGroup": "similarStacks"}},
+    {"snapshot": "01-reopened"},
+    {"tuning": {"stackDistance": 0.9, "stackGapSeconds": 30}},
+    {"wait": "grouping", "timeout": 30},
+    {"dump": "02-regrouped", "photos": false},
+    {"expect": {"stackEdits.bestPicks": ["sonoma_burst3.jpg"], "stackEdits.splitOut": ["sonoma_burst2.jpg"], "stackCount": 7,
+                "stacks.3.members": ["sonoma_burst0.jpg", "sonoma_burst1.jpg", "sonoma_burst3.jpg"], "stacks.3.bestPick": "sonoma_burst3.jpg"}},
+    {"tuning": {"reset": "similarStacks"}},
+    {"wait": "grouping", "timeout": 30},
+    {"expect": {"stacks.2.members": ["sonoma_burst0.jpg", "sonoma_burst1.jpg", "sonoma_burst3.jpg"], "stacks.2.bestPick": "sonoma_burst3.jpg"}},
+    {"quit": true}
+  ]
+}

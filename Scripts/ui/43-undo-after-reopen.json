@@ -1,0 +1,19 @@
+{
+  "needs": {"after": "42-apply-then-quit", "keepShoot": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Undo Apply after quitting and reopening: the menu names the run, and the rejects come back with their decisions."},
+    {"open": "$SHOOT"},
+    {"wait": "undoable", "timeout": 10},
+    {"wait": "idle"},
+    {"expect": {"totals.photos": 32, "apply.undoMenuTitle": "Undo Apply: Move 3 Photos to _Rejected", "undoTitle": "Undo Apply: Move 3 Photos to _Rejected…"}},
+    {"menuItem": ["File", "Undo Apply: Move 3 Photos to _Rejected…"]},
+    {"confirm": true},
+    {"wait": "undone"},
+    {"snapshot": "01-undone-after-reopen"},
+    {"expectHash": "42-original"},
+    {"expect": {"totals.photos": 35, "totals.rejected": 3, "photo:horizon_1.jpg.decision": "rejected"}},
+    {"quit": true}
+  ]
+}

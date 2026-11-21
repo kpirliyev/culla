@@ -1,0 +1,50 @@
+{
+  "needs": {"reset": true},
+  "timeout": 200,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "⇧G splits a frame out of its stack (undoable); ⇧S makes the current frame the best pick by hand; when the current frame is the pick, the right pane shows the runner-up."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"group": "similarStacks"},
+    {"keys": ["down", "down"]},
+    {"wait": "idle"},
+    {"expect": {"stackReview.stackIndex": 2, "stackReview.current": "sonoma_burst0.jpg"}},
+    {"key": "shift+g"},
+    {"wait": "idle"},
+    {"expect": {
+      "stackReview.frames": ["sonoma_burst1.jpg", "sonoma_burst2.jpg", "sonoma_burst3.jpg"],
+      "stackReview.current": "sonoma_burst1.jpg", "stackEdits.splitOut": ["sonoma_burst0.jpg"],
+      "undoTitle": "Undo Split from Stack", "groups.similarStacks.total": 13
+    }},
+    {"snapshot": "01-split-out"},
+    {"key": "cmd+z"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.frames": ["sonoma_burst0.jpg", "sonoma_burst1.jpg", "sonoma_burst2.jpg", "sonoma_burst3.jpg"], "stackEdits.splitOut": [], "redoTitle": "Redo Split from Stack"}},
+
+    {"log": "The current frame is Culla's pick: the right pane shows the runner-up, not the same picture twice."},
+    {"click": "sonoma_burst1.jpg", "in": "stack"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.current": "sonoma_burst1.jpg", "stackReview.pick": "sonoma_burst1.jpg", "stackReview.rightPaneRole": "runnerUp"}},
+    {"snapshot": "02-current-is-pick"},
+
+    {"log": "⇧S on another frame makes it the pick, chosen by hand."},
+    {"key": "end"},
+    {"key": "shift+s"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.pick": "sonoma_burst3.jpg", "stackReview.handPicked": true, "stackEdits.bestPicks": ["sonoma_burst3.jpg"],
+                "undoTitle": "Undo Make Best Pick", "stackReview.rightPaneRole": "runnerUp"}},
+    {"key": "home"},
+    {"wait": "idle"},
+    {"expect": {"stackReview.rightPane": "sonoma_burst3.jpg", "stackReview.rightPaneRole": "bestPick", "stackReview.pickReason": "chosen by you"}},
+    {"snapshot": "03-hand-picked"},
+    {"log": "And a frame split out, to check that both edits survive reopening (26)."},
+    {"key": "end"},
+    {"key": "left"},
+    {"key": "shift+g"},
+    {"wait": "idle"},
+    {"expect": {"stackEdits.splitOut": ["sonoma_burst2.jpg"], "stackEdits.bestPicks": ["sonoma_burst3.jpg"]}},
+    {"dump": "04-edits", "photos": false},
+    {"quit": true}
+  ]
+}

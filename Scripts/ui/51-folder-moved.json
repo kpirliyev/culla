@@ -1,0 +1,24 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "The shoot folder is renamed while open: Culla notices it is gone, finds it through its bookmark, follows it and keeps every decision."},
+    {"open": "$SHOOT"},
+    {"wait": "idle"},
+    {"click": "sonoma_2.jpg"},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"fixture": {"move": "CullaSampleShoot-moved"}},
+    {"sleep": 3},
+    {"wait": "idle"},
+    {"snapshot": "01-followed"},
+    {"dump": "01-followed", "photos": false},
+    {"expect": {"folder": "CullaSampleShoot-moved", "totals.rejected": 1, "disk.disconnected": false}},
+    {"fixture": {"move": "CullaSampleShoot"}},
+    {"sleep": 3},
+    {"wait": "idle"},
+    {"expect": {"folder": "CullaSampleShoot", "totals.rejected": 1}},
+    {"quit": true}
+  ]
+}

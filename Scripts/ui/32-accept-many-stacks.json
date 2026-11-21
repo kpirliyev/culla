@@ -1,0 +1,87 @@
+{
+  "needs": {
+    "shoot": "2000",
+    "slow": true,
+    "timeout": 900
+  },
+  "timeout": 800,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Accepting 100 stacks in a row on the 2,000-photo shoot: the longest main-thread stall, and the time from Return to the next stack fully shown. Opens the shoot (from the score cache when an earlier script analysed it)."
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "analysis",
+      "timeout": 600
+    },
+    {
+      "group": "similarStacks"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "expect": {
+        "viewMode": "stackReview"
+      }
+    },
+    {
+      "dump": "01-opened",
+      "photos": false
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "return",
+      "repeat": 100,
+      "interval": 0.25
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "dump": "02-after-100",
+      "photos": false
+    },
+    {
+      "snapshot": "02-after-100"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "keys": [
+        "right",
+        "right",
+        "left",
+        "right"
+      ],
+      "interval": 0.25
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "dump": "03-frame-steps",
+      "photos": false
+    },
+    {
+      "quit": true
+    }
+  ]
+}

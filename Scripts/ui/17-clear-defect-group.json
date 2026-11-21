@@ -1,0 +1,32 @@
+{
+  "needs": {"reset": true},
+  "timeout": 180,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run with --reset. Clearing Exposure with keys: P and X move to the next undecided photo, decided photos stay in the filmstrip with their marks, and after the last one the photo area says so and offers the next group."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"group": "exposure"},
+    {"wait": "idle"},
+    {"expect": {"focus": "sonoma_0_over.jpg", "visibleCount": 2, "groups.exposure.left": 2}},
+    {"key": "p"},
+    {"expect": {"focus": "horizon_0_under.jpg", "photo:sonoma_0_over.jpg.decision": "kept", "visibleCount": 2, "completedGroup": null}},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"snapshot": "01-exposure-all-decided"},
+    {"dump": "01-done", "photos": false},
+    {"expect": {"focus": "horizon_0_under.jpg", "visibleCount": 2, "groups.exposure.left": 0, "groups.exposure.total": 2,
+                "completedGroup": "exposure", "nextGroupToReview": "otherIssues"}},
+    {"log": "Undo makes the group unfinished again."},
+    {"key": "cmd+z"},
+    {"expect": {"completedGroup": null, "groups.exposure.left": 1}},
+    {"key": "shift+cmd+z"},
+    {"expect": {"completedGroup": "exposure"}},
+    {"log": "Going back over decided photos: they keep their marks."},
+    {"key": "left"},
+    {"wait": "idle"},
+    {"snapshot": "02-decided-photo-in-filmstrip"},
+    {"expect": {"focus": "sonoma_0_over.jpg"}},
+    {"quit": true}
+  ]
+}

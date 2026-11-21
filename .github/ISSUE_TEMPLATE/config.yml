@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Ask a question
+    url: https://github.com/kpirliyev/culla/discussions
+    about: Questions about using Culla go to Discussions. English, Russian and Turkmen are all welcome.

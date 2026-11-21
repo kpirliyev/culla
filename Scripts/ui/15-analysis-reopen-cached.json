@@ -1,0 +1,35 @@
+{
+  "needs": {"after": "14-analysis-first-open"},
+  "timeout": 120,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Run after 14 without --reset. Reopening: every score comes from the cache, nothing is analysed, the groups are full within about a second, and no summary banner shows."},
+    {"openRecent": 0},
+    {"wait": "idle"},
+    {"wait": "analysis", "timeout": 30},
+    {"log": "14 ended in Duplicates, in duplicate review: the place comes back once the group's sets arrive from the cache."},
+    {"expect": {"currentGroup": "duplicates", "viewMode": "duplicateReview", "focus": "sonoma_1.jpg"}},
+    {"snapshot": "01-reopened-from-cache"},
+    {"dump": "01-reopened", "photos": false},
+    {"expect": {
+      "analysis.phase": "finished",
+      "analysis.analysedThisOpen": 0,
+      "analysis.cachedCount": 34,
+      "summaryBanner": null,
+      "stackCount": 5,
+      "exactDuplicateSets": 1,
+      "nearDuplicateSets": 2,
+      "groups.blurry.total": 18,
+      "groups.exposure.total": 2,
+      "flagCounts.lowAesthetics": 17,
+      "flagCounts.blurry": 18
+    }},
+    {"log": "Groups fully populated within a second of opening (0 to 1 s)."},
+    {"expect": {"analysis.timings.finishedS": 0.5}, "tolerance": 0.5},
+    {"log": "Start Reviewing stays reachable from the menu without the banner."},
+    {"menuItem": ["Go", "Start Reviewing"]},
+    {"wait": "idle"},
+    {"expect": {"currentGroup": "duplicates"}},
+    {"quit": true}
+  ]
+}

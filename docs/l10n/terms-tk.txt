@@ -1,0 +1,184 @@
+Culla — Turkmen terms for the interface text
+=============================================
+Written after the package batch (480 entries) and the coordinator's rulings on it.
+The app batch must use the same terms. The glossary in docs/localization.md stays binding;
+this file adds what it does not cover and records the rulings that changed it.
+
+RULINGS (override the glossary and the first draft)
+---------------------------------------------------
+1. sidecar            «XMP faýly» in buttons, counts, headlines and second mentions.
+                      The full «XMP goşmaça faýly» only in the sentence that first explains the
+                      file (at most once per screen or paragraph; never in a button or a count).
+2. clear decision     «Karary aýyr» (hint: «karary aýyr»; count: «%lld suratyň kararyny aýyr»).
+                      decision = «karar» everywhere. «bellik» = Culla's flag. «reňk belligi» = colour label.
+                      Do not use «belgi».
+3. Move to the Trash  «Sebede taşla»; results «Sebede taşlandy», «Sebede taşlanar», «Sebede taşlanan».
+                      «geçir» stays for moves into _Rejected and other folders.
+4. Make Best Pick     «Iň gowy kadr hökmünde saýla» (menu, Keys); hint «iň gowy saýla».
+5. hide / show pick   «iň gowusyny gizle» / «iň gowusyny görkez».
+6. score (Vision's or a detector's number)   «bal». «baha» means only the star rating.
+
+Kept as drafted: apply = «ulan» / «Kararlary ulan»; shoot = «bukja», or «surata düşüriş bukjasy»
+where it must be told apart from another folder; keep = «galdyr»; copy = «nusgala»;
+Certain / Likely = «Şübhesiz» / «Ähtimal»; On / Off = «Ýakylan» / «Öçürilen»; hyphenated suffixes
+on the app name (Culla-ny, Culla-dan), avoided by restructuring where possible.
+
+TERMS BEYOND THE GLOSSARY
+-------------------------
+Certain / Likely (confidence levels)   «Şübhesiz» / «Ähtimal»   (never «Anyk»: that is "sharp")
+flag (verb) / flag (noun) / No Flag    belle, bellenýär / bellik / Belliksiz
+likely rejects                         ret edilmegi ähtimal N surat; none: ret edilmegi ähtimal surat ýok
+move (files, to a folder)              geçir, geçirildi, geçirilýär   (never «göçür»)
+copy (verb) / copy (noun)              nusgala, nusgalandy, nusgalamak / nusga
+set (of duplicates)                    toplum
+group (sidebar)                        topar; a group name is quoted: «…» toparyna / toparynda
+near-duplicates / exact copies         takmyny dublikatlar / takyk nusgalar
+accept                                 kabul et
+expand / collapse (stacks)             aç / ýygna
+pause / resume / paused                duruz / dowam et / Duruzyldy
+skip                                   böküp geç (hint); barlanmaýar, barlama (settings: "is skipped")
+On / Off; switch on and off            Ýakylan / Öçürilen; ýak / öçür (ýakyp-öçürip)
+default                                başlangyç (başlangyç sazlamalar; başlangyçda öçürilen)
+subject (photographic)                 esasy obýekt
+lens / lens smudge                     obýektiw / hapa obýektiw
+background (faces)                     fon (fondaky ýüzler; fon ýüzi)
+burst (camera)                         seriýa
+main face                              esasy ýüz
+blown highlights / crushed shadows     aşa ýagty ýerler / aşa garaňky kölegeler
+clipping; exposure problems            ekspozisiýa kemçiligi
+cut-off face                           kesilen ýüz
+accidental shot / weak shot            tötänleýin kadr / gowşak kadr
+low aesthetics / aesthetics            pes estetika / estetika
+screenshot                             ekran suraty
+sensitivity / sharpness / blur (pane)  duýgurlyk / anyklyk / bulaşyklyk
+similarity                             meňzeşlik (görnüş meňzeşligi)
+softer / weaker (comparatives)         bulaşygrak / gowşagrak
+wink                                   göz gypmak
+profile / sunglasses                   profil / gün äýnegi
+thumbnails (in the grid)               tordaky suratlar
+tile                                   surat ("bir surat bolup görkezilýär")
+row / pane                             hatar / panel
+selection                              saýlaw; Select All «Hemmesini saýla»; Deselect All «Saýlawy aýyr»;
+                                       the selected photos: saýlananlar
+subfolder                              içki bukja
+overwrite                              üstünden ýaz
+left alone / left in place             degilmedi / ýerinde galdy   (not «galdyryldy», which is "kept")
+keepers                                galdyrylan suratlar
+unreadable                             okap bolmaýan
+undecided (photo)                      seredilmedik (same as unreviewed)
+Apply as a noun                        ulanmak (Ulanmak ýatyryldy / togtady; Ulanmagy yzyna al)
+cancelled / stopped (part-way)         ýatyryldy / togtady
+interrupted apply                      tamamlanmadyk ulanmak
+retry                                  ýene synanyş
+reason                                 sebäbi
+back / go back                         Yza gaýt; hint «yza»; «…» toparyna gaýt; Öňki ýere gaýt
+next / previous / first / last         indiki / öňki / ilkinji / soňky
+zoom / zoom to 100% / fit              ulalt / 100% ölçegde görkez / penjirä sygdyr
+start reviewing                        Gözden geçirip başla
+stack review (the screen)              tapgyry gözden geçiriş (… geçirişde)
+rate N stars                           N ýyldyz goý; N surata M ýyldyz goý; No Rating «Bahasyz»
+presets Lenient / Balanced / Strict    Ýumşak / Deňagramly / Berk
+menus                                  Faýl, Düzediş (Edit), Görnüş (View), Kömek (Help);
+                                       Keys section "Moving" = Geçiş; "Views" = Görnüşler
+window / app                           penjire / programma
+system items                           Culla-ny gizle, Culla-dan çyk, Beýlekileri gizle, Kiçelt (Minimize),
+                                       Penjireleriň arasynda geç, programmalaryň arasynda geçiş (app switcher)
+keys                                   düwme; Space «Boşluk»; arrows «Aşak / Ýokary / Çep / Sag peýkam»;
+                                       brackets «Çep / Sag kwadrat ýaý»; comma «Otur»; = «Deňdir»; + «Plýus».
+                                       Command, Control, Option, Shift, Return, Escape, Delete, Tab, Home, End,
+                                       Page Up, Page Down stay as printed on the keyboard.
+
+PATTERNS
+--------
+"N of M"                     «N / M»: Derňelýär: 420 / 1 240 · Toplum 2 / 3 · Tapgyr 12 / 86
+"X of Y moved"               «Y suratdan X sanysy geçirildi»
+Undo %@ / Redo %@            «Yzyna al: %@» / «Gaýtala: %@»  (name after a colon, never declined)
+"⌘Z takes it back"           «%@ bilen yzyna alyp bolýar.»
+menu path in a sentence      «Düzediş ▸ Yzyna al» in «…», followed by «bilen» or another separate word
+folder name placeholder      «%@» bukjasyna / bukjasynda / bukjasyny; _Rejected without quotes: %@ bukjasyna
+file path placeholder        after a colon: «Faýl tapylmady: %@»
+"to a/the folder" (dative)   «bukjanyň içine» (the dative of bukja looks like the nominative)
+slider labels                «… şundan pes / köp / kiçi / uly / ýokary», or a noun («… çägi», «… tapawut»)
+value notes                  «… şundan pes bolsa bellenýär: %@»
+"so far" / "yet"             «Şu wagta çenli … tapylmady» (paused) / «Entek … tapylmady» (running)
+time                         sek, min, sag; takmynan N min galdy; N sek içinde; birbada (at once)
+yes/no question              «… ret etmelimi?»
+sentences address «siz»      saýlaň, gözden geçiriň, bilersiňiz
+count nouns stay singular    5 surat, 5 suraty ret et, 5 suratyň kararyny aýyr; one and other forms differ
+                             only in pronouns and plural nouns elsewhere in the sentence
+quotes / typography          «…», the … character, · separators, sentence case for menus and headings
+
+
+ADDED WITH THE APP BATCH (637 entries)
+================================================================
+Package corrections delivered with it (../tk-package-fixes.json):
+  Trash sentence on Review and Apply in the present tense («Sebede taşlanýar … durýar»);
+  «%lld okalmaýan» for "%lld unreadable" (same word as the app's counts);
+  «Gyzyl» reňk belligi (the colour label under its translated name, as in Settings).
+
+culling / Keep Culling                 surat saýlamak / «Saýlamagy dowam et»   (not «seçmek»)
+rescue (a reject) / a rescue           halas et / halas ediş
+session                                seans
+twin, pair (RAW+JPEG) / pair them      jübüt / jübütle; «Aýratyn görkez» (Separate Them)
+application                            programma
+Open Keepers In… / in %@ / the setting «Galdyrylanlary programmada aç…» / «Galdyrylanlary %@ programmasynda aç» /
+                                       «Galdyrylanlary açýan programma»
+memory card                            ýat karty
+recent shoots                          soňky bukjalar («Soňky bukjalary aç», «Soňky bukja ýok»)
+drop (drag and drop)                   süýräp taşla
+cache: clear / thumbnails / scores     arassala / kiçi suratlar / ballar («Derňew ballary»)
+thumbnail size (toolbar / tooltip)     «Ölçeg» / «Tordaky suratlaryň ölçegi»
+tile (counted in the status bar)       öýjük
+slider                                 süýşürgiç
+provisional / custom (preset marks)    deslapky / el bilen
+reset to default / save as default     başlangyja gaýtar / başlangyç edip sakla; «Başlangyç» (Default badge)
+system default (language)              Ulgam boýunça
+Settings tabs                          Umumy, Gözler, Bulaşyklyk, Meňzeşlik, Dublikatlar, Ekspozisiýa, Beýleki,
+                                       Öndürijilik, Düwmeler
+menus                                  Faýl, Düzediş, Görnüş, Geçiş (Go), Surat (Photo), Penjire, Kömek;
+                                       Hyzmatlar, Hemmesini görkez, Hemmesini öňe çykar, Giňelt (window Zoom),
+                                       Menýuny arassala
+zoom readout / fit                     masştab / tutuş (surat); menu item stays «Penjirä sygdyr»
+runner-up / next best                  ikinji orun / ikinji
+person / face (strip rows)             Adam N / Ýüz №N   («Ýüz 1» reads as "a hundred and one")
+on a face / on the subject (score)     ýüz boýunça N / esasy obýekt boýunça N   (never «ýüzde N» = "N per cent")
+clipped (inspector value)              ýiten; legends use «Aşa ýagty ýerler %@» / «Aşa garaňky kölegeler %@»
+likely (probability value)             ähtimallygy %@
+open (eyes value)                      açyklygy %@
+amber (outline colour)                 mämişi; outlined = (çyzyk bilen) gurşalan
+inspector labels                       Düşüriş (Capture), Düşürilen (Taken), Kamera, Obýektiw, Diafragma, Wyderžka (Shutter),
+                                       Fokus aralygy, ISO, Şekil (Image), Ölçeg (Size), Piksel sany (Resolution), Format,
+                                       Faýl, Ady, Bukja, Faýl ölçegi, Üýtgedilen, Jübüti (Paired with), Mesele (Problem),
+                                       Bellikler (Flags), Näbelli
+colour labels                          Gyzyl, Sary, Ýaşyl, Gök, Melewşe; Ýok (None)
+buttons                                Bolýar, Ýatyr, Taýýar (Done), Ýap (Dismiss/Close), Düşnükli (Got It), Saýla, Üýtget…,
+                                       Unut (Forget), Ýene synanyş (Try Again), Degme (Leave alone), Bolşy ýaly galdyr
+open source / licence / version        açyk çeşme kodly / ygtyýarnama / wersiýa
+documentation                          resminamalar
+NEW pill                               TÄZE
+startup disk                           ulgam diski
+banner, notice                         habarnama
+the apply's title in a sentence        «%@» hereketi … (hereketini yzyna almalymy? / hereketi yzyna alynýar)
+"decided" (every … has a decision)     … barada karar berildi; quiet note «hemmesi tamam»
+threshold notes in the inspector       «Şundan pes bolsa bulaşyk: %lld», «Şundan ýokary bolsa bellenýär: %@»
+
+
+ROUND 3 (13 new entries, 12 existing entries touched)
+==========================================================================================================================
+
+colour label in Review and Apply sentences   the literal value written to the file, in «…»: reňk belligi «Red», «%@».
+                                             (Settings shows the translated names Gyzyl, Sary, Ýaşyl, Gök, Melewşe.)
+Mark Only sentences                          «… %N surat öz XMP faýlynda ret edilen diýip bellenýär: baha %@, reňk belligi «%@».»
+Culla's own field (in a sidecar)             Culla-nyň öz meýdany
+clipped (inspector values)                   Highlights row «%@ ap-ak», Shadows row «%@ gap-gara»  (replaces «%@ ýiten»)
+reading (eye-openness measurement)           görkeziji («iň pes görkezijisi»)
+skipped-sidecar reasons                      üýtgedilmedi (left as it was); dogry düzülmedik XML; UTF-8 tekst däl;
+                                             Culla üýtgetmeýän gurluş
+paired with (verb, RAW with JPEG)            jübütlener
+result banner                                netije habarnamasy
+"must be on" (a setting)                     … ýakylan bolmaly
+language list in System Settings             macOS sazlamalaryndaky dil sanawyňyz
+ordinals with digits                         N-nji / N-njy by the last spoken word: -njy after 6, 9, 10, 30, 40, 60, 90
+                                             (alty, dokuz, on, otuz, kyrk, altmyş, togsan), -nji otherwise;
+                                             row label «çepden 1-nji», «çepden 6-njy»
+"one" plural forms                           drop «Ähli» when the English one form drops "All" («%lld toplum barada karar berildi»)

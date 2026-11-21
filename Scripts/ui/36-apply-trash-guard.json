@@ -1,0 +1,29 @@
+{
+  "needs": {"reset": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "Move to the Trash as the screen shows it. The harness never moves a file to a Trash outside the app's container (in the sandbox the system Trash is the person's own), so applying is refused with a message and nothing on disk changes. Trash and its undo are covered by the package's tests."},
+    {"open": "$SHOOT"},
+    {"wait": "analysis", "timeout": 150},
+    {"saveHash": "36-original"},
+    {"group": "allPhotos"},
+    {"click": "horizon_1.jpg"},
+    {"key": "x"},
+    {"click": "sonoma_3.jpg"},
+    {"key": "x"},
+    {"click": "horizon_0_under.jpg"},
+    {"key": "x"},
+    {"wait": "idle"},
+    {"applyScreen": "open"},
+    {"applyAction": "moveToTrash"},
+    {"wait": "idle"},
+    {"snapshot": "01-trash-chosen"},
+    {"expect": {"apply.buttonTitle": "Move 3 Photos to the Trash"}},
+    {"key": "shift+cmd+return"},
+    {"sleep": 0.3},
+    {"expect": {"apply.banner.kind": "error", "apply.run": null}},
+    {"expectHash": "36-original"},
+    {"quit": true}
+  ]
+}

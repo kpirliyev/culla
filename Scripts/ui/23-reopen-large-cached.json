@@ -1,0 +1,16 @@
+{
+  "needs": {"after": "22-culling-while-analysing", "shoot": "2000", "slow": true, "timeout": 300},
+  "timeout": 240,
+  "window": [1440, 900],
+  "steps": [
+    {"log": "Run after 22 without --reset. Reopening the 2,000-photo shoot: every score from the cache, groups fully populated within about a second of the grid appearing."},
+    {"openRecent": 0},
+    {"wait": "idle", "timeout": 60},
+    {"wait": "analysis", "timeout": 60},
+    {"dump": "01-reopened", "photos": false},
+    {"snapshot": "01-reopened"},
+    {"expect": {"analysis.analysedThisOpen": 0, "summaryBanner": null, "totals.kept": 10, "totals.rejected": 10}},
+    {"expect": {"analysis.timings.finishedS": 0.75}, "tolerance": 0.75},
+    {"quit": true}
+  ]
+}

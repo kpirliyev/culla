@@ -1,0 +1,584 @@
+{
+  "needs": {
+    "reset": true,
+    "shoot": "10000",
+    "slow": true,
+    "timeout": 3000
+  },
+  "timeout": 2900,
+  "window": [
+    1440,
+    900
+  ],
+  "steps": [
+    {
+      "log": "Performance on 10,000 photos (make_sample_shoot.py --count 10000), best with --optimized. Every stretch is recorded under measurements.<name> in the dumps: the longest main-thread stall, stalls over 50 and 100 ms, its length, memory now and at peak. Targets: under 50 ms everywhere except opening, under 100 ms."
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "open": "$SHOOT",
+      "timeout": 600
+    },
+    {
+      "wait": "idle",
+      "timeout": 120
+    },
+    {
+      "record": "open",
+      "values": {
+        "photosKnownMs": "open.photosKnownMs",
+        "shownMs": "open.shownMs",
+        "photos": "totals.photos"
+      }
+    },
+    {
+      "snapshot": "01-opened"
+    },
+    {
+      "log": "Paging the whole grid while analysis runs, then the memory with the end of the grid on screen."
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "pagedown",
+      "repeat": 450,
+      "interval": 0.02
+    },
+    {
+      "key": "end"
+    },
+    {
+      "wait": "idle",
+      "timeout": 120
+    },
+    {
+      "record": "pageWholeGrid",
+      "values": {
+        "analysed": "analysis.done",
+        "thumbnailMemoryMB": "thumbnailMemoryMB"
+      }
+    },
+    {
+      "snapshot": "02-end-of-grid"
+    },
+    {
+      "log": "300 steps in the loupe while analysis runs."
+    },
+    {
+      "key": "home"
+    },
+    {
+      "key": "space"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "right",
+      "repeat": 300,
+      "interval": 0.03
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "record": "loupe300Steps",
+      "values": {
+        "screenPreviewsHeld": "screenPreviewsHeld"
+      }
+    },
+    {
+      "key": "space"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "log": "The rest of analysis with the grid on screen: speed, peak memory, and the interface's responsiveness meanwhile."
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "wait": "analysis",
+      "timeout": 1500
+    },
+    {
+      "record": "analysis",
+      "values": {
+        "photosPerSecond": "analysis.overallPhotosPerSecond",
+        "finishedS": "analysis.timings.finishedS",
+        "concurrency": "analysis.concurrency",
+        "analysed": "analysis.analysedThisOpen",
+        "stacks": "stackCount",
+        "firstGroupCountS": "analysis.timings.firstGroupCountS"
+      }
+    },
+    {
+      "snapshot": "03-analysed"
+    },
+    {
+      "log": "Accepting 100 stacks in a row."
+    },
+    {
+      "group": "similarStacks"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "return",
+      "repeat": 100,
+      "interval": 0.05
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "record": "accept100Stacks",
+      "values": {
+        "shownMedianMs": "stackReview.stackShownMedianMs",
+        "shownMaxMs": "stackReview.stackShownMaxMs"
+      }
+    },
+    {
+      "log": "Dragging detection sliders in Settings, with the live counts on screen: a flag threshold, then a stack setting that regroups."
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "settingsWindow": "blur"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "dragSlider": "blurryBelow",
+      "from": 25,
+      "to": 45,
+      "steps": 40,
+      "in": "settings"
+    },
+    {
+      "dragSlider": "blurryBelow",
+      "from": 45,
+      "to": 25,
+      "steps": 40,
+      "in": "settings"
+    },
+    {
+      "wait": "grouping",
+      "timeout": 120
+    },
+    {
+      "record": "settingsSliderBlur"
+    },
+    {
+      "snapshot": "04-settings-blur",
+      "window": "settings"
+    },
+    {
+      "settingsWindow": "similarity"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "dragSlider": "stackGapSeconds",
+      "from": 10,
+      "to": 30,
+      "steps": 20,
+      "in": "settings"
+    },
+    {
+      "dragSlider": "stackGapSeconds",
+      "from": 30,
+      "to": 10,
+      "steps": 20,
+      "in": "settings"
+    },
+    {
+      "wait": "grouping",
+      "timeout": 120
+    },
+    {
+      "record": "settingsSliderStacks"
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "log": "The same in the Blurry group's tuning panel."
+    },
+    {
+      "group": "blurry"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "popover": "tuning"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "dragSlider": "blurryBelow",
+      "from": 25,
+      "to": 45,
+      "steps": 40,
+      "in": "panel"
+    },
+    {
+      "dragSlider": "blurryBelow",
+      "from": 45,
+      "to": 25,
+      "steps": 40,
+      "in": "panel"
+    },
+    {
+      "wait": "grouping",
+      "timeout": 120
+    },
+    {
+      "record": "panelSliderBlur"
+    },
+    {
+      "snapshot": "05-panel-blur"
+    },
+    {
+      "tuningAction": "resetToDefault"
+    },
+    {
+      "popover": "close"
+    },
+    {
+      "log": "A focus rescan of 10,000 unchanged photos."
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "rescan": "focus",
+      "timeout": 120
+    },
+    {
+      "record": "focusRescan",
+      "values": {
+        "ms": "disk.rescan.last.ms",
+        "mainMs": "disk.rescan.last.mainMs"
+      }
+    },
+    {
+      "log": "5,000 rejects as one decision, its undo and redo; then Review and Apply on them, applying and Undo Apply."
+    },
+    {
+      "settings": {
+        "collapseStacksInAllPhotos": false
+      }
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "click": 0
+    },
+    {
+      "click": 4999,
+      "modifiers": "shift"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "x"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "record": "reject5000",
+      "values": {
+        "rejected": "totals.rejected"
+      }
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "cmd+z"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "record": "undoReject5000",
+      "values": {
+        "rejected": "totals.rejected"
+      }
+    },
+    {
+      "key": "shift+cmd+z"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "saveHash": "59-before-apply"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "applyScreen": "open",
+      "timeout": 120
+    },
+    {
+      "record": "openApplyScreen",
+      "values": {
+        "openMs": "apply.openMs",
+        "rejected": "totals.rejected"
+      }
+    },
+    {
+      "sleep": 0.5
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "key": "shift+cmd+return"
+    },
+    {
+      "wait": "applied",
+      "timeout": 600
+    },
+    {
+      "record": "apply5000",
+      "values": {
+        "ms": "apply.result.ms",
+        "state": "apply.result.state"
+      }
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "bannerAction": "undo",
+      "timeout": 600
+    },
+    {
+      "record": "undoApply5000",
+      "values": {
+        "ms": "apply.undoReport.ms",
+        "state": "apply.undoReport.state"
+      }
+    },
+    {
+      "expectHash": "59-before-apply",
+      "stamps": true
+    },
+    {
+      "log": "An hour-like stretch of mixed work, then the memory, and again after a pause: growth that does not come back would show here."
+    },
+    {
+      "group": "allPhotos"
+    },
+    {
+      "wait": "idle",
+      "timeout": 60
+    },
+    {
+      "record": "beforeSoak"
+    },
+    {
+      "sleep": 0.3
+    },
+    {
+      "resetStalls": true
+    },
+    {
+      "loop": 40,
+      "steps": [
+        {
+          "group": "allPhotos"
+        },
+        {
+          "key": "pagedown",
+          "repeat": 12,
+          "interval": 0.02
+        },
+        {
+          "key": "space"
+        },
+        {
+          "key": "right",
+          "repeat": 15,
+          "interval": 0.02
+        },
+        {
+          "keys": [
+            "p",
+            "x",
+            "u",
+            "3",
+            "0"
+          ]
+        },
+        {
+          "key": "z"
+        },
+        {
+          "key": "z"
+        },
+        {
+          "key": "space"
+        },
+        {
+          "key": "i"
+        },
+        {
+          "key": "i"
+        },
+        {
+          "group": "unreviewed"
+        },
+        {
+          "key": "x"
+        },
+        {
+          "key": "cmd+z"
+        },
+        {
+          "group": "blurry"
+        },
+        {
+          "key": "right",
+          "repeat": 5,
+          "interval": 0.02
+        },
+        {
+          "group": "similarStacks"
+        },
+        {
+          "key": "right",
+          "repeat": 3
+        },
+        {
+          "key": "down"
+        },
+        {
+          "group": "duplicates"
+        },
+        {
+          "key": "right"
+        },
+        {
+          "group": "allPhotos"
+        },
+        {
+          "key": "end"
+        },
+        {
+          "key": "home"
+        },
+        {
+          "wait": "idle",
+          "timeout": 60
+        }
+      ]
+    },
+    {
+      "record": "soak"
+    },
+    {
+      "sleep": 6
+    },
+    {
+      "record": "afterSoakSettled"
+    },
+    {
+      "dump": "09-final",
+      "photos": false
+    },
+    {
+      "expectAtMost": {
+        "measurements.open.longestStallMs": 400,
+        "measurements.pageWholeGrid.longestStallMs": 250,
+        "measurements.loupe300Steps.longestStallMs": 250,
+        "measurements.accept100Stacks.longestStallMs": 250,
+        "measurements.settingsSliderBlur.longestStallMs": 250,
+        "measurements.panelSliderBlur.longestStallMs": 250,
+        "measurements.reject5000.longestStallMs": 250,
+        "measurements.analysis.peakFootprintMB": 2500
+      }
+    },
+    {
+      "quit": true
+    }
+  ]
+}

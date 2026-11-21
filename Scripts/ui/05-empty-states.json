@@ -1,0 +1,20 @@
+{
+  "needs": {"reset": true},
+  "timeout": 120,
+  "window": [1280, 800],
+  "steps": [
+    {"open": "$SHOOT/../Empty"},
+    {"wait": "idle"},
+    {"expect": {"screen": "shoot", "totals.photos": 0, "visibleCount": 0}},
+    {"snapshot": "01-empty-folder"},
+    {"open": "$SHOOT"},
+    {"wait": "idle"},
+    {"group": "kept"},
+    {"wait": "idle"},
+    {"snapshot": "02-empty-group"},
+    {"group": "blurry"},
+    {"wait": "idle"},
+    {"snapshot": "03-empty-defect-group"},
+    {"quit": true}
+  ]
+}

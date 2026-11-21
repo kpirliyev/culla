@@ -1,0 +1,19 @@
+{
+  "needs": {"after": "40-apply-crash", "keepShoot": true},
+  "timeout": 240,
+  "window": [1280, 800],
+  "steps": [
+    {"log": "After the simulated crash: opening the shoot offers to undo what was done, and doing so restores the folder."},
+    {"open": "$SHOOT"},
+    {"wait": "recovery", "timeout": 20},
+    {"wait": "idle"},
+    {"snapshot": "01-recovery-offer"},
+    {"dump": "01-recovery", "photos": false},
+    {"expect": {"apply.banner.kind": "recovery", "apply.undoable.state": "failed"}},
+    {"bannerAction": "recoveryUndo"},
+    {"snapshot": "02-recovered"},
+    {"expectHash": "40-original"},
+    {"expect": {"totals.photos": 35, "totals.rejected": 5}},
+    {"quit": true}
+  ]
+}
