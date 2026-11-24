@@ -2,7 +2,6 @@ import AppKit
 import CullaCommands
 import CullaCore
 import CullaStore
-import CullaUpdates
 import SwiftUI
 
 /// What the window shows with no shoot open: a drop target, Open Folder, and recent shoots.
@@ -16,9 +15,11 @@ struct WelcomeView: View {
                     Spacer(minLength: 24)
                     VStack(spacing: app.showsIntroduction ? 22 : 28) {
                         header
+                        #if !APP_STORE
                         if let version = app.updates.notice {
                             UpdateNotice(version: version, updates: app.updates)
                         }
+                        #endif
                         if app.showsIntroduction {
                             IntroductionCard(app: app)
                         }
@@ -127,61 +128,6 @@ private struct IntroductionCard: View {
             (.toggleLoupe, localized("Switch between the grid and one large photo")),
             (.acceptStack, localized("Accept a stack or duplicate set: keep the pick, reject the rest")),
         ]
-    }
-}
-
-/// One quiet line when an automatic check found a newer version: "Culla 1.1 is available.", with
-/// Download, Release Notes and Skip This Version. It is only ever shown here, with no shoot open.
-/// The buttons go below the sentence when one line has no room for them.
-private struct UpdateNotice: View {
-    let version: ReleaseVersion
-    let updates: UpdateChecker
-
-    var body: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 12) {
-                sentence
-                Spacer(minLength: 8)
-                buttons
-            }
-            VStack(alignment: .leading, spacing: 8) {
-                sentence
-                HStack(spacing: 12) { buttons }
-                    .padding(.leading, 24)
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.white.opacity(0.04)))
-        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Palette.hairlineColor))
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel(UpdateText.notice(version))
-    }
-
-    private var sentence: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "arrow.down.circle")
-                .font(.system(size: 15))
-                .foregroundStyle(.secondary)
-                .accessibilityHidden(true)
-            Text(verbatim: UpdateText.notice(version))
-                .font(.system(size: 13))
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    @ViewBuilder
-    private var buttons: some View {
-        Button(UpdateText.download) { updates.perform(.download) }
-            .controlSize(.small)
-        Button(UpdateText.releaseNotes) { updates.perform(.releaseNotes) }
-            .buttonStyle(.link)
-            .font(.callout)
-        Button(UpdateText.skipThisVersion) { updates.skip(version) }
-            .buttonStyle(.link)
-            .font(.callout)
-            .foregroundStyle(.secondary)
     }
 }
 

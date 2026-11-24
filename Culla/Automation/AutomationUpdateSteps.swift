@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG && !APP_STORE
 import AppKit
 import CullaUpdates
 import Foundation
@@ -179,6 +179,22 @@ extension AutomationRunner {
             dump["alert"] = NSNull()
         }
         state["updates"] = dump
+        state["distribution"] = "direct"
+    }
+}
+#elseif DEBUG
+import Foundation
+
+/// The App Store variant has no update check (the store updates the app): the `updates` step is
+/// refused, and the dump says so with `"updates": null` and `"distribution": "appStore"`.
+extension AutomationRunner {
+    func updateStep(_ step: [String: Any]) async throws -> String {
+        throw Failure("This is the App Store variant, which has no update check: the \"updates\" step is refused")
+    }
+
+    func addUpdateState(to state: inout [String: Any]) {
+        state["updates"] = NSNull()
+        state["distribution"] = "appStore"
     }
 }
 #endif

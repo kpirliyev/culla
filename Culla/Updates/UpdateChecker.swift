@@ -1,3 +1,6 @@
+// The App Store variant (APP_STORE, the AppStore configuration) has no update check: the store
+// updates the app. Every file in Culla/Updates is left out of it whole.
+#if !APP_STORE
 import AppKit
 import CullaCore
 import CullaUpdates
@@ -63,18 +66,27 @@ final class UpdateChecker {
     /// What the last link would have opened, under automation, which never opens the browser.
     @ObservationIgnored private(set) var lastOpenedLink: URL?
     @ObservationIgnored private let isAutomation: Bool
-    /// The window an alert sits on when no other is given: the main window; set by the app model.
-    @ObservationIgnored weak var mainWindow: NSWindow?
+    /// The window an alert sits on when no other is given: the main window, from the app model.
+    @ObservationIgnored private let mainWindow: @MainActor () -> NSWindow?
 
     private static let log = Logger(subsystem: "com.kpirliyev.Culla", category: "updates")
 
-    init(settings: AppSettings, fetcher: (any UpdateFetching)?, isAutomation: Bool) {
+    init(settings: AppSettings, fetcher: (any UpdateFetching)?, isAutomation: Bool,
+         mainWindow: @escaping @MainActor () -> NSWindow? = { nil }) {
         self.settings = settings
         self.fetcher = fetcher
         self.isAutomation = isAutomation
+        self.mainWindow = mainWindow
         checksOnItsOwn = !isAutomation
         let text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
         current = ReleaseVersion(text)
+    }
+
+    /// The app's checker: the one HTTPS request `CullaUpdates` makes, except under automation,
+    /// where no network object is made at all and the harness supplies the answers.
+    convenience init(settings: AppSettings, isAutomation: Bool, mainWindow: @escaping @MainActor () -> NSWindow?) {
+        self.init(settings: settings, fetcher: isAutomation ? nil : HTTPSUpdateFetcher(),
+                  isAutomation: isAutomation, mainWindow: mainWindow)
     }
 
     // MARK: - The welcome view's notice
@@ -192,7 +204,7 @@ final class UpdateChecker {
         let (alert, actions) = UpdateAlert.make(for: outcome)
         shownAlert = alert
         shownActions = actions
-        let target = window ?? mainWindow
+        let target = window ?? mainWindow()
         guard let target, target.isVisible, !target.isSheet, target.attachedSheet == nil else {
             // No free window to sit on (another sheet is up): an alert of its own.
             if isAutomation { return }
@@ -247,3 +259,4 @@ final class UpdateChecker {
     }
     #endif
 }
+#endif

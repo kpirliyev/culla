@@ -50,9 +50,9 @@ final class MainMenu: NSObject, NSMenuDelegate, NSMenuItemValidation {
         let menu = NSMenu(title: "Culla")
         let about = menu.addItem(withTitle: localized("menu.aboutCulla", default: "About Culla"), action: #selector(about(_:)), keyEquivalent: "")
         about.target = self
-        let updates = menu.addItem(withTitle: localized("menu.checkForUpdates", default: "Check for Updates…"),
-                                   action: #selector(checkForUpdates(_:)), keyEquivalent: "")
-        updates.target = self
+        #if !APP_STORE
+        menu.addItem(CheckForUpdatesMenuItem(updates: app.updates))
+        #endif
         menu.addItem(.separator())
         menu.addItem(command(.openSettings))
         menu.addItem(.separator())
@@ -177,8 +177,6 @@ final class MainMenu: NSObject, NSMenuDelegate, NSMenuItemValidation {
     }
 
     @objc private func about(_ sender: Any?) { showAbout?() }
-    /// Asks at once; the answer is an alert on the window in front (the main window if none is).
-    @objc private func checkForUpdates(_ sender: Any?) { app.updates.checkNow(window: NSApp.keyWindow) }
     @objc private func keyboardShortcuts(_ sender: Any?) { showKeyboardShortcuts?() }
     @objc private func documentation(_ sender: Any?) { openDocumentation?() }
 
@@ -265,7 +263,6 @@ final class MainMenu: NSObject, NSMenuDelegate, NSMenuItemValidation {
     func validateMenuItem(_ item: NSMenuItem) -> Bool {
         if item.action == #selector(openRecent(_:)) { return !app.isLoading }
         if item.action == #selector(clearRecents(_:)) { return !app.recents.isEmpty }
-        if item.action == #selector(checkForUpdates(_:)) { return !app.updates.isChecking }
         guard let name = item.representedObject as? String, let command = Command(rawValue: name) else { return true }
         let session = app.session
         switch command {

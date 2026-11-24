@@ -71,12 +71,6 @@ final class SettingsModel {
     /// The Settings window, for the alert Check Now answers with; set by its controller.
     @ObservationIgnored weak var window: NSWindow?
 
-    /// Settings ▸ General ▸ Check Now: the same check as Culla ▸ Check for Updates…, answered
-    /// with an alert on this window.
-    func checkForUpdatesNow() {
-        app.updates.checkNow(window: window)
-    }
-
     /// The pane on screen.
     var pane: SettingsPane = .general {
         didSet { if pane != oldValue { takeBaseline() } }

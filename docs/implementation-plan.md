@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-24
 
-Culla is built in nine milestones, each ending in something you can run and judge. The first checks that detection works at all on a real shoot; fine-tuning it is deliberately the last one to be done, so every threshold stays an adjustable setting until then. The structure all of it is built to is in [Architecture](architecture.md). The plan implements [Design](design.md) and [User Flows](user-flows.md) with all twelve open questions confirmed as proposed.
+Culla is built in ten milestones, each ending in something you can run and judge. The first checks that detection works at all on a real shoot; fine-tuning it is deliberately the last one to be done, so every threshold stays an adjustable setting until then. The structure all of it is built to is in [Architecture](architecture.md). The plan implements [Design](design.md) and [User Flows](user-flows.md) with all twelve open questions confirmed as proposed.
 
 Task lists below are the progress record: tick a box when its task is done.
 
@@ -19,8 +19,9 @@ Task lists below are the progress record: tick a box when its task is done.
 | M6 Release | Polish, signing and notarization | The notarized 1.0 passes all eight flows |
 | M7 Tuning | Detection fine-tuning on real shoots | You trust each group's defaults on your own photos |
 | M8 Updates | The update check | A copy of Culla learns of a newer version from `cullaapp.com` and says so on the welcome view |
+| M9 App Store | A Mac App Store variant without the update check | The store build is approved and live |
 
-From M1 on, every milestone adds flows to an app that already runs. Detection tuning was moved from M0 to M7 on 2026-11-09: the app is built first with the values chosen from the first shoot, and tuned once it can be used on real shoots. M7 can run before M6's release steps. M8 was added on 2026-11-24 and built straight away; M7 is still the last work to be done. No dates are set; the order and the gates are what this plan fixes.
+From M1 on, every milestone adds flows to an app that already runs. M9 was added on 2026-11-24, after 1.0 was published as a disk image. Detection tuning was moved from M0 to M7 on 2026-11-09: the app is built first with the values chosen from the first shoot, and tuned once it can be used on real shoots. M7 can run before M6's release steps. M8 was added on 2026-11-24 and built straight away; M7 is still the last work to be done. No dates are set; the order and the gates are what this plan fixes.
 
 ## Decisions carried in
 
@@ -51,7 +52,7 @@ Technical choices this plan makes:
 | Detection | Vision, Core Image and ImageIO only | The requirement: built-in frameworks, no third-party models |
 | Storage | SQLite through GRDB, the only third-party package | Fast filtered queries over the scores of 10,000 or more photos |
 | Session data | Kept in the app's own support folder | Nothing is written into the shoot folder until Apply |
-| Distribution | Open source under the MIT licence at `github.com/kpirliyev/culla`; the notarized disk image is a GitHub Release asset, linked from `cullaapp.com` | The Mac App Store can follow later |
+| Distribution | Open source under the MIT licence at `github.com/kpirliyev/culla`; the notarized disk image is a GitHub Release asset, linked from `cullaapp.com` | The Mac App Store is a second way to get the same app, prepared in M9; the disk image stays |
 | Detection testing | By eye, on contact sheets and in the app; no labelled test set | You test manually as the app is built |
 | Neural Engine usage figure | Not shown | macOS has no supported reading of it |
 | Documentation | Markdown in this repository's `docs/` folder | Docs are versioned with the code |
@@ -422,6 +423,27 @@ Checked on 2026-11-24: every package test run passes, the Debug and Release conf
 
 **Gate.** Not passed yet: it waits for the interface scripts under `Scripts/ui-run.sh` and for the deployed site. With a canned answer naming a newer version, the welcome view shows the line and Skip This Version removes it; a real check against the deployed site answers "this is the newest version"; the Release build has exactly the four entitlements and no network code outside `CullaUpdates`.
 
+## M9 — Mac App Store
+
+Goal: the same Culla on the Mac App Store, beside the disk image. The store updates its apps itself and Apple allows no other way, so the store build has no update check and uses no network. How it is built and what the owner does is in `Scripts/store.md`; the rules are in `docs/architecture.md` ("Checking for updates").
+
+- [x] The store variant: the `AppStore` configuration, `CULLA_DISTRIBUTION` and the condition `APP_STORE`, `Culla/Culla-AppStore.entitlements` with three entitlements, and the update check left out (no menu item, no Settings section, no line on the welcome view, no automatic check). `Debug` and `Release` build as before.
+- [x] `ITSAppUsesNonExemptEncryption` false in the Info.plist, so an upload asks no export compliance question.
+- [x] `Scripts/store.sh`: `--rehearse` (no account), `--preflight`, the signed package, and `--upload`, the only form that contacts Apple.
+- [x] One target, not two (decided on 2026-11-24): `CullaUpdates` stays linked in the store build, unused and unable to connect. A second target without it would be two sets of settings to keep in step.
+- [x] The interface script `Scripts/ui/72-store-no-update-check.json` and `Scripts/ui-run.sh --store`; `expectFailure` on any step, the dump's `distribution` and `shownViews`.
+- [ ] Run script 72, and scripts 69 to 71 again, since the update views moved into `Culla/Updates/UpdateViews.swift`. Not run on 2026-11-24: macOS refused the session access to the app's container, as in M8.
+- [ ] One-time setup: the Apple Distribution and Mac Installer Distribution certificates, the App ID, the profile `Culla Mac App Store` and the app record (owner; `Scripts/store.md`, "One-time setup").
+- [ ] `Scripts/store.sh --preflight` passes, then `Scripts/store.sh` makes the signed package. This path has never run; `Scripts/store.md` lists what is not known until it does.
+- [ ] A privacy policy address. The store requires one and the site has no privacy page.
+- [ ] The listing: name (is "Culla" free on the store?), description in English and Russian, screenshots from the sample shoot, the privacy answers, the age rating, and the EU trader declaration (owner).
+- [ ] Upload, submit for review, answer what the review asks (owner).
+- [ ] After approval: say on the site that Culla is also on the Mac App Store, and check that a Mac moving from the disk image to the store copy keeps its settings and sessions.
+
+Checked on 2026-11-24: the package's 152 tests pass; the Debug, Release and AppStore configurations build; the Release app still has the four entitlements and the update check, and `Scripts/make-dmg.sh --build` and `Scripts/release.sh --preflight` pass; `Scripts/store.sh --rehearse` passes every check (three entitlements, none of the app's update code in the binary); `Scripts/store.sh --preflight` stops with status 3 and names the two missing certificates and the missing profile; the translation check passes with no text added.
+
+**Gate.** Not passed: it waits for the owner's setup, the first signed package and Apple's review.
+
 ## Testing
 
 Each layer is checked the cheapest way that still catches its failures.
@@ -462,3 +484,4 @@ Nothing blocks the start of M0. The open items are needed at the milestone each 
 - [ ] The cameras or phones you shoot with, so their RAW formats are tested.
 - [x] The editor you hand off to: Photomator. Whether it reads Culla's sidecars (stars, the reject mark, the colour label) is to be checked in the application as part of M4's gate.
 - [x] An Apple Developer account for signing and notarization. In place since 2026-11-21; the bundle identifier stays `com.kpirliyev.Culla`.
+- [ ] For the Mac App Store (M9): the two store certificates, the provisioning profile and the app record; a privacy policy address; the listing's text and screenshots; and your decision on the EU trader declaration, which decides whether contact details are shown on the store page. `Scripts/store.md` has the steps.

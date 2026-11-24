@@ -2,6 +2,8 @@
 
 The steps that turn the source into a signed, notarized disk image anyone can download. `Scripts/release.sh` runs all of them with one command, on the owner's Mac or on GitHub when a tag is pushed; the sections numbered 1 to 5 describe the same steps one by one, for understanding a failure or doing them by hand.
 
+The Mac App Store package is a different build with a script and a guide of its own: `Scripts/store.sh` and `Scripts/store.md`. Nothing here changes for it.
+
 ## The short way
 
 **From this Mac.** With the Developer ID certificate in the login keychain and the notarization profile stored (section 2):

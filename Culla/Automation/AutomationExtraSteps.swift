@@ -195,6 +195,7 @@ extension AutomationRunner {
             ["name": $0.name, "ms": Self.round1($0.ms), "atMs": Self.round1(($0.at - started) * 1000)] as [String: Any]
         }
         state["introductionShown"] = app.showsIntroduction
+        state["shownViews"] = AutomationMarks.shown.sorted()
         addUpdateState(to: &state)
         state["systemAccessibility"] = [
             "increaseContrast": SystemAccessibility.increaseContrast,

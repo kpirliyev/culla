@@ -29,6 +29,7 @@ Scripts/ui-run.sh Scripts/ui/01-first-open.json --reset
 | `--reset` | Start from nothing: delete the automation database, thumbnails and settings. Without it they are kept, which is how reopening is tested. |
 | `--no-build` | Skip the build. |
 | `--timeout <s>` | Kill the app after this long (default 300). |
+| `--store` | Build and run the Debug Mac App Store variant (`CULLA_DISTRIBUTION=appStore`: no update check, three entitlements) into a DerivedData folder of its own, the usual one with `-store` added. |
 
 Exit status: 0 when every step passed, 1 when a step failed, 2 when the build failed, 124 on timeout.
 
@@ -53,6 +54,7 @@ Each script says what it needs in a `needs` object at its top, so the setup is d
 | `"prepare": [["copy", "a.jpg", "b.jpg"], ["remove", "c.jpg"]]` | Changes the container's copy of the shoot first (a copy is touched, so it is newer). |
 | `"slow": true` | Left out by `--quick`. |
 | `"timeout": 600` | Seconds before `ui-run.sh` gives up. |
+| `"store": true` | For the Mac App Store variant only. `ui-all.sh` builds the direct variant and skips the script; run it with `ui-run.sh --store`. |
 
 `--optimized` builds the Debug app (harness included) with `-O` into its own DerivedData. Use it for analysis speed: unoptimized pixel loops make analysis in a plain Debug build about three times slower than `culla-eval`.
 
@@ -118,6 +120,7 @@ A script is a JSON object with a `steps` list and optionally `needs` (above), `t
 | `{"keyRecorder": "cancel"}` | `cancel`, `confirm` (take the chord from the other command) or `resetAll`. |
 | `{"cache": "measure"}` | Measures the caches into the dump's `cache`; `clear` removes every thumbnail, `clearWithMemory` also those held in memory (new tiles must then read the photos), `clearAll` also every cached score, `prune` applies the size limit. |
 | `{"expectMatch": {"summaryBanner": "^35 photos · \\d+ stacks"}}` | Like `expect`, but each value is a regular expression the dumped value's text must match. For numbers that come from a borderline detector reading. |
+| `"expectFailure": "<pattern>"` on any step | The step passes only when it fails, with an error whose text matches the regular expression: for checking that something is refused, such as an `updates` step in the Mac App Store variant. |
 | `{"log": "text"}` | Writes a line to the log. |
 | `{"record": "open", "values": {"shownMs": "open.shownMs"}}` | Records a measurement under `measurements.<name>` in every later dump: the longest main-thread stall since the last `resetStalls`, stalls over 50 and 100 ms, the stretch's length, memory now and at peak, and the dump values named. |
 | `{"expectAtMost": {"measurements.open.longestStallMs": 100}}` | Fails when a dumped number is larger. |
@@ -135,6 +138,8 @@ A script is a JSON object with a `steps` list and optionally `needs` (above), `t
 Every dump also has `language` (`running`: the language the text is in; `preferredLocalizations` and `localizations` of the main bundle; `launchChoice` and the stored choice's `reopenOffered`; `quitAndReopenRequested`), `mainMenu` (the menu bar as it would show now: each menu's `title` and `items`, with `key` for an item's key equivalent; separators, hidden items and the system's Services left out), `slowSections` (main-thread sections over 4 ms — opening, regrouping, the grid's reloads, Settings' panes, the apply plan — with when they ended, to say which part of a stall was which), `splitWidths`, `introductionShown` and `systemAccessibility`.
 
 The dump's settings objects: `settings` (every setting in effect, `language` among them), `tuningDefault` (the default tuning, every `TuningKey`) beside `tuning` (the open shoot's), `tuningScope` (`hasOwnTuning`, `differsFromDefault`, `preset`), `preset` (the default's: `lenient`, `balanced`, `strict` or `custom`), `flagCounts` (photos per flag, any tier), `keyMap` (chords per command), `keyConflicts`, `menuKeys` (the key each command's menu item shows), `cache` (`thumbnailBytes`, `cachedScores`, `databaseBytes`, `limitBytes`, after a `cache` step or the Performance pane), and `settingsWindow` (`shown`, `pane`, `title`, `recording`, `conflict`, and on detection panes `scopeNote`, `preset` and `lines`: each shown count line by `TuningKey`, null when the pane has no count to show).
+
+Every dump also has `distribution`, `direct` or `appStore`, and `shownViews`, the sorted names of the views on screen that the source marks with `automationMark(_:)`: `settingsUpdatesSection` and `welcomeUpdateLine` so far. SwiftUI keeps such views out of the accessibility tree the harness reads, so the mark is how a script checks that one is or is not shown. In the Mac App Store variant `updates` is `null` and every `updates` step is refused.
 
 Scripts must not assert detector readings that sit close to a threshold. Vision's models change between macOS updates: in November 2026 the lens smudge confidence of `horizon_0_under.jpg` and `sonoma_0_over.jpg` crossed 0.5. Check flags far from their thresholds (`photo:<id>.tiers.<flag>`, `flagCounts.<flag>`) or use `expectMatch`.
 
@@ -272,6 +277,7 @@ Example:
 | `ui/69-updates-welcome.json` | Check for updates on the welcome view: the line after an automatic check finds a newer version, at the minimum width too; Download and Release Notes recorded; Skip This Version removing it until a newer version; silence for a newer macOS, a failure, an invalid or unpublished file, and over an open shoot | `--reset` |
 | `ui/70-updates-check-now.json` | Culla ▸ Check for Updates…: the item below About Culla, disabled while checking; the alert for each outcome, a skipped version still reported, the alert over an open shoot | `--reset` |
 | `ui/71-updates-settings.json` | Settings ▸ General ▸ Updates: the switch and what it sends, Check Now with its alert on the Settings window, the last-checked line (never, a time, no answer), switching off removing the welcome line | `--reset` |
+| `ui/72-store-no-update-check.json` | The Mac App Store variant has no update check: `distribution` and `updates` in the dump, no Check for Updates… in the Culla menu, no Updates section in Settings ▸ General, no line on the welcome view, and every `updates` step refused. Skipped by `ui-all.sh` | `--store --reset` |
 
 For 04:
 

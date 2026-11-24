@@ -21,6 +21,8 @@
 #                          ["copy", from, to] (copied, then touched) or ["remove", name]
 #   "slow": true           left out by --quick
 #   "timeout": 600         seconds before ui-run.sh gives up
+#   "store": true          for the App Store variant only: skipped here, since this builds the
+#                          direct variant; run it with ui-run.sh --store
 #
 # Fixtures that are missing are generated once into a cache folder outside the repository:
 # $CULLA_FIXTURES (default: next to the DerivedData folder ui-run.sh uses). Point
@@ -103,6 +105,7 @@ out("N_KEEP", 1 if needs.get("keepShoot") else 0)
 out("N_SLOW", 1 if needs.get("slow") else 0)
 out("N_TIMEOUT", needs.get("timeout", 300))
 out("N_PREPARE", json.dumps(needs.get("prepare", [])))
+out("N_STORE", 1 if needs.get("store") else 0)
 PY
 }
 
@@ -137,6 +140,11 @@ for SCRIPT in "$REPO"/Scripts/ui/*.json; do
     NAME="$(basename "$SCRIPT" .json)"
     [ -n "$ONLY" ] && [[ "$NAME" != *"$ONLY"* ]] && continue
     eval "$(needs "$SCRIPT")"
+    if [ "$N_STORE" -eq 1 ]; then
+        NAMES+=("$NAME"); RESULTS+=("skipped (App Store variant: ui-run.sh --store)"); TIMES+=("-"); OUTS+=("")
+        set_status "$NAME" skipped
+        continue
+    fi
     if [ "$QUICK" -eq 1 ] && [ "$N_SLOW" -eq 1 ]; then
         NAMES+=("$NAME"); RESULTS+=("skipped (slow)"); TIMES+=("-"); OUTS+=("")
         set_status "$NAME" skipped

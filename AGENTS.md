@@ -20,7 +20,7 @@ Culla is a free Mac app for culling photos. Read `docs/architecture.md`, `docs/d
 ## Layout
 
 - `CullaKit/` is a Swift package: `CullaCore` (models), `CullaFiles` (scanning, metadata, image I/O), `CullaAnalysis` (detectors, grouping), and the `culla-eval` command-line tool.
-- `Culla.xcodeproj` and `Culla/` are the Mac app. Files added under `Culla/` join the app target automatically. The app is sandboxed. Its only use of the network is the update check: one request for `https://cullaapp.com/update.json`, made by `CullaUpdates` in the package, where all network code lives (`docs/architecture.md`, "Checking for updates"). Nothing else may open a connection.
+- `Culla.xcodeproj` and `Culla/` are the Mac app. Files added under `Culla/` join the app target automatically. The app is sandboxed. Its only use of the network is the update check: one request for `https://cullaapp.com/update.json`, made by `CullaUpdates` in the package, where all network code lives (`docs/architecture.md`, "Checking for updates"). Nothing else may open a connection. The Mac App Store variant (the `AppStore` configuration, condition `APP_STORE`) has no update check and no network entitlement; `Scripts/store.md` explains it, and anything added to the update check must stay inside `#if !APP_STORE`.
 - `docs/` holds the design, the user flows and the plan.
 - `site/` is the landing page, `https://cullaapp.com`: a Nuxt 4 site generated as static files, in English, Russian and Turkmen. `site/deploy/` holds the nginx configuration, the deploy script and the server's cron script, with their tests. Read `docs/landing-page-plan.md` before changing either; its rules on wording (free and open source under the MIT licence, no performance claims, sidecars labelled Beta, no email address anywhere) bind every text on the site. The site has no contact form: bugs, ideas and questions go to GitHub Issues and Discussions in `kpirliyev/culla`, and the disk image is downloaded from that repository's Releases. The site's icon is made from the app icon in `Culla/Assets.xcassets` at every build.
 
@@ -35,6 +35,8 @@ cd CullaKit && swift build
 cd CullaKit && swift test
 cd CullaKit && swift run -c release culla-eval <folder>
 xcodebuild -project Culla.xcodeproj -scheme Culla -configuration Debug build
+xcodebuild -project Culla.xcodeproj -scheme Culla -configuration AppStore build   # the Mac App Store variant
+Scripts/store.sh --rehearse    # builds that variant and checks it; needs no Apple account
 ```
 
 After adding or changing text, run `python3 Scripts/l10n.py check --require ru,tk`; it fails on missing translations, missing translator comments and mismatched placeholders.

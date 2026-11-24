@@ -147,7 +147,7 @@ final class AutomationRunner {
             let began = Date()
             let beganAt = (StallMonitor.shared.now() * 10).rounded() / 10
             do {
-                let detail = try await perform(action, step)
+                let detail = try await performExpectingFailure(action, step)
                 let ms = Date().timeIntervalSince(began) * 1000
                 var entry: [String: Any] = ["index": index, "action": action, "ok": true, "ms": (ms * 10).rounded() / 10, "atMs": beganAt]
                 if let detail { entry["detail"] = detail }
@@ -175,6 +175,23 @@ final class AutomationRunner {
         "copyKeepersTo", "fixture", "rescan", "saveHash", "expectHash", "fileAction", "fileContains",
         "settingsWindow", "preset", "tuningAction", "bindKey", "keyRecorder", "cache", "expectMatch",
     ] + extraActions
+
+    /// `"expectFailure": "<pattern>"` on any step: the step passes only when it fails, with an
+    /// error whose text matches the regular expression, to check that something is refused.
+    private func performExpectingFailure(_ action: String, _ step: [String: Any]) async throws -> String? {
+        guard let pattern = step["expectFailure"] as? String else { return try await perform(action, step) }
+        let detail: String?
+        do {
+            detail = try await perform(action, step)
+        } catch {
+            let text = String(describing: error)
+            guard text.range(of: pattern, options: .regularExpression) != nil else {
+                throw Failure("Failed as expected, but with \"\(text)\", which does not match \(pattern)")
+            }
+            return "failed as expected: \(text)"
+        }
+        throw Failure("Expected to fail with an error matching \(pattern), but passed\(detail.map { " (\($0))" } ?? "")")
+    }
 
     static func action(of step: [String: Any]) -> String {
         actions.first { step[$0] != nil } ?? "unknown"

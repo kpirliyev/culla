@@ -163,8 +163,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         controller.showWindow(nil)
         NSApp.activate()
         Task { await model.reloadRecents() }
+        #if !APP_STORE
         // Once a day at most, and only while the setting is on; never under automation.
         model.updates.startAutomaticChecks()
+        #endif
         if let pendingOpen {
             self.pendingOpen = nil
             model.openFolder(at: pendingOpen)

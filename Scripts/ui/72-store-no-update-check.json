@@ -1,0 +1,97 @@
+{
+  "needs": {
+    "reset": true,
+    "store": true
+  },
+  "timeout": 120,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with ui-run.sh --store --reset (the Debug App Store variant; scripts 69 to 71 are for the direct variant). The store variant has no update check: the dump says so (\"updates\": null, \"distribution\": \"appStore\"), Culla ▸ Check for Updates… is not in the menu bar, Settings ▸ General has no Updates section, the welcome view has no update line, and the \"updates\" step is refused. The stored setting stays, since both variants share one container."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "firstRun": "dismiss"
+    },
+    {
+      "expect": {
+        "screen": "welcome",
+        "distribution": "appStore",
+        "updates": null,
+        "shownViews": [],
+        "settings.checksForUpdatesAutomatically": true,
+        "mainMenu.0.title": "Culla",
+        "mainMenu.0.items.count": 7,
+        "mainMenu.0.items.0.title": "About Culla",
+        "mainMenu.0.items.1.title": "Settings…"
+      }
+    },
+    {
+      "expectMatch": {
+        "mainMenu": "^(?s)(?!.*Check for Updates).*$"
+      }
+    },
+    {
+      "menuItem": [
+        "Culla",
+        "Check for Updates…"
+      ],
+      "expectFailure": "^No menu item Check for Updates…"
+    },
+    {
+      "snapshot": "01-welcome-no-update-line"
+    },
+    {
+      "settingsWindow": "general"
+    },
+    {
+      "expect": {
+        "settingsWindow.shown": true,
+        "settingsWindow.pane": "general",
+        "shownViews": [],
+        "updates": null
+      }
+    },
+    {
+      "snapshot": "02-settings-general-no-updates",
+      "window": "settings"
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.1",
+      "expectFailure": "App Store variant, which has no update check"
+    },
+    {
+      "updates": "automatic",
+      "expectFailure": "App Store variant, which has no update check"
+    },
+    {
+      "updates": "check",
+      "expectFailure": "App Store variant, which has no update check"
+    },
+    {
+      "expect": {
+        "screen": "welcome",
+        "updates": null,
+        "shownViews": [],
+        "distribution": "appStore"
+      }
+    },
+    {
+      "dump": "03-end",
+      "photos": false
+    },
+    {
+      "quit": true
+    }
+  ]
+}

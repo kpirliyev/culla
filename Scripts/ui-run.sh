@@ -10,13 +10,15 @@
 #                      (first-launch behaviour); by default they are kept, to test reopening
 #   --no-build         skip xcodebuild
 #   --timeout <s>      give up after this many seconds (default 300)
+#   --store            build and run the Debug App Store variant (no update check), into a
+#                      DerivedData folder of its own: the DerivedData folder with -store added
 #
 # Environment: CULLA_DERIVED_DATA overrides the DerivedData folder.
 # Exit status: 0 when every step passed, 1 when a step failed, 2 when the build failed,
 # 124 on timeout. See Scripts/README.md for the script format.
 set -euo pipefail
 
-usage() { sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
+usage() { sed -n '2,18p' "$0" | sed 's/^# \{0,1\}//'; exit "${1:-0}"; }
 
 SCRIPT=""
 SHOOT=""
@@ -24,6 +26,7 @@ KEEP_SHOOT=0
 RESET=0
 BUILD=1
 TIMEOUT=300
+STORE=0
 while [ $# -gt 0 ]; do
     case "$1" in
         --shoot) SHOOT="$2"; shift 2 ;;
@@ -31,6 +34,7 @@ while [ $# -gt 0 ]; do
         --reset) RESET=1; shift ;;
         --no-build) BUILD=0; shift ;;
         --timeout) TIMEOUT="$2"; shift 2 ;;
+        --store) STORE=1; shift ;;
         -h|--help) usage 0 ;;
         -*) echo "Unknown option $1" >&2; usage 2 ;;
         *) if [ -z "$SCRIPT" ]; then SCRIPT="$1"; shift; else echo "Unexpected $1" >&2; usage 2; fi ;;
@@ -41,16 +45,25 @@ done
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 DERIVED="${CULLA_DERIVED_DATA:-/private/tmp/claude-501/-Users-kpirliyev--claude-spares-spare-GbpzHL/8f631fd4-fb21-48e3-9a6a-52261335d745/scratchpad/DerivedData-ui}"
-APP="$DERIVED/Build/Products/Debug/Culla.app"
+# The store variant is the Debug configuration with CULLA_DISTRIBUTION=appStore, a setting only
+# the app target reads (APP_STORE and the store entitlements follow from it; the package targets
+# build as in any Debug build). The sample shoot stays in $DERIVED for both.
+BUILD_DERIVED="$DERIVED"
+BUILD_ARGS=()
+if [ "$STORE" -eq 1 ]; then
+    BUILD_DERIVED="$DERIVED-store"
+    BUILD_ARGS=(CULLA_DISTRIBUTION=appStore)
+fi
+APP="$BUILD_DERIVED/Build/Products/Debug/Culla.app"
 CONTAINER="$HOME/Library/Containers/com.kpirliyev.Culla/Data"
 AUTO="$CONTAINER/tmp/CullaAutomation"
 
 # 1. Build.
 if [ "$BUILD" -eq 1 ]; then
-    mkdir -p "$DERIVED"
-    BUILD_LOG="$DERIVED/ui-run-build.log"
+    mkdir -p "$BUILD_DERIVED"
+    BUILD_LOG="$BUILD_DERIVED/ui-run-build.log"
     if ! xcodebuild -project "$REPO/Culla.xcodeproj" -scheme Culla -configuration Debug \
-        -destination 'platform=macOS' -derivedDataPath "$DERIVED" build >"$BUILD_LOG" 2>&1; then
+        -destination 'platform=macOS' -derivedDataPath "$BUILD_DERIVED" ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"} build >"$BUILD_LOG" 2>&1; then
         grep -E "error:" "$BUILD_LOG" | head -20 >&2 || tail -20 "$BUILD_LOG" >&2
         echo "Build failed; log: $BUILD_LOG" >&2
         exit 2

@@ -1,3 +1,5 @@
+// Left out of the App Store variant, which has no update check (see UpdateChecker.swift).
+#if !APP_STORE
 import AppKit
 import CullaCore
 import CullaUpdates
@@ -88,3 +90,4 @@ enum UpdateText {
             : localized("Last checked \(when).")
     }
 }
+#endif

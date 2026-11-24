@@ -112,6 +112,8 @@ Goal: know when a newer Culla exists, without being interrupted while culling.
 4. **By hand.** Culla ▸ Check for Updates… asks at once and always answers, also when the version was skipped or the check failed.
 5. **Off.** Settings ▸ General ▸ Check for updates automatically. With it off, Culla goes online only when you choose Check for Updates.
 
+A copy of Culla from the Mac App Store has none of this: the App Store updates it, and it never goes online.
+
 ## Edge cases
 
 | Situation | What Culla does |
