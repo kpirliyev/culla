@@ -1,0 +1,241 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 200,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset. Culla ▸ Check for Updates… with canned answers: the menu item below About Culla, disabled while a check runs; it always answers with an alert: the newest version (named), a newer one (both named) with Download, Release Notes and Later, one needing a newer macOS (version and macOS named), a failed check; a skipped version is still reported; and over an open shoot."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "firstRun": "dismiss"
+    },
+    {
+      "expect": {
+        "updates.menuItem.title": "Check for Updates…",
+        "updates.menuItem.index": 1,
+        "updates.menuItem.enabled": true,
+        "mainMenu.0.items.0.title": "About Culla",
+        "mainMenu.0.items.1.title": "Check for Updates…"
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "upToDate",
+      "delayMs": 800
+    },
+    {
+      "updates": "check",
+      "background": true
+    },
+    {
+      "expect": {
+        "updates.isChecking": true,
+        "updates.menuItem.enabled": false
+      }
+    },
+    {
+      "updates": "awaitAlert"
+    },
+    {
+      "expect": {
+        "updates.isChecking": false,
+        "updates.menuItem.enabled": true,
+        "updates.lastOutcome": "upToDate",
+        "updates.lastTrigger": "manual",
+        "updates.alert.message": "Culla is up to date",
+        "updates.alert.detail": "Culla 1.0 is the newest version.",
+        "updates.alert.buttons": [
+          "OK"
+        ],
+        "updates.alert.on": "main"
+      }
+    },
+    {
+      "snapshot": "01-alert-up-to-date"
+    },
+    {
+      "updates": "alert",
+      "button": "OK"
+    },
+    {
+      "expect": {
+        "updates.alert": null
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.1"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "expect": {
+        "updates.alert.message": "A newer version of Culla is available",
+        "updates.alert.detail": "Culla 1.1 is available; you have Culla 1.0. Download it from cullaapp.com, then replace Culla in your Applications folder with it.",
+        "updates.alert.buttons": [
+          "Download",
+          "Release Notes",
+          "Later"
+        ],
+        "updates.notice": "1.1"
+      }
+    },
+    {
+      "snapshot": "02-alert-available"
+    },
+    {
+      "updates": "alert",
+      "button": "Release Notes"
+    },
+    {
+      "expect": {
+        "updates.alert": null,
+        "updates.lastOpenedLink": "https://cullaapp.com/en/release-notes/"
+      }
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "updates": "alert",
+      "button": "Download"
+    },
+    {
+      "expect": {
+        "updates.lastOpenedLink": "https://cullaapp.com/download"
+      }
+    },
+    {
+      "updates": "notice",
+      "button": "skip"
+    },
+    {
+      "expect": {
+        "updates.notice": null,
+        "updates.skipped": "1.1"
+      }
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "expect": {
+        "updates.alert.message": "A newer version of Culla is available",
+        "updates.notice": null
+      }
+    },
+    {
+      "updates": "alert",
+      "button": "Later"
+    },
+    {
+      "expect": {
+        "updates.alert": null,
+        "updates.lastOpenedLink": "https://cullaapp.com/download"
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "needsNewerSystem",
+      "version": "1.2",
+      "minimumSystem": "99.0"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "expect": {
+        "updates.alert.message": "Culla 1.2 needs a newer macOS",
+        "updates.alert.buttons": [
+          "OK"
+        ]
+      }
+    },
+    {
+      "expectMatch": {
+        "updates.alert.detail": "^Culla 1\\.2 needs macOS 99 or later, and this Mac has macOS \\d+(\\.\\d+)*\\. The version you have keeps working\\.$"
+      }
+    },
+    {
+      "snapshot": "03-alert-needs-newer-macos"
+    },
+    {
+      "updates": "alert",
+      "button": 0
+    },
+    {
+      "updates": "canned",
+      "outcome": "failed"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "failed",
+        "updates.alert.message": "Culla couldn’t check for updates",
+        "updates.alert.detail": "Check that this Mac is connected to the internet, then try again.",
+        "updates.alert.buttons": [
+          "OK"
+        ]
+      }
+    },
+    {
+      "snapshot": "04-alert-failed"
+    },
+    {
+      "updates": "alert",
+      "button": "OK"
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.3"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "expect": {
+        "screen": "shoot",
+        "updates.alert.on": "main",
+        "updates.alert.message": "A newer version of Culla is available"
+      }
+    },
+    {
+      "snapshot": "05-alert-over-shoot"
+    },
+    {
+      "updates": "alert",
+      "button": "Later"
+    },
+    {
+      "expect": {
+        "updates.alert": null
+      }
+    },
+    {
+      "dump": "05-after",
+      "photos": false
+    },
+    {
+      "quit": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Culla — Design
 
-Last updated: 2026-11-12
+Last updated: 2026-11-24
 
 Culla sorts a shoot into groups of likely rejects and lookalikes, then lets one person clear the batch from the keyboard without deleting anything by accident. This doc defines the screens, the decision model, the key map and the settings. The step-by-step journeys are in [User Flows](user-flows.md); the build order is in the [Implementation Plan](implementation-plan.md).
 
@@ -150,6 +150,7 @@ Three presets (Lenient, Balanced, Strict) set every detection slider at once; Ba
 | General | Advance after a decision | On, off | On |
 | General | Show best pick beside the current frame | On, off | On |
 | General | Include subfolders | On, off | On |
+| General | Check for updates automatically | On, off | On |
 | Eyes | Sensitivity | 0 to 100 | 50, which flags eye openness below 0.26 |
 | Eyes | Smallest face to check | 1 to 20% of the frame's short side | 4% |
 | Eyes | Ignore background faces | Off, or faces under 20 to 80% of the largest face | Under 40% |
@@ -187,6 +188,7 @@ The app always shows what it is doing and how much culling is left.
 - **Missing volume.** If a card or drive disconnects, tiles dim, analysis pauses and decisions are kept until it returns. A photo whose image could not be loaded meanwhile shows a placeholder and loads when the volume is back; it is not reported as unreadable.
 - **Decisions not saved.** If the database cannot be written, the status bar shows a warning rather than failing silently.
 - **First run.** The welcome view carries a short introduction with the five keys that matter (keep, reject, clear, grid/loupe, accept), read from the live key map. It goes away with Got It or on opening a first shoot. Help ▸ Keyboard Shortcuts (⌘/) shows the whole key map at any time.
+- **A newer version.** At most once a day Culla asks `cullaapp.com` which version is the newest. If there is a newer one, the welcome view shows one line, for example "Culla 1.1 is available.", with Download, Release Notes and Skip This Version. Nothing appears over an open shoot and no dialog opens on its own. Culla ▸ Check for Updates… asks at once and always answers: this is the newest version, a newer one is available, the newer one needs a newer macOS, or the check could not be made. Download opens the site in the browser; Culla does not install anything itself. Settings ▸ General has the switch, a Check Now button and the time of the last check.
 - **Rescanning settings.** Turning "Include subfolders" off or "Treat RAW+JPEG as one photo" on while a shoot is open asks first when photos would leave the session, saying how many and how many decisions would be lost.
 
 Look and accessibility:

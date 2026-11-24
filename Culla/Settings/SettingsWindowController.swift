@@ -28,6 +28,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         window.identifier = NSUserInterfaceItemIdentifier("settings")
         super.init(window: window)
         window.delegate = self
+        model.window = window
         tabs.tabStyle = .toolbar
         tabs.onSelect = { [weak self] pane in self?.selected(pane) }
         for pane in SettingsPane.allCases {

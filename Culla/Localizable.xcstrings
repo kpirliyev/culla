@@ -3174,6 +3174,25 @@
         }
       }
     },
+    "A newer version of Culla is available" : {
+      "comment" : "Title of the alert after Check for Updates… when a newer version exists. Culla is the app's name.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна новая версия Culla"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla-nyň täze wersiýasy elýeterli"
+          }
+        }
+      }
+    },
     "A photo without a decision or a rating gets no sidecar. An existing sidecar is merged; everything else in it is kept." : {
       "comment" : "Note under the Sidecars section in Settings ▸ General.",
       "extractionState" : "manual",
@@ -4068,6 +4087,44 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diňe şu bukja üçin üýtgedildi."
+          }
+        }
+      }
+    },
+    "Check for updates automatically" : {
+      "comment" : "Switch in Settings ▸ General ▸ Updates; also VoiceOver's name for the switch.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверять обновления автоматически"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Täzelenmeleri awtomatik barla"
+          }
+        }
+      }
+    },
+    "Check that this Mac is connected to the internet, then try again." : {
+      "comment" : "Text of the alert after Check for Updates… when the check could not be made.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверьте, что этот Mac подключён к интернету, и попробуйте ещё раз."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu Mac-yň internete birikdirilendigini barlaň, soňra gaýtadan synanyşyň."
           }
         }
       }
@@ -5006,6 +5063,82 @@
         }
       }
     },
+    "Culla %@ is available; you have Culla %@. Download it from cullaapp.com, then replace Culla in your Applications folder with it." : {
+      "comment" : "Text of the alert after Check for Updates… when a newer version exists. The first %@ is the newer version (such as 1.1), the second the version the person has (such as 1.0); neither is translated. cullaapp.com is the project's site. Applications is the Mac's Applications folder: use the name the Finder shows for it in your language. Culla does not install anything itself: the person downloads the new version and puts it in place of the old one.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна версия Culla %1$@, у вас — Culla %2$@. Скачайте её с cullaapp.com и замените ею Culla в папке «Программы»."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %1$@ wersiýasy elýeterli; sizde Culla %2$@ bar. Ony cullaapp.com saýtyndan ýükläp alyň, soňra «Applications» (Programmalar) bukjasyndaky Culla-ny onuň bilen çalyşyň."
+          }
+        }
+      }
+    },
+    "Culla %@ is the newest version." : {
+      "comment" : "Text of the alert after Check for Updates… when nothing newer exists. %@ is the version the person has, such as 1.0 (never translated).",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %@ — новейшая версия."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %@ iň täze wersiýa."
+          }
+        }
+      }
+    },
+    "Culla %@ needs a newer macOS" : {
+      "comment" : "Title of the alert after Check for Updates… when the newer version does not run on this Mac's macOS. %@ is the newer version, such as 1.1 (never translated). macOS is never translated.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для Culla %@ нужна более новая macOS"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %@ üçin has täze macOS gerek"
+          }
+        }
+      }
+    },
+    "Culla %@ needs macOS %@ or later, and this Mac has macOS %@. The version you have keeps working." : {
+      "comment" : "Text of the alert after Check for Updates… when the newer version needs a newer macOS. The first %@ is the newer version of Culla (such as 1.1), the second the oldest macOS it runs on (such as 27), the third the macOS this Mac has (such as 26.1); none is translated. The last sentence says the copy of Culla the person has goes on working.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Для Culla %1$@ нужна macOS %2$@ или новее, а на этом Mac установлена macOS %3$@. Ваша версия продолжит работать."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %1$@ üçin macOS %2$@ ýa-da has täzesi gerek, bu Mac-da bolsa macOS %3$@ gurnalan. Sizdäki wersiýa işlemegini dowam etdirýär."
+          }
+        }
+      }
+    },
     "Culla can’t read this file" : {
       "comment" : "Heading in the loupe and other large photo views in place of a photo whose file cannot be read.",
       "extractionState" : "manual",
@@ -5117,6 +5250,25 @@
         }
       }
     },
+    "Culla couldn’t check for updates" : {
+      "comment" : "Title of the alert after Check for Updates… when cullaapp.com could not be reached or gave no proper answer. Culla is the app's name.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не удалось проверить обновления"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla täzelenmeleri barlap bilmedi"
+          }
+        }
+      }
+    },
     "Culla finds the likely rejects in a shoot — closed eyes, blur, bad exposure, duplicates and bursts of lookalikes — and you decide each one from the keyboard. Nothing is moved until you review and apply, and applying can be undone." : {
       "comment" : "The first-run introduction's text on the welcome screen. A shoot is a folder of photos from one photo session; 'review and apply' is a step of the app (Review and Apply).",
       "extractionState" : "manual",
@@ -5132,6 +5284,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Culla bukjadan ret edilmegi ähtimal suratlary tapýar — ýumuk gözler, bulaşyklyk, ýaramaz ekspozisiýa, dublikatlar we meňzeş kadrlaryň tapgyrlary — siz bolsa her biri barada klawiaturadan karar berýärsiňiz. Gözden geçirip ulanýançaňyz hiç zat geçirilmeýär, ulanylan zady bolsa yzyna alyp bolýar."
+          }
+        }
+      }
+    },
+    "Culla hasn’t checked for updates yet." : {
+      "comment" : "Line beside the Check Now button in Settings ▸ General ▸ Updates when no check was ever made.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновления ещё не проверялись."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Täzelenmeler entek barlanmady."
           }
         }
       }
@@ -5273,6 +5444,25 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Culla is up to date" : {
+      "comment" : "Title of the alert after Culla ▸ Check for Updates… when this copy of Culla is the newest version. Culla is the app's name.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Установлена последняя версия Culla"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla-nyň iň täze wersiýasy gurnalan"
           }
         }
       }
@@ -6416,6 +6606,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ret edilen suratlaryň reňk belligi"
+          }
+        }
+      }
+    },
+    "Last checked %@." : {
+      "comment" : "Line beside the Check Now button in Settings ▸ General ▸ Updates. %@ is the date and time of the last check, already formatted for the language, such as '24 Nov 2026 at 10:42'.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Последняя проверка: %@."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soňky barlag: %@."
           }
         }
       }
@@ -7672,6 +7881,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Batareýada, doly tizlikde."
+          }
+        }
+      }
+    },
+    "Once a day Culla asks cullaapp.com which version is the newest. Nothing about you or your photos is sent." : {
+      "comment" : "Explanation under the switch 'Check for updates automatically' in Settings: what the check does and that it sends nothing personal. cullaapp.com is the project's site, never translated.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раз в день Culla узнаёт у cullaapp.com, какая версия новейшая. Ничего о вас и ваших фото не передаётся."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla günde bir gezek cullaapp.com saýtyndan iň täze wersiýanyň haýsydygyny soraýar. Siz ýa-da suratlaryňyz barada hiç zat iberilmeýär."
           }
         }
       }
@@ -9385,6 +9613,25 @@
         }
       }
     },
+    "Skip This Version" : {
+      "comment" : "Button on the welcome screen's update line: hides the line for this version for good; Culla mentions it again only when an even newer version comes out, or when the person checks by hand.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пропустить эту версию"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu wersiýany geçir"
+          }
+        }
+      }
+    },
     "Sort a shoot into keepers and rejects, from the keyboard." : {
       "comment" : "The tagline under the app's name on the welcome screen. Also: The one-line description of the app in the About window. 'Shoot' is the set of photos from one photo session; 'keepers' the photos kept, 'rejects' those rejected. The window is 360 points wide; the line may wrap.",
       "extractionState" : "manual",
@@ -10045,6 +10292,25 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Surat maglumatlary zaýalanan ýa-da doly däl."
+          }
+        }
+      }
+    },
+    "The last check, %@, got no answer." : {
+      "comment" : "Line beside the Check Now button in Settings ▸ General ▸ Updates when the last check could not reach cullaapp.com. %@ is the date and time of that check, already formatted for the language, such as '24 Nov 2026 at 10:42'.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Последняя проверка (%@) осталась без ответа."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soňky barlag (%@) jogapsyz galdy."
           }
         }
       }
@@ -14167,6 +14433,31 @@
         }
       }
     },
+    "menu.checkForUpdates" : {
+      "comment" : "Item of the app menu (the menu named Culla), right below About Culla: asks cullaapp.com at once whether a newer version of Culla exists. Use the wording macOS apps use for 'Check for Updates…' in your language; keep the ellipsis.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for Updates…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверить обновления…"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Täzelenmeleri barla…"
+          }
+        }
+      }
+    },
     "menu.clearMenu" : {
       "comment" : "Last item of File ▸ Open Recent: empties the list of recent shoots. Use the wording macOS uses for this item in your language. A command.",
       "extractionState" : "manual",
@@ -16527,6 +16818,31 @@
         }
       }
     },
+    "settings.section.updates" : {
+      "comment" : "Heading of a section of Settings ▸ General about checking for newer versions of Culla.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updates"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Обновления"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Täzelenmeler"
+          }
+        }
+      }
+    },
     "settings.speed.full" : {
       "comment" : "One side of the 'Analysis speed' choice in Settings ▸ Performance: analyse at full speed always. Adjective; a segmented control, little room.",
       "extractionState" : "manual",
@@ -18265,6 +18581,156 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ sek"
+          }
+        }
+      }
+    },
+    "updates.checkNow" : {
+      "comment" : "Button in Settings ▸ General ▸ Updates: checks for a newer version of Culla at once (verb, command).",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check Now"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверить сейчас"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Häzir barla"
+          }
+        }
+      }
+    },
+    "updates.checking" : {
+      "comment" : "Shown in Settings ▸ General ▸ Updates while Culla is asking cullaapp.com for the newest version; also VoiceOver's name for the small spinner there.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking…"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверка…"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Barlanýar…"
+          }
+        }
+      }
+    },
+    "updates.download" : {
+      "comment" : "Button (verb, command) on the welcome screen's update line and in the update alert: opens the download page of cullaapp.com in the web browser. Short.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скачать"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ýükläp al"
+          }
+        }
+      }
+    },
+    "updates.later" : {
+      "comment" : "Button of the alert saying a newer version of Culla is available: closes the alert without doing anything (decide later).",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Позже"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soňra"
+          }
+        }
+      }
+    },
+    "updates.notice" : {
+      "comment" : "One line on the welcome screen when a newer version of Culla exists: 'Culla 1.1 is available.' %@ is the version number, such as 1.1 (never translated). Culla is the app's name.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %@ is available."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Доступна версия Culla %@."
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culla %@ wersiýasy elýeterli."
+          }
+        }
+      }
+    },
+    "updates.releaseNotes" : {
+      "comment" : "Button on the welcome screen's update line and in the update alert: opens the page listing what changed in each version of Culla, in the web browser. Same words as the site's 'Release Notes' link.",
+      "extractionState" : "manual",
+      "generatesSymbol" : false,
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Release Notes"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Примечания к выпуску"
+          }
+        },
+        "tk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wersiýa bellikleri"
           }
         }
       }

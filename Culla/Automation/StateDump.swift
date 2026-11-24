@@ -375,6 +375,7 @@ extension StateDump {
             ] as [String: Any],
             "editorApplication": settings.editorApplication?.path ?? NSNull(),
             "language": settings.language?.rawValue ?? "system",
+            "checksForUpdatesAutomatically": settings.checksForUpdatesAutomatically,
         ] as [String: Any]
         // The language the app runs in, and the choice it was launched with.
         dump["language"] = [

@@ -141,7 +141,7 @@ APP="$EXPORT/Culla.app"
 [ -d "$APP" ] || fail 2 "the export made no Culla.app; log: $OUT/export.log"
 
 # --- What a release build must be (Scripts/release.md) -------------------------------------------
-# make-dmg.sh checks the automation harness and the three entitlements again; these are the rest.
+# make-dmg.sh checks the automation harness and the four entitlements again; these are the rest.
 check() { say "  ok  $1"; }
 say "Checking ${APP}…"
 plutil -lint "$APP/Contents/Info.plist" >/dev/null || fail 1 "Info.plist does not lint"
@@ -157,16 +157,23 @@ done < <(find "$APP" -name '*.plist' -print0)
 check "$LINTED property lists lint; version $APP_VERSION, $APP_ID"
 
 ENTITLEMENTS="$(codesign -d --entitlements - --xml "$APP" 2>/dev/null | plutil -convert json -o - - 2>/dev/null || echo '{}')"
-EXPECTED='{"com.apple.security.app-sandbox":true,"com.apple.security.files.bookmarks.app-scope":true,"com.apple.security.files.user-selected.read-write":true}'
+EXPECTED='{"com.apple.security.app-sandbox":true,"com.apple.security.files.bookmarks.app-scope":true,"com.apple.security.files.user-selected.read-write":true,"com.apple.security.network.client":true}'
 [ "$(printf '%s' "$ENTITLEMENTS" | python3 -c 'import json,sys; print(json.dumps(json.load(sys.stdin), sort_keys=True, separators=(",", ":")))')" = "$EXPECTED" ] \
     || fail 1 "unexpected entitlements: $ENTITLEMENTS"
-check "exactly the three entitlements"
+check "exactly the four entitlements (sandbox, user-selected files, bookmarks, outgoing connections)"
 
 BINARY="$APP/Contents/MacOS/Culla"
 if otool -L "$BINARY" | grep -E "CFNetwork\.framework|/Network\.framework" >&2; then
     fail 1 "the app links a network framework of its own"
 fi
 check "no CFNetwork or Network.framework linked"
+# URLSession comes with Foundation, so linking says nothing about who uses it: the sources say.
+# Every network call of the project is in CullaKit/Sources/CullaUpdates (the update check).
+NETWORK_USES="$(grep -rlE --include='*.swift' \
+    'URLSession|NSURLConnection|CFNetwork|CFSocket|CFStream|NWConnection|NWListener|NWPathMonitor|NWBrowser|^[[:space:]]*import[[:space:]]+Network([[:space:]]|$)' \
+    "$REPO/Culla" "$REPO/CullaKit/Sources" | grep -v "^$REPO/CullaKit/Sources/CullaUpdates/" || true)"
+[ -z "$NETWORK_USES" ] || { printf '%s\n' "$NETWORK_USES" >&2; fail 1 "network code outside CullaKit/Sources/CullaUpdates"; }
+check "network code only in CullaKit/Sources/CullaUpdates"
 if strings "$BINARY" | grep -q "CullaAutomation"; then
     fail 1 "the app contains the automation harness (CullaAutomation)"
 fi

@@ -15,6 +15,7 @@ let package = Package(
         .library(name: "CullaStore", targets: ["CullaStore"]),
         .library(name: "CullaCommands", targets: ["CullaCommands"]),
         .library(name: "CullaPipeline", targets: ["CullaPipeline"]),
+        .library(name: "CullaUpdates", targets: ["CullaUpdates"]),
         .executable(name: "culla-eval", targets: ["culla-eval"]),
     ],
     dependencies: [
@@ -40,6 +41,9 @@ let package = Package(
             dependencies: ["CullaCore", "CullaFiles", "CullaAnalysis", "CullaSession", "CullaStore"],
             resources: [.process("Localizable.xcstrings")]
         ),
+        // Check for updates: the version rules, the schedule and the one network request of the
+        // whole project, kept here so it can be audited in one place. No AppKit, no text.
+        .target(name: "CullaUpdates", dependencies: ["CullaCore"]),
         // Measures CullaPipeline on a real folder. A development tool; not part of the app.
         .executableTarget(
             name: "culla-pipeline-bench",
@@ -55,6 +59,7 @@ let package = Package(
         .testTarget(name: "CullaAnalysisTests", dependencies: ["CullaAnalysis"]),
         .testTarget(name: "CullaSessionTests", dependencies: ["CullaSession"]),
         .testTarget(name: "CullaStoreTests", dependencies: ["CullaStore"]),
+        .testTarget(name: "CullaUpdatesTests", dependencies: ["CullaUpdates", "CullaCore"]),
         .testTarget(name: "CullaCommandsTests", dependencies: ["CullaCommands", "CullaSession"]),
         // Applying decisions to disk and undoing it, end to end: plan, executor, journal, session.
         .testTarget(

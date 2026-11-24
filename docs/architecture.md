@@ -1,6 +1,6 @@
 # Culla — Architecture
 
-Last updated: 2026-11-12
+Last updated: 2026-11-24
 
 This is the contract every part of the code is built to. [Design](design.md) says what the app shows, [User Flows](user-flows.md) say how it is used, and the [Implementation Plan](implementation-plan.md) says in which order it is built. Change this file in the same change that breaks one of its rules.
 
@@ -15,6 +15,7 @@ This is the contract every part of the code is built to. [Design](design.md) say
 | `CullaStore` | Core, Session, GRDB | SQLite persistence through `CullaDatabase`: sessions, decisions, cached scores, and later manual stack edits and the apply journal |
 | `CullaCommands` | Session | Every user action as one `Command` enum, the key map as data, key matching, grid selection logic, undo names; also the text and small decisions the interface needs but that have nothing to do with AppKit: the review guide (which group opens next), bulk-reject rules, loupe zoom targets, stack-review layout, the Review and Apply wording, the tuning control descriptions shared by Settings and the tuning popover, and the three presets |
 | `CullaPipeline` | Core, Files, Analysis, Session, Store | `ShootApplier`, the facade for applying and undoing; and background analysis of a shoot: `AnalysisScheduler` (priorities, pause, adjustable concurrency) and `ShootAnalysis` (cache first, analyse the misses, save in batches, deliver events, compute stacks, duplicates and best picks) |
+| `CullaUpdates` | nothing | The update check: version comparison, the update document, the decision and the schedule as pure functions, and the one network request the app makes. All network code of the project is in this module |
 | `culla-eval` | Core, Files, Analysis | The command-line detector check |
 | `Culla` (app) | all of the above | SwiftUI and AppKit interface, `SessionModel`, commands and key bindings, settings |
 
@@ -124,9 +125,21 @@ The app ships in English, Russian and Turkmen. `docs/localization.md` holds what
 - **Tooling.** `Scripts/l10n.py` checks the catalogs (comments, placeholders, plural forms, stale and duplicate keys, and with `--require ru,tk` completeness), prints statistics, and exports and imports a translator's file. Unit tests always run in English and can render any language with `Localization.withLanguage`.
 - **Verification.** Interface scripts launch the app in English unless a script names a language. Three scripts walk the same screens in English, Russian and Turkmen and save snapshots, menu titles and accessibility trees; `Scripts/l10n-screens.py` lists text that is identical to the English run, which is how leftover English is found.
 
+## Checking for updates
+
+The one thing Culla asks the network is whether a newer version exists. Decided on 2026-11-24; before that the app had no network access at all.
+
+- **One request.** A GET of `https://cullaapp.com/update.json`, a static file the site's build writes from `site/release.json`: `version`, `minimumSystem` and `date`. An empty `date` means nothing is published.
+- **Nothing is sent but the request.** No query string, no cookies, no cache, and three fixed headers: `User-Agent: Culla`, `Accept: application/json` and `Accept-Language: en`. The language is pinned because the system would otherwise send the person's language list. So the request carries neither the app's version nor anything about the Mac or the person; a capture on 2026-11-24 showed that the system adds only `Host`, `Cache-Control: no-cache`, `Accept-Encoding` and `Connection`. HTTPS only, redirects refused, a 15 second timeout, at most 64 KB read.
+- **The answer is only compared.** The app never opens an address taken from the response. Download opens `https://cullaapp.com/download` and Release Notes opens the site's release notes page in the browser; both addresses are built into the app. Culla does not download or install anything itself.
+- **When.** At most once in 24 hours, at launch or when the app becomes active, if "Check for updates automatically" is on (the default); and whenever the person chooses Culla ▸ Check for Updates… or Check Now in Settings.
+- **What the person sees.** An automatic check that finds a newer version adds one line to the welcome view, with Download, Release Notes and Skip This Version. It never shows a dialog and never shows anything over an open shoot; a failed check and a version that needs a newer macOS are silent. The line is remembered between launches, and goes when a check finds nothing newer, when the version is skipped, or when automatic checks are switched off. A manual check always answers, with an alert on the window it was asked from.
+- **Where the code is.** `CullaUpdates` holds the request and every decision. The app holds the checker's state, the menu item, the Settings section and the text. `com.apple.security.network.client` is the fourth and last entitlement; `Scripts/release.sh` refuses a build with any other set, and refuses one whose sources name `URLSession` or the Network framework outside `CullaUpdates`.
+- **Under automation** the app never checks and never touches the network; scripts feed the checker a canned outcome.
+
 ## Rules
 
 - Supported Apple APIs only. A feature that would need a private interface is dropped.
 - No blocking work on Swift's cooperative pool or the main thread.
-- The app is sandboxed and has no network access.
+- The app is sandboxed. Its only use of the network is the update check described above; no other code may open a connection, and no network code lives outside `CullaUpdates`.
 - No file is moved, deleted or written beside a photo except by the apply step, and the apply step is journalled so it can be undone.

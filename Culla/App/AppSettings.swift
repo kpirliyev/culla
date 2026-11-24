@@ -200,6 +200,34 @@ final class AppSettings {
         return [language.rawValue] + others
     }
 
+    /// Ask cullaapp.com once a day which version is the newest (Settings ▸ General ▸ Updates).
+    var checksForUpdatesAutomatically: Bool {
+        didSet { defaults.set(checksForUpdatesAutomatically, forKey: Key.checksForUpdatesAutomatically) }
+    }
+
+    /// When Culla last tried to learn the newest version, whether or not it got an answer.
+    /// Automatic checks are counted from it (`UpdateSchedule`).
+    var lastUpdateCheck: Date? {
+        didSet { defaults.set(lastUpdateCheck, forKey: Key.lastUpdateCheck) }
+    }
+
+    /// True when that last attempt got no answer, for the line in Settings.
+    var lastUpdateCheckFailed: Bool {
+        didSet { defaults.set(lastUpdateCheckFailed, forKey: Key.lastUpdateCheckFailed) }
+    }
+
+    /// The newer version the last answered check found for this Mac, "1.1": the welcome view's
+    /// notice shows it until it is skipped, or this copy of Culla is that version or newer.
+    var newestKnownVersion: String? {
+        didSet { defaults.set(newestKnownVersion, forKey: Key.newestKnownVersion) }
+    }
+
+    /// The version Skip This Version was used on: no automatic notice for it, though Check for
+    /// Updates still names it.
+    var skippedUpdateVersion: String? {
+        didSet { defaults.set(skippedUpdateVersion, forKey: Key.skippedUpdateVersion) }
+    }
+
     /// The shoot window's sidebar and inspector widths, as the person last dragged them.
     var sidebarWidth: Double? {
         didSet { defaults.set(sidebarWidth, forKey: Key.sidebarWidth) }
@@ -239,6 +267,11 @@ final class AppSettings {
         static let sidebarWidth = "sidebarWidth"
         static let inspectorWidth = "inspectorWidth"
         static let language = "language"
+        static let checksForUpdatesAutomatically = "checksForUpdatesAutomatically"
+        static let lastUpdateCheck = "lastUpdateCheck"
+        static let lastUpdateCheckFailed = "lastUpdateCheckFailed"
+        static let newestKnownVersion = "newestKnownVersion"
+        static let skippedUpdateVersion = "skippedUpdateVersion"
         static let appleLanguages = "AppleLanguages"
     }
 
@@ -268,6 +301,11 @@ final class AppSettings {
         introductionDismissed = defaults.bool(forKey: Key.introductionDismissed)
         sidebarWidth = defaults.object(forKey: Key.sidebarWidth) as? Double
         inspectorWidth = defaults.object(forKey: Key.inspectorWidth) as? Double
+        checksForUpdatesAutomatically = defaults.object(forKey: Key.checksForUpdatesAutomatically) as? Bool ?? true
+        lastUpdateCheck = defaults.object(forKey: Key.lastUpdateCheck) as? Date
+        lastUpdateCheckFailed = defaults.bool(forKey: Key.lastUpdateCheckFailed)
+        newestKnownVersion = defaults.string(forKey: Key.newestKnownVersion)
+        skippedUpdateVersion = defaults.string(forKey: Key.skippedUpdateVersion)
         let choice = (defaults.persistentDomain(forName: domain)?[Key.language] as? String).flatMap(AppLanguage.init(rawValue:))
         language = choice
         launchChoice = choice

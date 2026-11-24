@@ -1,8 +1,8 @@
 # Culla — Implementation Plan
 
-Last updated: 2026-11-12
+Last updated: 2026-11-24
 
-Culla is built in eight milestones, each ending in something you can run and judge. The first checks that detection works at all on a real shoot; fine-tuning it is deliberately the last milestone, so every threshold stays an adjustable setting until then. The structure all of it is built to is in [Architecture](architecture.md). The plan implements [Design](design.md) and [User Flows](user-flows.md) with all twelve open questions confirmed as proposed.
+Culla is built in nine milestones, each ending in something you can run and judge. The first checks that detection works at all on a real shoot; fine-tuning it is deliberately the last one to be done, so every threshold stays an adjustable setting until then. The structure all of it is built to is in [Architecture](architecture.md). The plan implements [Design](design.md) and [User Flows](user-flows.md) with all twelve open questions confirmed as proposed.
 
 Task lists below are the progress record: tick a box when its task is done.
 
@@ -18,8 +18,9 @@ Task lists below are the progress record: tick a box when its task is done.
 | M5 Settings | Settings, presets and tuning | Every setting works with no restart |
 | M6 Release | Polish, signing and notarization | The notarized 1.0 passes all eight flows |
 | M7 Tuning | Detection fine-tuning on real shoots | You trust each group's defaults on your own photos |
+| M8 Updates | The update check | A copy of Culla learns of a newer version from `cullaapp.com` and says so on the welcome view |
 
-From M1 on, every milestone adds flows to an app that already runs. Detection tuning was moved from M0 to M7 on 2026-11-09: the app is built first with the values chosen from the first shoot, and tuned once it can be used on real shoots. M7 can run before M6's release steps. No dates are set; the order and the gates are what this plan fixes.
+From M1 on, every milestone adds flows to an app that already runs. Detection tuning was moved from M0 to M7 on 2026-11-09: the app is built first with the values chosen from the first shoot, and tuned once it can be used on real shoots. M7 can run before M6's release steps. M8 was added on 2026-11-24 and built straight away; M7 is still the last work to be done. No dates are set; the order and the gates are what this plan fixes.
 
 ## Decisions carried in
 
@@ -54,6 +55,7 @@ Technical choices this plan makes:
 | Detection testing | By eye, on contact sheets and in the app; no labelled test set | You test manually as the app is built |
 | Neural Engine usage figure | Not shown | macOS has no supported reading of it |
 | Documentation | Markdown in this repository's `docs/` folder | Docs are versioned with the code |
+| Updates | The app checks `cullaapp.com/update.json` and tells the person; the download stays in the browser. No in-app installer and no update framework (decided on 2026-11-24) | It keeps GRDB the only package and limits the app's network use to one request for a static file |
 
 ## Project layout
 
@@ -69,6 +71,7 @@ All logic lives in a Swift package, so it can be tested and run from the command
 | `CullaStore` | Package module | The SQLite store: sessions, decisions, cached scores |
 | `CullaCommands` | Package module | Commands, the key map, selection logic |
 | `CullaPipeline` | Package module | Background analysis: scheduler, score cache use, grouping and best picks |
+| `CullaUpdates` | Package module | The update check: versions, the decision, the schedule and the one network request |
 | `culla-eval` | Command-line tool | Runs the detectors over a folder and writes scores and contact sheets |
 | Tests | One target per module | Unit tests |
 
@@ -396,6 +399,26 @@ Goal: defaults you trust on your own photos. Done last, in the finished app, whe
 - [ ] Set the Lenient and Strict presets around the confirmed Balanced values.
 
 **Gate.** On three shoots of different kinds, you agree with what each group flags at the Balanced preset, and the Certain tier contains no photo you would keep.
+
+## M8 — Checking for updates
+
+Goal: a person running an older Culla hears that a newer one exists, without the app doing anything else online and without being interrupted while culling. The rules are in `docs/architecture.md` ("Checking for updates"); what the person sees is in `docs/design.md` and Flow 9 of `docs/user-flows.md`.
+
+- [x] `CullaUpdates` in the package: version comparison, the update document, the decision, the schedule and the skip rule as pure functions with unit tests, and the request itself (ephemeral, no cookies, no cache, three fixed headers, HTTPS only, no redirects, 64 KB at most), tested against a stub. 34 tests.
+- [x] The app: the automatic check at most once a day, the line on the welcome view with Download, Release Notes and Skip This Version, Culla ▸ Check for Updates… with its four answers, and the Updates section in Settings ▸ General.
+- [x] Text in English, Russian and Turkmen: 22 entries.
+- [x] Interface scripts with canned outcomes (`Scripts/ui/69` to `71`, and the update screens in the three language walks); under automation the app never touches the network.
+- [ ] Run those scripts through `Scripts/ui-run.sh`. On 2026-11-24 they passed only against an unsandboxed Debug copy with a four-photo shoot, because the session that built them was refused access to the app's container by macOS and had no Pillow for the sample shoot. The Russian and Turkmen walks stopped after the update screens for want of the 35-photo sample.
+- [x] The fourth entitlement, `com.apple.security.network.client`, and the release scripts' checks for exactly four. `otool` still shows no network framework linked (URLSession comes with Foundation), so `release.sh` also refuses network code in the sources outside `CullaUpdates`.
+- [x] The site: `update.json` written from `release.json` at build, tests for it, and the wording about the network corrected in three languages. Neither the nginx configuration nor `count.py` changed, so the server needs no root step.
+- [x] The docs: architecture, design, user flows, README, contributing, the release guide and the landing page plan.
+- [ ] Deploy the site so `https://cullaapp.com/update.json` exists (owner asks for the deploy).
+- [x] Decide which version first carries the check: 1.0. Its release on GitHub was still a draft, so 1.0 is built again as build 2 and every published copy has the check (decided on 2026-11-24).
+- [ ] Build 1.0 again: commit, delete the draft release, move the `v1.0` tag to the new commit and push it, so the release workflow makes a new draft (`Scripts/release.md`).
+
+Checked on 2026-11-24: every package test run passes, the Debug and Release configurations build, the Release image passes the four-entitlement check, the translation and accessibility checks pass, and `site/test.sh` passes. The request was captured on a local listener and carries only the fixed headers.
+
+**Gate.** Not passed yet: it waits for the interface scripts under `Scripts/ui-run.sh` and for the deployed site. With a canned answer naming a newer version, the welcome view shows the line and Skip This Version removes it; a real check against the deployed site answers "this is the newest version"; the Release build has exactly the four entitlements and no network code outside `CullaUpdates`.
 
 ## Testing
 

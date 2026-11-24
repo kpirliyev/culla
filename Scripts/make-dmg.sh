@@ -50,9 +50,10 @@ if strings "$APP/Contents/MacOS/Culla" | grep -q "CullaAutomation"; then
     exit 1
 fi
 
-# Exactly the three entitlements Culla needs: the sandbox, user-selected files, app-scoped bookmarks.
+# Exactly the four entitlements Culla needs: the sandbox, user-selected files, app-scoped bookmarks,
+# and outgoing connections for the one request Check for Updates makes (CullaKit/Sources/CullaUpdates).
 ENTITLEMENTS="$(codesign -d --entitlements - --xml "$APP" 2>/dev/null | plutil -convert json -o - - 2>/dev/null || echo '{}')"
-EXPECTED='{"com.apple.security.app-sandbox":true,"com.apple.security.files.bookmarks.app-scope":true,"com.apple.security.files.user-selected.read-write":true}'
+EXPECTED='{"com.apple.security.app-sandbox":true,"com.apple.security.files.bookmarks.app-scope":true,"com.apple.security.files.user-selected.read-write":true,"com.apple.security.network.client":true}'
 if [ "$(printf '%s' "$ENTITLEMENTS" | python3 -c 'import json,sys; print(json.dumps(json.load(sys.stdin), sort_keys=True, separators=(",", ":")))')" != "$EXPECTED" ]; then
     echo "Unexpected entitlements: $ENTITLEMENTS" >&2
     echo "(get-task-allow comes from a debug-style signature: build with CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO, as --build does)" >&2

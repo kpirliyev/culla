@@ -5,6 +5,7 @@ import CullaCore
 import CullaFiles
 import CullaSession
 import CullaStore
+import CullaUpdates
 import Foundation
 import ImageIO
 import Observation
@@ -84,7 +85,11 @@ final class AppModel {
     @ObservationIgnored let thumbnails: ThumbnailCache
     /// The power source and memory pressure, which set how many photos are analysed at once.
     @ObservationIgnored let power = PowerMonitor()
-    @ObservationIgnored weak var window: NSWindow?
+    @ObservationIgnored weak var window: NSWindow? {
+        didSet { updates.mainWindow = window }
+    }
+    /// Check for updates: the welcome view's notice, Culla ▸ Check for Updates… and Settings.
+    @ObservationIgnored let updates: UpdateChecker
     /// Shows the Settings window (⌘,); set by the app delegate.
     @ObservationIgnored var showSettings: (() -> Void)?
     /// Shows Help ▸ Keyboard Shortcuts; set by the app delegate.
@@ -100,6 +105,12 @@ final class AppModel {
     init(environment: AppEnvironment) {
         self.environment = environment
         settings = AppSettings(defaults: environment.makeDefaults(), domain: environment.defaultsDomain)
+        // Under automation no network object is made at all: the harness supplies the answers.
+        updates = UpdateChecker(
+            settings: settings,
+            fetcher: environment.isAutomation ? nil : HTTPSUpdateFetcher(),
+            isAutomation: environment.isAutomation
+        )
         do {
             // About 90 thumbnails: two screens of tiles at the default size. Each thumbnail on
             // screen also costs Core Animation a copy of about the same size, held as long as the

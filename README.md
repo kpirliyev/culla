@@ -30,7 +30,7 @@ Every key can be changed in Settings ▸ Keys; Help ▸ Keyboard Shortcuts (⌘/
 
 ## Privacy
 
-- Everything happens on your Mac. Culla has no network access: the app is sandboxed without the network entitlement.
+- Everything happens on your Mac, and nothing is uploaded. The only thing Culla asks the internet is whether a newer version exists: at most once a day it reads one small file, `https://cullaapp.com/update.json`, sending nothing about you, your Mac or your photos. Settings ▸ General turns the automatic check off.
 - Nothing is written into a shoot folder until you apply. Thumbnails, scores and decisions live in Culla's own container (`~/Library/Containers/com.kpirliyev.Culla`).
 - Culla never changes an image file. Ratings and decisions go into `<name>.xmp` sidecars beside each photo, and an existing sidecar is merged, keeping everything else in it.
 

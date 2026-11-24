@@ -64,6 +64,100 @@
       "window": "close"
     },
     {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.1"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.notice": "1.1"
+      }
+    },
+    {
+      "snapshot": "03b-update-line"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-03b-update-line"
+    },
+    {
+      "dump": "03b-update-line",
+      "photos": false
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "snapshot": "03c-update-alert-available"
+    },
+    {
+      "dump": "03c-update-alert-available",
+      "photos": false
+    },
+    {
+      "updates": "alert",
+      "button": 2
+    },
+    {
+      "updates": "canned",
+      "outcome": "needsNewerSystem",
+      "version": "1.2",
+      "minimumSystem": "99.0"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "snapshot": "03d-update-alert-needs-newer-macos"
+    },
+    {
+      "dump": "03d-update-alert-needs-newer-macos",
+      "photos": false
+    },
+    {
+      "updates": "alert",
+      "button": 0
+    },
+    {
+      "updates": "canned",
+      "outcome": "upToDate"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "snapshot": "03e-update-alert-up-to-date"
+    },
+    {
+      "dump": "03e-update-alert-up-to-date",
+      "photos": false
+    },
+    {
+      "updates": "alert",
+      "button": 0
+    },
+    {
+      "updates": "canned",
+      "outcome": "failed"
+    },
+    {
+      "updates": "check"
+    },
+    {
+      "snapshot": "03f-update-alert-failed"
+    },
+    {
+      "dump": "03f-update-alert-failed",
+      "photos": false
+    },
+    {
+      "updates": "alert",
+      "button": 0
+    },
+    {
       "open": "$SHOOT"
     },
     {

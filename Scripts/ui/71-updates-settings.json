@@ -1,0 +1,132 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 200,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset. Settings ▸ General ▸ Updates: the switch (on by default) with what the check sends, Check Now answering with an alert on the Settings window, the line saying when Culla last checked (never, a time, a check without an answer), and switching automatic checks off taking the welcome line away."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "firstRun": "dismiss"
+    },
+    {
+      "settingsWindow": "general"
+    },
+    {
+      "expect": {
+        "updates.checksAutomatically": true,
+        "updates.lastCheckedText": "Culla hasn’t checked for updates yet.",
+        "settings.checksForUpdatesAutomatically": true
+      }
+    },
+    {
+      "snapshot": "01-settings-updates-never",
+      "window": "settings"
+    },
+    {
+      "accessibility": "settings",
+      "save": "a11y-01-settings-general"
+    },
+    {
+      "updates": "canned",
+      "outcome": "upToDate"
+    },
+    {
+      "updates": "check",
+      "from": "settings"
+    },
+    {
+      "expect": {
+        "updates.alert.on": "settings",
+        "updates.alert.message": "Culla is up to date"
+      }
+    },
+    {
+      "snapshot": "02-settings-check-now-alert",
+      "window": "settings"
+    },
+    {
+      "updates": "alert",
+      "button": "OK"
+    },
+    {
+      "expectMatch": {
+        "updates.lastCheckedText": "^Last checked .+\\.$"
+      }
+    },
+    {
+      "snapshot": "03-settings-updates-checked",
+      "window": "settings"
+    },
+    {
+      "updates": "canned",
+      "outcome": "failed"
+    },
+    {
+      "updates": "check",
+      "from": "settings"
+    },
+    {
+      "updates": "alert",
+      "button": "OK"
+    },
+    {
+      "expectMatch": {
+        "updates.lastCheckedText": "^The last check, .+, got no answer\\.$"
+      }
+    },
+    {
+      "snapshot": "04-settings-updates-no-answer",
+      "window": "settings"
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.1"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.notice": "1.1"
+      }
+    },
+    {
+      "updates": "automaticSetting",
+      "value": false
+    },
+    {
+      "expect": {
+        "updates.checksAutomatically": false,
+        "updates.notice": null,
+        "settings.checksForUpdatesAutomatically": false
+      }
+    },
+    {
+      "snapshot": "05-settings-updates-off",
+      "window": "settings"
+    },
+    {
+      "settingsWindow": "close"
+    },
+    {
+      "snapshot": "06-welcome-without-line"
+    },
+    {
+      "dump": "06-end",
+      "photos": false
+    },
+    {
+      "quit": true
+    }
+  ]
+}

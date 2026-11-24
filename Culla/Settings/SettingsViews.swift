@@ -323,6 +323,7 @@ struct GeneralPane: View {
         let settings = model.settings
         Form {
             LanguageSection(settings: settings, app: model.app)
+            UpdatesSection(model: model)
             Section(localized("settings.section.culling", default: "Culling")) {
                 toggle(localized("Advance after a decision"), KeyText.advanceNote(settings.keyBindings),
                        Binding(get: { settings.advanceAfterDecision }, set: { settings.advanceAfterDecision = $0 }))
@@ -412,6 +413,43 @@ struct LanguageSection: View {
                     Button(localized("Quit and Reopen Culla")) { app.quitAndReopen() }
                         .accessibilityHint(localized("Saves every decision, quits Culla and opens it again in the chosen language."))
                 }
+            }
+        }
+    }
+}
+
+/// Settings ▸ General ▸ Updates: the automatic check, what it sends, Check Now and when Culla
+/// last checked.
+struct UpdatesSection: View {
+    let model: SettingsModel
+
+    var body: some View {
+        let settings = model.settings
+        let updates = model.app.updates
+        Section(localized("settings.section.updates", default: "Updates")) {
+            LabeledContent {
+                Toggle(UpdateText.settingTitle, isOn: Binding(get: { settings.checksForUpdatesAutomatically },
+                                                             set: { updates.setChecksAutomatically($0) }))
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+            } label: {
+                SettingLabel(title: UpdateText.settingTitle, help: UpdateText.settingHelp)
+            }
+            LabeledContent {
+                HStack(spacing: 8) {
+                    if updates.isChecking {
+                        ProgressView().controlSize(.small)
+                            .accessibilityLabel(UpdateText.checking)
+                    }
+                    Button(UpdateText.checkNow) { model.checkForUpdatesNow() }
+                        .disabled(updates.isChecking)
+                }
+            } label: {
+                Text(verbatim: updates.isChecking
+                     ? UpdateText.checking
+                     : UpdateText.lastChecked(settings.lastUpdateCheck, failed: settings.lastUpdateCheckFailed))
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }

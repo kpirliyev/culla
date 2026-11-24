@@ -9,7 +9,7 @@ import Foundation
 extension AutomationRunner {
     static let extraActions = [
         "record", "expectAtMost", "dragSlider", "loop", "accessibility", "keyboardFocus", "window", "firstRun",
-        "scanToggle", "systemAccessibility",
+        "scanToggle", "systemAccessibility", "updates",
     ]
 
     /// Runs one of the steps above, or returns nil when the action is not one of them.
@@ -102,6 +102,9 @@ extension AutomationRunner {
         case "accessibility":
             return try await accessibilityStep(step)
 
+        case "updates":
+            return try await updateStep(step)
+
         case "window":
             // {"window": "about"} or "help" (the keyboard cheat sheet), "docs" (records the docs
             // folder Help would open), "close": shows a window of the Culla and Help menus.
@@ -192,6 +195,7 @@ extension AutomationRunner {
             ["name": $0.name, "ms": Self.round1($0.ms), "atMs": Self.round1(($0.at - started) * 1000)] as [String: Any]
         }
         state["introductionShown"] = app.showsIntroduction
+        addUpdateState(to: &state)
         state["systemAccessibility"] = [
             "increaseContrast": SystemAccessibility.increaseContrast,
             "reduceMotion": SystemAccessibility.reduceMotion,

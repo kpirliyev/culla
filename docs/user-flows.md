@@ -1,6 +1,6 @@
 # Culla — User Flows
 
-Last updated: 2026-11-09
+Last updated: 2026-11-24
 
 A session has four stages: open a shoot, clear the groups Culla found, sweep what is left, then confirm and apply. This doc walks each journey step by step. Screens, keys and settings are defined in [Design](design.md); the build order is in the [Implementation Plan](implementation-plan.md).
 
@@ -102,6 +102,16 @@ Goal: every step can be taken back, before and after applying.
 - **Coming back later.** Closing the window saves the session. Opening the same folder restores every decision and your place.
 - **New files since last time.** They are analysed on reopening and marked New, so a second card from the same shoot joins the session.
 
+## Flow 9 — Learning about a new version
+
+Goal: know when a newer Culla exists, without being interrupted while culling.
+
+1. **Automatic.** At most once a day, when Culla opens or comes to the front, it asks `cullaapp.com` which version is the newest. Nothing about you or your photos is sent.
+2. If a newer version exists, the welcome window shows one line: "Culla 1.1 is available." Nothing appears while a shoot is open.
+3. Download opens the site in your browser and fetches the disk image; drag the new Culla over the old one in Applications. Release Notes shows what changed. Skip This Version hides the line until the version after it.
+4. **By hand.** Culla ▸ Check for Updates… asks at once and always answers, also when the version was skipped or the check failed.
+5. **Off.** Settings ▸ General ▸ Check for updates automatically. With it off, Culla goes online only when you choose Check for Updates.
+
 ## Edge cases
 
 | Situation | What Culla does |
@@ -116,6 +126,8 @@ Goal: every step can be taken back, before and after applying.
 | A sidecar already exists | Only the rating and keep or reject fields are updated; everything else in it is preserved |
 | Apply fails part-way (disk full, permission lost) | Stops, reports what moved, and offers Undo for that part |
 | Videos in the folder | Skipped in the first version, fully ignored |
+| No internet when an update check is due | Nothing is shown; Culla asks again a day later. A check made by hand says it could not be made |
+| The newer version needs a newer macOS | An automatic check stays silent; a check made by hand says which macOS it needs |
 
 ## Confirmed decisions
 

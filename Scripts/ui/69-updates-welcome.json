@@ -1,0 +1,250 @@
+{
+  "needs": {
+    "reset": true
+  },
+  "timeout": 200,
+  "window": [
+    1280,
+    800
+  ],
+  "steps": [
+    {
+      "log": "Run with --reset. Check for updates on the welcome view, with canned answers (automation never touches the network or checks on its own): an automatic check finding a newer version shows one line with Download, Release Notes and Skip This Version; the links are recorded; Skip This Version removes the line and only an even newer version brings it back; a version needing a newer macOS, an unpublished file, a failure and an open shoot show nothing."
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "firstRun": "dismiss"
+    },
+    {
+      "expect": {
+        "screen": "welcome",
+        "updates.notice": null,
+        "updates.hasLastCheck": false,
+        "updates.checksAutomatically": true,
+        "updates.alert": null
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.1"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "available",
+        "updates.lastTrigger": "automatic",
+        "updates.notice": "1.1",
+        "updates.noticeText": "Culla 1.1 is available.",
+        "updates.alert": null,
+        "updates.hasLastCheck": true,
+        "updates.lastCheckFailed": false
+      }
+    },
+    {
+      "snapshot": "01-welcome-update-line"
+    },
+    {
+      "accessibility": "main",
+      "save": "a11y-01-welcome-update",
+      "check": {
+        "unlabelled": 0
+      }
+    },
+    {
+      "windowSize": [
+        900,
+        640
+      ]
+    },
+    {
+      "snapshot": "02-welcome-update-line-narrow"
+    },
+    {
+      "windowSize": [
+        1280,
+        800
+      ]
+    },
+    {
+      "updates": "notice",
+      "button": "download"
+    },
+    {
+      "expect": {
+        "updates.lastOpenedLink": "https://cullaapp.com/download"
+      }
+    },
+    {
+      "updates": "notice",
+      "button": "releaseNotes"
+    },
+    {
+      "expect": {
+        "updates.lastOpenedLink": "https://cullaapp.com/en/release-notes/"
+      }
+    },
+    {
+      "updates": "notice",
+      "button": "skip"
+    },
+    {
+      "expect": {
+        "updates.notice": null,
+        "updates.skipped": "1.1",
+        "updates.newestKnown": "1.1"
+      }
+    },
+    {
+      "snapshot": "03-welcome-after-skip"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "available",
+        "updates.notice": null
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.2"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.notice": "1.2",
+        "updates.noticeText": "Culla 1.2 is available."
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "needsNewerSystem",
+      "version": "1.3",
+      "minimumSystem": "99.0"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "needsNewerSystem",
+        "updates.notice": null,
+        "updates.alert": null
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.2"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.notice": "1.2"
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "failed"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "failed",
+        "updates.lastCheckFailed": true,
+        "updates.notice": "1.2",
+        "updates.alert": null
+      }
+    },
+    {
+      "updates": "canned",
+      "outcome": "invalid"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "failed",
+        "updates.notice": "1.2",
+        "updates.alert": null
+      }
+    },
+    {
+      "open": "$SHOOT"
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "updates": "canned",
+      "outcome": "available",
+      "version": "1.4"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "screen": "shoot",
+        "updates.notice": "1.4",
+        "updates.alert": null
+      }
+    },
+    {
+      "snapshot": "04-shoot-shows-nothing"
+    },
+    {
+      "close": true
+    },
+    {
+      "wait": "idle"
+    },
+    {
+      "expect": {
+        "screen": "welcome",
+        "updates.notice": "1.4"
+      }
+    },
+    {
+      "snapshot": "05-welcome-after-shoot"
+    },
+    {
+      "updates": "canned",
+      "outcome": "unpublished"
+    },
+    {
+      "updates": "automatic"
+    },
+    {
+      "expect": {
+        "updates.lastOutcome": "upToDate",
+        "updates.notice": null,
+        "updates.newestKnown": null
+      }
+    },
+    {
+      "snapshot": "06-welcome-up-to-date"
+    },
+    {
+      "dump": "06-welcome-up-to-date",
+      "photos": false
+    },
+    {
+      "quit": true
+    }
+  ]
+}

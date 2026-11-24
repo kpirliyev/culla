@@ -1,6 +1,6 @@
 # Culla — Landing Page Plan
 
-Last updated: 2026-11-21
+Last updated: 2026-11-24
 
 A plan for the public website of Culla, `https://cullaapp.com`. The site is in `site/`; its README says how to build and deploy it. The page has one job: a photographer who lands on it understands in five seconds that Culla is free and open source, that it runs on their Mac's own hardware, and that culling happens from the keyboard, and can download it without scrolling.
 
@@ -18,7 +18,7 @@ A plan for the public website of Culla, `https://cullaapp.com`. The site is in `
 | Languages | English, Russian, Turkmen, as in the app. English is the default: it is shown whenever the browser asks for none of the three | Same audience; reuse `docs/localization.md` for terms |
 | Contact | GitHub: an issue form for bugs, an issue form for feature requests, and Discussions for questions. No form on the page, and no email address on the page or in this repository | Decided by the owner on 2026-11-20. Bugs and ideas are public and searchable, the maker's address stays private, and the server has nothing to receive or send |
 | Counting | Visits are counted from the nginx log, which stores full IP addresses and is kept for 30 days. Downloads of each version are read once a day from GitHub's own count for each release asset. Both go into CSV files. A report page (GoAccess) is left for later | The owner needs both numbers; neither needs a script or cookie on the page |
-| Tracking | None. No cookies, no analytics script, no third-party fonts or scripts, and the page loads nothing from GitHub; it only links there. The page says plainly what the server log keeps and that the download comes from GitHub | The app has no network access; the site makes the same promise and needs no consent banner |
+| Tracking | None. No cookies, no analytics script, no third-party fonts or scripts, and the page loads nothing from GitHub; it only links there. The page says plainly what the server log keeps and that the download comes from GitHub | The app uploads nothing and goes online only to read `update.json` from this site (since 2026-11-24); the site makes the same promise and needs no consent banner. The page says that the update check appears in the server log like a visit |
 | Language switch | Three round flags (United Kingdom, Russia, Turkmenistan) in the top bar and the footer, each named for screen readers by the language's own name | Asked for by the owner on 2026-11-20 |
 | Icon | The page's icon and favicon are made from the Xcode project's app icon at every build | The owner plans to change the icon; replacing it in Xcode changes the site too |
 | Scripts on the page | The generated pages carry no framework script. One small hand-written script runs the keyboard demo and the copy-link button | Everything else works with JavaScript off, and the server can forbid inline scripts and styles |
@@ -160,7 +160,7 @@ Recalled for pattern, not for looks: IINA, Rectangle, Maccy, Stats, HandBrake, O
 - Every language has its own address: `/en/`, `/ru/`, `/tk/`, with `hreflang` links between them and `/en/` marked as the default. The language is in the address, so no cookie is needed to remember it.
 - The icon: `site/scripts/sync-icon.mjs` reads the largest image in `Culla/Assets.xcassets/AppIcon.appiconset/` and writes the favicon, the touch icons, the icon in the page's top bar and the sharing image. It runs before every `npm run dev` and `npm run generate`, and its output is not committed. To change the icon, replace it in the Xcode project and build the site again.
 - Screenshots sit in named slots (`site/public/shots/<name>.<lang>.png`). A slot without a file draws a grey placeholder, so the site can be built before the screenshots exist.
-- Release data comes from `site/release.json` (repository, version, file name, size, SHA-256, date), filled in at release time. Every GitHub address on the page is built from its `repository` field, `kpirliyev/culla`, so the name is written in one place. The build makes no network request, and the pages load nothing from GitHub: they link to it.
+- Release data comes from `site/release.json` (repository, version, file name, size, SHA-256, date, minimum macOS), filled in at release time. The build also writes `/update.json` from it, the file the app's update check reads. Every GitHub address on the page is built from its `repository` field, `kpirliyev/culla`, so the name is written in one place. The build makes no network request, and the pages load nothing from GitHub: they link to it.
 - Screenshots are made from the Debug build with the existing interface scripts in each language, on photos the owner has the right to publish.
 - Site budgets (targets for the build, not text on the page): a few kilobytes of JavaScript, usable with JavaScript off, no inline script or style in the generated pages, Lighthouse 95 or more in every category.
 - Accessibility: keyboard reachable, visible focus, contrast AA, alt text for every screenshot, Reduce Motion honoured.
@@ -239,7 +239,7 @@ None is needed. Each thing a program on the server might do has a simpler answer
 | Download and visit counts | The nginx log, GitHub's download count and a short cron script |
 | Latest version on the page | `release.json` at build time |
 | Choosing the language | An nginx `map` on `Accept-Language` |
-| Updates in the app | Not applicable; the app has no network access |
+| Updates in the app | `update.json`, a static file the build writes from `release.json` (version, minimum macOS, date). The app reads it at most once a day and when asked, and only tells the person; the download stays in the browser |
 | Bug reports, ideas and questions | GitHub Issues and Discussions |
 
 If a need appears that these cannot meet, it would be one small Go service behind nginx with one endpoint, added then.

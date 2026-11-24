@@ -42,15 +42,15 @@ The workflow runs on GitHub's `xcode-27` image and selects Xcode 27.1. It first 
 ```bash
 APP=build/Release/Culla.app      # wherever the build put it
 plutil -lint "$APP/Contents/Info.plist"
-codesign -d --entitlements - "$APP"          # exactly: app-sandbox, files.user-selected.read-write, files.bookmarks.app-scope
+codesign -d --entitlements - "$APP"          # exactly: app-sandbox, files.user-selected.read-write, files.bookmarks.app-scope, network.client
 otool -L "$APP/Contents/MacOS/Culla"          # no CFNetwork or Network.framework of its own
 strings "$APP/Contents/MacOS/Culla" | grep -c CullaAutomation   # 0: the harness is compiled out ("Culla-Automation" and "isAutomation", the names of the separate data folders, remain and are harmless)
 ```
 
-- Version 1.0, build 1 (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` in the project). Raise the build number for every upload to notarization.
+- Version 1.0, build 2 (`MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` in the project). Raise the build number for every upload to notarization. Build 1 was the first 1.0, notarized on 2026-11-21 and never published; build 2 adds the update check.
 - Hardened runtime is on (`ENABLE_HARDENED_RUNTIME = YES`); it is required for notarization.
 - No `com.apple.security.get-task-allow`. With ad hoc signing (`CODE_SIGN_IDENTITY = "-"`) Xcode would add it to Release builds too, and notarization refuses it, so the Release configuration sets `CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO`. The commands below pass it as well, so they hold even if the project setting is ever lost.
-- No network entitlement: the app never goes online.
+- `com.apple.security.network.client` is the only network entitlement, and it is there for one request: the update check reads `https://cullaapp.com/update.json` (docs/architecture.md, "Checking for updates"). No incoming connections, and no network code outside `CullaUpdates`.
 
 ## 1. Rehearse without an account
 
@@ -58,7 +58,7 @@ strings "$APP/Contents/MacOS/Culla" | grep -c CullaAutomation   # 0: the harness
 Scripts/make-dmg.sh --build --out ~/Desktop/Culla-1.0-unsigned.dmg
 ```
 
-This builds the Release configuration (ad hoc signed, which is what the project does without an identity), checks it holds no automation code and exactly the three entitlements, and makes a compressed disk image with the app and a link to Applications. On another Mac, Gatekeeper refuses an unsigned download; that is expected until the steps below are done.
+This builds the Release configuration (ad hoc signed, which is what the project does without an identity), checks it holds no automation code and exactly the four entitlements, and makes a compressed disk image with the app and a link to Applications. On another Mac, Gatekeeper refuses an unsigned download; that is expected until the steps below are done.
 
 ## 2. One-time setup (owner)
 
@@ -127,7 +127,7 @@ On a Mac (or a fresh user account) that has never seen Culla:
 spctl --assess --type open --context context:primary-signature -v build/Culla-1.0.dmg   # accepted, source=Notarized Developer ID
 ```
 
-Download the image the way a person would (a browser sets the quarantine flag), open it, drag Culla to Applications and open it: there must be no security warning beyond the usual "downloaded from the internet" question. Then run all eight user flows from the keyboard (docs/user-flows.md) on a shoot of your own.
+Download the image the way a person would (a browser sets the quarantine flag), open it, drag Culla to Applications and open it: there must be no security warning beyond the usual "downloaded from the internet" question. Then run the user flows from the keyboard (docs/user-flows.md) on a shoot of your own. For Flow 9, Culla ▸ Check for Updates… must answer that this is the newest version until step 6 has told the site about it.
 
 ## 6. Publish
 
@@ -148,6 +148,6 @@ The disk image is published as an asset of a GitHub Release in `kpirliyev/culla`
 
 3. Download the asset from the release page in a browser and repeat step 5 on it.
 
-4. Only then tell the site: fill in `site/release.json` (`version`, `file`, `size`, `sha256` and `date`; an empty `date` means "not released yet") and the release notes in `site/data/release-notes/`, and deploy the site (`site/deploy/deploy.sh`). From that deploy on, `/download` redirects to the asset. Done in this order, the page never links to a file that is not there.
+4. Only then tell the site: fill in `site/release.json` (`version`, `file`, `size`, `sha256`, `date` and `minimumSystem`, the oldest macOS the new version runs on; an empty `date` means "not released yet") and the release notes in `site/data/release-notes/`, and deploy the site (`site/deploy/deploy.sh`). From that deploy on, `/download` redirects to the asset and `https://cullaapp.com/update.json` names the new version, which is how copies of Culla already installed learn of it within a day. Done in this order, neither the page nor the app ever points to a file that is not there.
 
 GitHub counts the downloads of each asset; the server reads that count once a day (`site/deploy/count.py`).

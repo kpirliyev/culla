@@ -28,7 +28,7 @@ The interface is checked by scripts that drive a Debug build and write snapshots
 - **Supported Apple APIs only.** Detection uses Vision, Core Image and ImageIO. A feature that would need a private interface is dropped, not approximated.
 - **Nothing is written into a shoot folder** until the person applies their decisions, and the apply step is journalled so it can be undone. Tools write their output elsewhere.
 - **No new packages.** GRDB is the only third-party dependency; ask before adding one.
-- **No network access** in the app. It is sandboxed with user-selected read and write access and app-scoped bookmarks only.
+- **One network request only.** The app is sandboxed with user-selected read and write access, app-scoped bookmarks and outgoing connections. The only connection it makes is the update check, which reads `https://cullaapp.com/update.json`. All network code lives in `CullaUpdates`; nothing else may open a connection.
 - **No blocking work on the main thread or Swift's cooperative pool.** Image decoding, pixel loops and Core Image's `CIDetector` run through `BlockingQueue` in `CullaCore`.
 - **Logic goes in the package**, where it is unit-tested without the interface; the app target holds views and thin glue.
 - **Every detection threshold is a `Tuning` value** shown in Settings, never a constant in a view.
