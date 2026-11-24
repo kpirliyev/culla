@@ -412,9 +412,11 @@ Goal: a person running an older Culla hears that a newer one exists, without the
 - [x] The fourth entitlement, `com.apple.security.network.client`, and the release scripts' checks for exactly four. `otool` still shows no network framework linked (URLSession comes with Foundation), so `release.sh` also refuses network code in the sources outside `CullaUpdates`.
 - [x] The site: `update.json` written from `release.json` at build, tests for it, and the wording about the network corrected in three languages. Neither the nginx configuration nor `count.py` changed, so the server needs no root step.
 - [x] The docs: architecture, design, user flows, README, contributing, the release guide and the landing page plan.
-- [ ] Deploy the site so `https://cullaapp.com/update.json` exists (owner asks for the deploy).
+- [x] Deploy the site so `https://cullaapp.com/update.json` exists. Deployed on 2026-11-24; the file answers with an empty date until 1.0 is published.
 - [x] Decide which version first carries the check: 1.0. Its release on GitHub was still a draft, so 1.0 is built again as build 2 and every published copy has the check (decided on 2026-11-24).
-- [ ] Build 1.0 again: commit, delete the draft release, move the `v1.0` tag to the new commit and push it, so the release workflow makes a new draft (`Scripts/release.md`).
+- [x] Build 1.0 again. Done on 2026-11-24: the draft with build 1 was deleted, the `v1.0` tag was moved to `373844a` and pushed, and the release workflow ran to the end and left a new draft with the notarized build 2.
+- [x] Publish the draft, fill in `site/release.json` and deploy the site. Done on 2026-11-24: 1.0 is published, `/download` redirects to its image and `update.json` carries the date.
+- [ ] Open the published 1.0 and choose Culla ▸ Check for Updates…: it must answer that 1.0 is the newest version (owner).
 
 Checked on 2026-11-24: every package test run passes, the Debug and Release configurations build, the Release image passes the four-entitlement check, the translation and accessibility checks pass, and `site/test.sh` passes. The request was captured on a local listener and carries only the fixed headers.
 
