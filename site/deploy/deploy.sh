@@ -15,7 +15,10 @@
 # The disk images are assets of the releases on GitHub, not files on this
 # server. site/release.json names the newest one:
 #   { "repository": "<owner>/<name>", "version": "1.0",
-#     "file": "Culla-1.0.dmg", ..., "date": "" }
+#     "minimumSystem": "26.0", "file": "Culla-1.0.dmg", ..., "date": "" }
+# The build writes /update.json from it (version, minimumSystem, date), the
+# file the app reads to learn whether a newer version exists; a build whose
+# update.json does not match release.json is not uploaded.
 # While "date" is empty the release is not published and /download answers
 # 503 with a friendly page. Once "date" is set, /download redirects to
 #   https://github.com/<repository>/releases/download/v<version>/<file>
@@ -160,11 +163,14 @@ def text(key):
     return value
 
 repository, version, file, date = text("repository"), text("version"), text("file"), text("date")
+minimum_system = text("minimumSystem")
 name = r"(?=[A-Za-z0-9_.-]*[A-Za-z0-9_-])[A-Za-z0-9_.-]+"   # not only dots
 if not re.fullmatch(name + "/" + name, repository):
     refuse('"repository" is "%s"; expected owner/name with only letters, digits, ".", "_" and "-"' % repository)
 if not re.fullmatch(r"[0-9]+(?:\.[0-9]+)*", version):
     refuse('"version" is "%s"; expected digits and dots, such as 1.0' % version)
+if not re.fullmatch(r"[0-9]+(?:\.[0-9]+)*", minimum_system):
+    refuse('"minimumSystem" is "%s"; expected digits and dots, such as 26.0' % minimum_system)
 if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]*\.dmg", file):
     refuse('"file" is "%s"; expected a plain .dmg file name' % file)
 if date and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date):
@@ -211,6 +217,28 @@ point_download() {
     with_staging download-target "${release_args[@]}"
 }
 
+# check_update_json: the build's /update.json, which the app reads to learn
+# whether a newer version exists, must say what release.json says, so that
+# a build from an older release.json is never uploaded.
+check_update_json() {
+    python3 - "$OUTPUT/update.json" "$RELEASE_JSON" <<'EOF' || die "the build's update.json does not match release.json; nothing was uploaded"
+import json, sys
+
+try:
+    with open(sys.argv[1], encoding="utf-8") as f:
+        update = json.load(f)
+except (OSError, ValueError) as error:
+    sys.stderr.write("deploy: %s: %s\n" % (sys.argv[1], error))
+    sys.exit(1)
+with open(sys.argv[2], encoding="utf-8") as f:
+    release = json.load(f)
+want = {key: release[key] for key in ("version", "minimumSystem", "date")}
+if update != want:
+    sys.stderr.write("deploy: update.json is %s; release.json says %s\n" % (json.dumps(update), json.dumps(want)))
+    sys.exit(1)
+EOF
+}
+
 # --- The site ---------------------------------------------------------------
 
 build_site() {
@@ -231,6 +259,7 @@ build_site() {
         fi
     done
     [ "$missing" = 0 ] || die "the build is incomplete; nothing was uploaded"
+    check_update_json
     if ! find "$OUTPUT" -name '*.gz' -print -quit | grep -q .; then
         say "warning: no pre-compressed .gz files in the build; nginx will send files uncompressed"
     fi

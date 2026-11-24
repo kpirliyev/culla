@@ -159,7 +159,7 @@ end it: `sudo rm /etc/sudoers.d/cullaapp /usr/local/sbin/cullaapp-install`.
 `site/release.json` names the newest release:
 
 ```json
-{ "repository": "kpirliyev/culla", "version": "1.0", "file": "Culla-1.0.dmg", "size": 0, "sha256": "", "date": "" }
+{ "repository": "kpirliyev/culla", "version": "1.0", "minimumSystem": "26.0", "file": "Culla-1.0.dmg", "size": 0, "sha256": "", "date": "" }
 ```
 
 While `date` is empty, `https://cullaapp.com/download` shows a small "not
@@ -170,8 +170,16 @@ other values and run `deploy.sh`. It writes
 `return 302 https://github.com/<repository>/releases/download/v<version>/<file>;`)
 only when it differs from what is there, and an empty `date` removes it
 again. `deploy.sh` refuses anything other than `owner/name`, digits and dots
-for the version, and a plain `.dmg` name. It does not check that the asset
-exists: open `https://cullaapp.com/download` afterwards.
+for the version and `minimumSystem`, and a plain `.dmg` name. It does not
+check that the asset exists: open `https://cullaapp.com/download` afterwards.
+
+The build also writes `/update.json` from it, the one file the app reads
+from the internet to learn whether a newer version exists:
+`{ "version": "1.0", "minimumSystem": "26.0", "date": "" }`. It is an
+ordinary static file in the web root, served by `location /` with
+`Cache-Control: no-cache`, so the nginx configuration has nothing of its own
+for it. `deploy.sh` refuses a build whose `update.json` does not match
+`release.json`. Check it with `curl -s https://cullaapp.com/update.json`.
 
 ## Check that everything works
 

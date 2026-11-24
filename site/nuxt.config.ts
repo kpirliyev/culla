@@ -1,6 +1,7 @@
-import { copyFileSync, existsSync, readdirSync, rmSync } from 'node:fs'
+import { copyFileSync, existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { updateJson } from './scripts/update-json.mjs'
 
 // Screenshots dropped into public/shots/ as <slot>.<lang>.png are found here at
 // build time; ShotSlot shows a drawn placeholder for any slot without one.
@@ -96,6 +97,10 @@ export default defineNuxtConfig({
         fileURLToPath(new URL('./root-fallback/index.html', import.meta.url)),
         join(nitro.options.output.publicDir, 'index.html'),
       )
+      // /update.json, which the app reads to learn whether a newer version
+      // exists, from release.json (see scripts/update-json.mjs).
+      const release = JSON.parse(readFileSync(fileURLToPath(new URL('./release.json', import.meta.url)), 'utf8'))
+      writeFileSync(join(nitro.options.output.publicDir, 'update.json'), updateJson(release))
     },
     'nitro:init'(nitro) {
       // The SPA fallback page is a shell that needs the client runtime, which

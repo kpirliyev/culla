@@ -155,7 +155,7 @@
     },
     "internet": {
       "q": "Internet gerekmi?",
-      "a": "Ýok. Programmanyň tora asla girip bilmegi ýok, şonuň üçin hiç zat hiç ýere ýüklenmeýär. Suratlaryňyz Mac-yňyzda galýar."
+      "a": "Ýok. Culla internetsiz işleýär we hiç zat ýüklemeýär, suratlaryňyz bolsa Mac-yňyzdan çykmaýar. Onuň internetden soraýan ýeke-täk zady täze wersiýanyň çykan-çykmandygy: günde iň köp bir gezek cullaapp.com-dan kiçijik bir faýly okaýar. Muny Sazlamalarda öçürip bolýar."
     },
     "changes": {
       "q": "Culla suratlarymy üýtgedýärmi?",
@@ -176,7 +176,7 @@
     },
     "counting": {
       "q": "Bu sahypa bir zat sanaýarmy?",
-      "a": "Serwer gelişleri sanamak üçin adaty žurnal ýöredýär. Islendik web-serweriň žurnaly ýaly, onda IP salgyňyz we brauzeriňiz ýazylýar, žurnal bolsa 30 günden soň pozulýar. Cookie ýok, sizi yzarlaýan skript ýok. Programmanyň özi GitHub-dan ýüklenýär, GitHub bolsa ýüklemeleri özi sanaýar we öz žurnallaryny ýöredýär."
+      "a": "Serwer gelişleri sanamak üçin adaty žurnal ýöredýär. Islendik web-serweriň žurnaly ýaly, onda IP salgyňyz we brauzeriňiz ýazylýar, žurnal bolsa 30 günden soň pozulýar. Programma täze wersiýany barlanda, bu haýyş hem sahypa gelişi ýaly şol žurnala düşýär. Cookie ýok, sizi yzarlaýan skript ýok. Programmanyň özi GitHub-dan ýüklenýär, GitHub bolsa ýüklemeleri özi sanaýar we öz žurnallaryny ýöredýär."
     },
     "report": {
       "q": "Meseläni nädip habar bermeli?",

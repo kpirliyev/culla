@@ -33,7 +33,8 @@ site's configuration). They are used only by the tests and are never
 installed.
 
 - `test_count.py`: visits from `access.log` (page views, 304s, robots, IPv6,
-  one visit per full address and browser,
+  one visit per full address and browser, the app's `/update.json` checks
+  not counted,
   logs spread over `.log`, `.1` and `.2.gz`, a file seen twice during
   rotation, re-runs, `--backfill`); the GitHub snapshot in `downloads.csv`
   (the request's address and headers, only `.dmg` assets, new downloads
@@ -56,7 +57,11 @@ installed.
     builds are refused; `/download` follows `release.json`; bad values are
     refused; over (stand-in) ssh with `CULLA_DEPLOY_KEY`, every ssh and rsync
     call carries `-i <key> -o IdentitiesOnly=yes`; `--upload-setup`; with the
-    password-free installer, `/download` and `--nginx` go through it.
+    password-free installer, `/download` and `--nginx` go through it;
+    `minimumSystem` must be digits and dots; the build's `update.json` is
+    uploaded with the empty date before a release and with the release's
+    values after, and a build whose `update.json` is missing or differs from
+    `release.json` is not uploaded.
   - `remote-install.sh`: `--nginx` installs only Culla's nginx files,
     rendered from `/etc/cullaapp/host.conf`, skips unchanged files and rolls
     back on a failing `nginx -t`; it refuses 31 kinds of forbidden directive
@@ -75,7 +80,9 @@ installed.
   cullaapp.com and www.cullaapp.com (bootstrap and full configuration, with
   and without www, where the host's default server answers); language
   redirects; security headers on pages, assets, redirects, challenges and
-  error pages; caching and `gzip_static`; the removed addresses answer 404;
+  error pages; caching and `gzip_static`; `/update.json` (200,
+  `application/json`, `no-cache`, never sent to a language, logged with the
+  app's User-Agent); the removed addresses answer 404;
   `/download` before and after a release; `count.py` on the real
   `access.log`; only `access.log` and `error.log`, every `access.log` line
   valid JSON with the expected fields and the client's full address. `site/test.sh` exits 2 when podman is missing or not running

@@ -155,7 +155,7 @@
     },
     "internet": {
       "q": "Does it need the internet?",
-      "a": "No. The app has no network access at all, so nothing is uploaded anywhere. Your photos stay on your Mac."
+      "a": "No. Culla works offline and uploads nothing, and your photos never leave your Mac. The one thing it asks the internet is whether there is a newer version: at most once a day it reads one small file from cullaapp.com. You can turn that off in Settings."
     },
     "changes": {
       "q": "Does it change my photos?",
@@ -176,7 +176,7 @@
     },
     "counting": {
       "q": "Does this site count anything?",
-      "a": "The server keeps an ordinary log to count visits. Like any web server's log, it records your IP address and browser, and it is deleted after 30 days. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
+      "a": "The server keeps an ordinary log to count visits. Like any web server's log, it records your IP address and browser, and it is deleted after 30 days. When the app checks for a newer version, that request shows up in the same log, just as a page visit does. No cookies, no scripts watching you. The download itself comes from GitHub, which keeps its own count and its own logs."
     },
     "report": {
       "q": "How do I report a problem?",

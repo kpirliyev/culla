@@ -32,7 +32,9 @@ when podman is missing or not running. `site/deploy/deploy.sh` builds through
   `package-lock.json` or the Node version changed. The steps are in
   `containers/build.sh`; after `npm run generate` it checks that every page
   and icon is there, that `.gz` copies exist, that no page has an inline
-  style, script or event handler, and the icons' sizes and formats. It needs
+  style, script or event handler, the icons' sizes and formats, and that
+  `update.json` is valid JSON with exactly `version`, `minimumSystem` and
+  `date`, the same as in `release.json`. It needs
   the npm registry for `npm ci`.
 - **The tests** run in `localhost/culla-site-test:<hash>`, built from
   `containers/test.Containerfile` (the official nginx image
@@ -62,10 +64,18 @@ The build writes `.output/public/`, with a `.gz` copy of every text file for ngi
 `release.json` holds the version on the page:
 
 ```json
-{ "repository": "kpirliyev/culla", "version": "1.0", "file": "Culla-1.0.dmg", "size": 0, "sha256": "", "date": "" }
+{ "repository": "kpirliyev/culla", "version": "1.0", "minimumSystem": "26.0", "file": "Culla-1.0.dmg", "size": 0, "sha256": "", "date": "" }
 ```
 
-`repository` is the GitHub repository; every GitHub address on the page (the repository, the release, the issue forms, Discussions, `CONTRIBUTING.md`, `LICENSE`) is built from it in `composables/github.mjs`, which `composables/site.ts` and the preview server share. The disk image is an asset of the GitHub Release `v<version>`, and `/download` redirects to it. `size` is in bytes; while it is 0 the size is left out of the version line. `date` is `YYYY-MM-DD`; while it is empty no date is shown. The release notes page shows `sha256` when it is filled in. The text of the release notes is in `data/release-notes/<lang>.json`; a note can be a string, or `{ "text": "…", "beta": true }` to carry the Beta label.
+`repository` is the GitHub repository; every GitHub address on the page (the repository, the release, the issue forms, Discussions, `CONTRIBUTING.md`, `LICENSE`) is built from it in `composables/github.mjs`, which `composables/site.ts` and the preview server share. The disk image is an asset of the GitHub Release `v<version>`, and `/download` redirects to it. `size` is in bytes; while it is 0 the size is left out of the version line. `date` is `YYYY-MM-DD`; while it is empty no date is shown. The release notes page shows `sha256` when it is filled in. `minimumSystem` is the oldest macOS the app runs on (its deployment target, digits and dots).
+
+The build writes `/update.json` from `release.json` (`scripts/update-json.mjs`, called from the `nitro:build:public-assets` hook in `nuxt.config.ts`); no copy of it is committed. It is the one file the app reads from the internet, at most once a day and when the person chooses Check for Updates, to learn whether a newer version exists:
+
+```json
+{ "version": "1.1", "minimumSystem": "26.0", "date": "2026-12-01" }
+```
+
+While `date` is empty it is still written, with the empty date, which the app reads as "nothing newer". nginx serves it like any root-level file (`location /`, `Cache-Control: no-cache`). The build's checks and `deploy.sh` both refuse an `update.json` that does not match `release.json`; `count.py` does not count its requests as visits. The text of the release notes is in `data/release-notes/<lang>.json`; a note can be a string, or `{ "text": "…", "beta": true }` to carry the Beta label.
 
 ## The app icon
 

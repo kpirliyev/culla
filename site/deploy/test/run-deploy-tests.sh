@@ -50,15 +50,34 @@ export CULLA_DEPLOY_HOST=stand-in-server CULLA_DEPLOY_USER=deploy
 # No password-free installer on this "server" until a test sets one up.
 export CULLA_DEPLOY_SUDO="" CULLA_DEPLOY_INSTALLER="$work/no-installer"
 
-# site/release.json stand-in: not published yet.
+# site/release.json stand-in: not published yet. Each also writes the
+# update.json a build from it would hold (see scripts/update-json.mjs).
 release="$work/release.json"
 export CULLA_DEPLOY_RELEASE_JSON="$release"
-unpublished() {
-    printf '{ "repository": "kpirliyev/culla", "version": "1.0", "file": "Culla-1.0.dmg", "size": 0, "sha256": "", "date": "" }\n' > "$release"
+#
+# rsync's quick check takes a file with the same size and the same
+# modification time, to the second, as unchanged. update.json of 1.0 and of
+# 1.1 have the same size, and this script rewrites it many times a second,
+# so each write gets a modification time of its own: one second after the
+# one before, on a clock of its own. (A real build writes every file anew and
+# takes far longer than a second, so a real deploy never meets this.)
+fixture_clock=1767225600   # 2026-01-01, then one second per write
+write_update_json() {  # write_update_json <text>: the build's update.json
+    printf '%s\n' "$1" > "$out/update.json"
+    fixture_clock=$((fixture_clock + 1))
+    touch -d "@$fixture_clock" "$out/update.json"
 }
-published() {  # published [repository] [version] [file]
-    printf '{ "repository": "%s", "version": "%s", "file": "%s", "size": 25000000, "sha256": "%s", "date": "2026-11-20" }\n' \
-        "${1-kpirliyev/culla}" "${2-1.0}" "${3-Culla-1.0.dmg}" "$(printf 'a%.0s' $(seq 64))" > "$release"
+update_json() {  # update_json <version> <minimumSystem> <date>
+    write_update_json "$(printf '{ "version": "%s", "minimumSystem": "%s", "date": "%s" }' "$1" "$2" "$3")"
+}
+unpublished() {
+    printf '{ "repository": "kpirliyev/culla", "version": "1.0", "minimumSystem": "26.0", "file": "Culla-1.0.dmg", "size": 0, "sha256": "", "date": "" }\n' > "$release"
+    update_json 1.0 26.0 ""
+}
+published() {  # published [repository] [version] [file] [minimumSystem]
+    printf '{ "repository": "%s", "version": "%s", "minimumSystem": "%s", "file": "%s", "size": 25000000, "sha256": "%s", "date": "2026-11-20" }\n' \
+        "${1-kpirliyev/culla}" "${2-1.0}" "${4-26.0}" "${3-Culla-1.0.dmg}" "$(printf 'a%.0s' $(seq 64))" > "$release"
+    update_json "${2-1.0}" "${4-26.0}" 2026-11-20
 }
 unpublished
 
@@ -110,6 +129,9 @@ ok "--check shows the changes (stale.html would go) and changes nothing"
 [ -f "$www/_nuxt/app.NEW.js.gz" ] || fail ".gz not uploaded"
 [ ! -e "$www/stale.html" ] && [ ! -e "$www/_nuxt/app.OLD.js" ] || fail "stale files survived"
 ok "deploy uploads the build and removes stale files"
+grep -qx '{ "version": "1.0", "minimumSystem": "26.0", "date": "" }' "$www/update.json" \
+    || fail "unpublished update.json: $(cat "$www/update.json" 2>&1)"
+ok "no release published: update.json is uploaded with the empty date"
 
 # A folder left from the time disk images were served from here goes too.
 mkdir -p "$www/downloads" && echo old > "$www/downloads/Culla-0.9.dmg"
@@ -159,12 +181,14 @@ published kpirliyev/culla 1.1 Culla-1.1.dmg
 grep -qx 'return 302 https://github.com/kpirliyev/culla/releases/download/v1.1/Culla-1.1.dmg;' "$conf" \
     || fail "new release not written: $(cat "$conf")"
 [ "$(reloads)" = 2 ] || fail "nginx not reloaded for the new release"
+grep -qx '{ "version": "1.1", "minimumSystem": "26.0", "date": "2026-11-20" }' "$www/update.json" \
+    || fail "update.json of the new release not uploaded: $(cat "$www/update.json")"
 ok "a new version in release.json moves /download to it"
 
 # Values that would end up in nginx's configuration are refused.
 good_conf="$(cat "$conf")"
-refused() {  # refused <what> <repository> <version> <file>
-    published "$2" "$3" "$4"
+refused() {  # refused <what> <repository> <version> <file> [minimumSystem]
+    published "${@:2}"
     local snap; snap="$(snapshot)"
     if msg="$("$deploy/deploy.sh" 2>&1)"; then fail "accepted $1"; fi
     grep -q "release.json refused" <<<"$msg" || fail "$1: unclear message: $msg"
@@ -182,14 +206,47 @@ refused "an empty version"            kpirliyev/culla "" Culla-1.0.dmg
 refused "a file name with a path"     kpirliyev/culla 1.0 ../Culla-1.0.dmg
 refused "a file that is not a .dmg"   kpirliyev/culla 1.0 Culla-1.0.zip
 refused "a file name with a space"    kpirliyev/culla 1.0 'Culla 1.0.dmg'
-printf '{ "repository": "kpirliyev/culla", "version": "1.0", "file": "Culla-1.0.dmg", "date": "soon" }\n' > "$release"
+refused "a minimumSystem with letters" kpirliyev/culla 1.0 Culla-1.0.dmg 26.0b
+refused "a minimumSystem with ;"      kpirliyev/culla 1.0 Culla-1.0.dmg '26;'
+refused "an empty minimumSystem"      kpirliyev/culla 1.0 Culla-1.0.dmg ""
+printf '{ "repository": "kpirliyev/culla", "version": "1.0", "file": "Culla-1.0.dmg", "date": "" }\n' > "$release"
+if msg="$("$deploy/deploy.sh" 2>&1)"; then fail "accepted a release.json without minimumSystem"; fi
+grep -q '"minimumSystem" must be a string' <<<"$msg" || fail "no minimumSystem: unclear message: $msg"
+printf '{ "repository": "kpirliyev/culla", "version": "1.0", "minimumSystem": 26, "file": "Culla-1.0.dmg", "date": "" }\n' > "$release"
+if msg="$("$deploy/deploy.sh" 2>&1)"; then fail "accepted a minimumSystem that is a number"; fi
+grep -q '"minimumSystem" must be a string' <<<"$msg" || fail "a numeric minimumSystem: unclear message: $msg"
+printf '{ "repository": "kpirliyev/culla", "version": "1.0", "minimumSystem": "26.0", "file": "Culla-1.0.dmg", "date": "soon" }\n' > "$release"
 if "$deploy/deploy.sh" >/dev/null 2>&1; then fail "accepted a date that is not YYYY-MM-DD"; fi
 printf '{ "version": "1.0", "file": "Culla-1.0.dmg", "date": "" }\n' > "$release"
 if "$deploy/deploy.sh" >/dev/null 2>&1; then fail "accepted a release.json without repository"; fi
 printf 'not json\n' > "$release"
 if "$deploy/deploy.sh" >/dev/null 2>&1; then fail "accepted a release.json that is not JSON"; fi
 [ "$(cat "$conf")" = "$good_conf" ] || fail "download-target.conf changed"
-ok "bad repository, version, file, date or JSON in release.json: refused before anything is uploaded"
+ok "bad repository, version, minimumSystem, file, date or JSON in release.json: refused before anything is uploaded"
+
+# The build's update.json must say what release.json says.
+published kpirliyev/culla 1.1 Culla-1.1.dmg
+grep -qx '{ "version": "1.1", "minimumSystem": "26.0", "date": "2026-11-20" }' "$out/update.json" \
+    || fail "fixture update.json: $(cat "$out/update.json")"
+"$deploy/deploy.sh" >/dev/null
+cmp -s "$out/update.json" "$www/update.json" || fail "update.json not uploaded as built: $(cat "$www/update.json")"
+ok "a published release: the build's update.json (version, minimumSystem, date) is uploaded"
+stale_update() {  # stale_update <what> <update.json text or "missing">
+    local snap; snap="$(snapshot)"
+    if [ "$2" = missing ]; then rm -f "$out/update.json"; else write_update_json "$2"; fi
+    if msg="$("$deploy/deploy.sh" 2>&1)"; then fail "uploaded a build with $1"; fi
+    grep -q "update.json does not match release.json" <<<"$msg" || fail "$1: unclear message: $msg"
+    [ "$(snapshot)" = "$snap" ] || fail "$1: the site was uploaded"
+}
+stale_update "an update.json of an older version" '{ "version": "1.0", "minimumSystem": "26.0", "date": "2026-11-20" }'
+stale_update "an update.json without the date"   '{ "version": "1.1", "minimumSystem": "26.0", "date": "" }'
+stale_update "an update.json of another system"  '{ "version": "1.1", "minimumSystem": "15.0", "date": "2026-11-20" }'
+stale_update "an update.json with an extra field" '{ "version": "1.1", "minimumSystem": "26.0", "date": "2026-11-20", "x": 1 }'
+stale_update "an update.json that is not JSON"   'not json'
+stale_update "no update.json"                    missing
+ok "a build whose update.json is missing or does not match release.json is not uploaded"
+published kpirliyev/culla 1.1 Culla-1.1.dmg
+[ "$(reloads)" = 2 ] || fail "the update.json checks changed /download"
 
 # remote-install.sh checks the values again on its own.
 for args in "kpirliyev/culla 1.0;x Culla-1.0.dmg" "a/b 1.0 x.dmg;" "a 1.0 x.dmg" "a/b 1.0" "nonsense"; do

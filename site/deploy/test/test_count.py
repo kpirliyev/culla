@@ -185,6 +185,21 @@ class VisitTests(CountTestCase):
         self.assertEqual(self.csv_rows("visits.csv")[1:], [
             [DAY, "en", "3", "4"], [DAY, "ru", "2", "2"], [DAY, "tk", "0", "0"]])
 
+    def test_update_checks_are_not_visits(self):
+        # The app reads /update.json at most once a day and on Check for
+        # Updates, with the User-Agent "Culla". Those requests are in the log
+        # but are neither page views nor visitors, in any language.
+        write_log(self.log("access.log"), [
+            page("/en/"),
+            page("/update.json", ua="Culla"),
+            page("/update.json", ua="Culla", ip="198.51.100.23"),
+            page("/update.json", status=304, ua="Culla"),
+            page("/update.json", ua=SAFARI),
+        ])
+        self.run_count("--date", DAY)
+        self.assertEqual(self.csv_rows("visits.csv")[1:], [
+            [DAY, "en", "1", "1"], [DAY, "ru", "0", "0"], [DAY, "tk", "0", "0"]])
+
     def test_rotated_file_seen_twice_is_read_once(self):
         # logrotate renamed access.log while count.py was starting: the same
         # file shows up as both access.log and access.log.1 (a hard link here).

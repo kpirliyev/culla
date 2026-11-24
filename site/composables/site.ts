@@ -20,6 +20,8 @@ export function pagePath(locale: string, page: SitePage = ''): string {
 export interface ReleaseInfo {
   repository: string
   version: string
+  /** The oldest macOS the app runs on, such as 26.0; goes into /update.json. */
+  minimumSystem: string
   file: string
   size: number
   sha256: string

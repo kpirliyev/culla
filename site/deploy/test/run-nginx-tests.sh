@@ -96,6 +96,9 @@ for l in en ru tk; do
     echo "<!doctype html><title>$l</title><p>page $l</p>" > "$w/$l/index.html"
 done
 echo "<!doctype html><title>404</title><p>fixture 404 page</p>" > "$w/404.html"
+# What the build writes from release.json; the app reads it to learn whether
+# a newer version exists.
+echo '{ "version": "1.1", "minimumSystem": "26.0", "date": "2026-12-01" }' > "$w/update.json"
 mkdir -p "$w/_nuxt"
 head -c 30000 /dev/zero | tr '\0' 'a' > "$w/_nuxt/app.abc123.js"
 gzip -k -9 "$w/_nuxt/app.abc123.js"
@@ -262,6 +265,24 @@ h="$(headers_of "$S/_nuxt/app.abc123.js")"
 [ -z "$(header "$h" Content-Encoding)" ] || fail "asset compressed for a client without gzip"
 ok "HTML no-cache, /_nuxt/ immutable, gzip_static serves the build's .gz byte for byte"
 
+# /update.json, as the app asks for it: no query string, no cookies, the
+# fixed User-Agent "Culla". A root-level static file served by "location /":
+# never redirected by language, revalidated on every check.
+for al in "" "ru-RU,ru;q=0.9" "tk"; do
+    h="$(headers_of -A Culla -H "Accept-Language: $al" "$S/update.json")"
+    printf '%s\n' "$h" | head -1 | grep -q ' 200' || fail "/update.json with Accept-Language '$al' is not 200: $(printf '%s' "$h" | head -1)"
+    [ -z "$(header "$h" Location)" ] || fail "/update.json with Accept-Language '$al' redirects"
+    expect_header "$h" Content-Type "application/json" "/update.json"
+    expect_header "$h" Cache-Control "no-cache" "/update.json"
+done
+c -A Culla -o "$work/update.json" "$S/update.json"
+cmp -s "$work/update.json" "$w/update.json" || fail "/update.json body is not the file in the web root"
+security "/update.json" -A Culla "$S/update.json"
+[ "$(status_of -A Culla "http://$H:$HTTP/update.json")" = 301 ] || fail "http://cullaapp.com/update.json is not redirected to HTTPS"
+[ "$(header "$(headers_of "http://$H:$HTTP/update.json")" Location)" = "https://cullaapp.com/update.json" ] \
+    || fail "http://cullaapp.com/update.json redirects elsewhere"
+ok "/update.json: 200, application/json, no-cache, the security headers, the file byte for byte, never sent to a language; over HTTP 301 to HTTPS"
+
 # 404 from the web root.
 [ "$(status_of "$S/nope")" = 404 ] || fail "/nope is not 404"
 c "$S/nope" | grep -q "fixture 404 page" || fail "404 page is not the site's 404.html"
@@ -319,6 +340,9 @@ ok "/download: friendly 503 before the first release, 302 to $GITHUB_URL after, 
 c -o /dev/null "$S/en/"
 sleep 1
 grep -q '"uri":"/download"' "$work/log/access.log" || fail "the /download redirect is not in access.log"
+# The app's update checks are logged like any request (the site says so),
+# and count.py does not count them as visits (en stays at 1 below).
+grep -q '"uri":"/update.json","status":200,.*"ua":"Culla"' "$work/log/access.log" || fail "the update check is not in access.log"
 day="$(python3 -c 'import json,sys; print(json.loads(open(sys.argv[1]).readline())["time"][:10])' "$work/log/access.log")"
 CULLA_LOG_DIR="$work/log" CULLA_STATS_DIR="$work/stats" PYTHONDONTWRITEBYTECODE=1 \
     python3 "$deploy/count.py" --date "$day" --releases-file "$here/fixtures/github-releases.json"
